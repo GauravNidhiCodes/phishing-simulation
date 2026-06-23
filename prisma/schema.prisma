@@ -1,0 +1,113 @@
+datasource db {
+  provider = "sqlite"
+}
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
+
+model Organization {
+  id              String           @id @default(uuid())
+  name            String
+  verifiedDomains VerifiedDomain[]
+  users           User[]
+  campaigns       Campaign[]
+  templates       EmailTemplate[]
+  createdAt       DateTime         @default(now())
+}
+
+model VerifiedDomain {
+  id             String       @id @default(uuid())
+  domain         String       @unique
+  txtRecordKey   String       // key that must be set in DNS
+  isVerified     Boolean      @default(false)
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  createdAt      DateTime     @default(now())
+}
+
+model User {
+  id             String         @id @default(uuid())
+  email          String         @unique
+  name           String?
+  role           String         @default("EMPLOYEE") // SUPERADMIN, ORG_ADMIN, EMPLOYEE
+  department     String?
+  organizationId String
+  organization   Organization   @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  campaignLogs   CampaignLog[]
+  quizProgress   QuizProgress[]
+  awarenessScore Int            @default(100) // 0 - 100 rating
+  riskCategory   String         @default("LOW") // LOW, MEDIUM, HIGH
+  createdAt      DateTime       @default(now())
+}
+
+model Campaign {
+  id             String         @id @default(uuid())
+  name           String
+  status         String         @default("DRAFT") // DRAFT, SCHEDULED, ACTIVE, COMPLETED
+  templateId     String
+  template       EmailTemplate  @relation(fields: [templateId], references: [id])
+  organizationId String
+  organization   Organization   @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  scheduledStart DateTime?
+  startedAt      DateTime?
+  completedAt    DateTime?
+  logs           CampaignLog[]
+  createdAt      DateTime       @default(now())
+}
+
+model EmailTemplate {
+  id             String        @id @default(uuid())
+  name           String
+  subject        String
+  bodyHtml       String
+  indicators     String        // serialized JSON of security indicators
+  campaigns      Campaign[]
+  organizationId String?       // Null for global pre-built library templates
+  organization   Organization? @relation(fields: [organizationId], references: [id])
+  createdAt      DateTime      @default(now())
+}
+
+model CampaignLog {
+  id          String    @id @default(uuid())
+  campaignId  String
+  campaign    Campaign  @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  userId      String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  deliveredAt DateTime?
+  openedAt    DateTime?
+  clickedAt   DateTime?
+  submittedAt DateTime? // form interaction tracking (no credentials recorded)
+  createdAt   DateTime  @default(now())
+}
+
+model TrainingModule {
+  id          String         @id @default(uuid())
+  title       String
+  description String
+  contentHtml String
+  quizzes     QuizQuestion[]
+  progress    QuizProgress[]
+  createdAt   DateTime       @default(now())
+}
+
+model QuizQuestion {
+  id        String         @id @default(uuid())
+  moduleId  String
+  module    TrainingModule @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  question  String
+  options   String         // serialized JSON array of choices
+  correct   Int            // Index of correct option
+}
+
+model QuizProgress {
+  id        String         @id @default(uuid())
+  userId    String
+  user      User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  moduleId  String
+  module    TrainingModule @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  completed Boolean        @default(false)
+  score     Int            @default(0)
+  updatedAt DateTime       @updatedAt
+}
