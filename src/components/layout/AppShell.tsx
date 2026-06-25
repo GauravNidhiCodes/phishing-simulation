@@ -120,7 +120,7 @@ export const AppShell: React.FC<{ children: React.ReactNode }> = ({ children }) 
                   exit={{ opacity: 0, x: -10 }}
                   className="ml-3 shrink-0"
                 >
-                  <h1 className="font-extrabold text-white text-xs tracking-wider">AEGIS GUARD</h1>
+                  <h1 className="font-extrabold text-white text-xs tracking-wider">PINKMAN PROTECTS</h1>
                   <span className="text-[8px] text-gray-500 uppercase tracking-widest font-mono block">Consent Check</span>
                 </motion.div>
               )}
@@ -215,7 +215,7 @@ export const AppShell: React.FC<{ children: React.ReactNode }> = ({ children }) 
 
             {/* Path indicator */}
             <div className="hidden sm:flex items-center gap-1.5 text-[10px] font-mono text-gray-400 uppercase tracking-wider">
-              <span className="text-gray-500">AEGIS_SYS</span>
+              <span className="text-gray-500">PINKMAN_SYS</span>
               <span>::</span>
               <span className="text-brand-blue font-bold">
                 {pathname?.split('/').filter(Boolean).join('_') || 'ROOT'}
@@ -277,7 +277,7 @@ export const AppShell: React.FC<{ children: React.ReactNode }> = ({ children }) 
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <ShieldAlert className="text-brand-cyan mr-1" size={20} />
-                    <h1 className="font-extrabold text-white text-sm tracking-wider">AEGIS GUARD</h1>
+                    <h1 className="font-extrabold text-white text-sm tracking-wider">PINKMAN PROTECTS</h1>
                   </div>
                   <button 
                     onClick={() => setMobileMenuOpen(false)}

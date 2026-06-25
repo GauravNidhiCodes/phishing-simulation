@@ -211,7 +211,7 @@ export default function SimulationLandingPage({ params }: { params: Promise<{ id
                 <ul className="space-y-2 text-[11px] leading-relaxed">
                   <li className="flex items-start gap-1.5"><CornerDownRight size={12} className="text-brand-purple shrink-0 mt-0.5" /> Always verify domain extensions before executing link click actions.</li>
                   <li className="flex items-start gap-1.5"><CornerDownRight size={12} className="text-brand-purple shrink-0 mt-0.5" /> Acknowledge coercive deadlines or panic warnings as high threat vectors.</li>
-                  <li className="flex items-start gap-1.5"><CornerDownRight size={12} className="text-brand-purple shrink-0 mt-0.5" /> Use Aegis Guard's 'Report Phish' dashboard client rather than replying.</li>
+                  <li className="flex items-start gap-1.5"><CornerDownRight size={12} className="text-brand-purple shrink-0 mt-0.5" /> Use Pinkman Protects' 'Report Phish' dashboard client rather than replying.</li>
                 </ul>
               </div>
             </div>

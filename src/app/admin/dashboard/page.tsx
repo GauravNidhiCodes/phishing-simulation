@@ -145,7 +145,7 @@ export default function Dashboard() {
 
   // Initial state for scrolling mock console shell terminal logs
   const [consoleLogs, setConsoleLogs] = useState([
-    '[10:48:05] SYSTEM: Aegis platform initialized successfully.',
+    '[10:48:05] SYSTEM: Pinkman Protects platform initialized successfully.',
     '[10:48:12] NODE_DNS: handshake established for tenant: Acme Corp.',
     '[10:48:24] DISPATCH: Dispatch loop executing email queue payload.',
     '[10:48:36] SSO: Resolved target SPF and DKIM values on acme.com.',
@@ -294,7 +294,7 @@ export default function Dashboard() {
         <div className="space-y-2">
           <div className="flex items-center gap-2">
             <span className="h-1.5 w-1.5 rounded-full bg-brand-cyan shadow-[0_0_8px_#06b6d4]" />
-            <span className="text-[10px] font-mono uppercase tracking-widest text-brand-cyan font-bold">Aegis Intelligence Platform</span>
+            <span className="text-[10px] font-mono uppercase tracking-widest text-brand-cyan font-bold">Pinkman Protects Intelligence Platform</span>
           </div>
           <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight leading-none bg-gradient-to-r from-white via-zinc-100 to-zinc-500 bg-clip-text text-transparent">
             Executive Security Console

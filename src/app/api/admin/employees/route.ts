@@ -120,7 +120,7 @@ export async function POST(request: Request) {
         return NextResponse.json({ error: 'Domain name is required' }, { status: 400 });
       }
 
-      const txtKey = `aegis-verification-${Math.random().toString(36).substring(2, 15)}`;
+      const txtKey = `pinkman-verification-${Math.random().toString(36).substring(2, 15)}`;
       const newDomain = await prisma.verifiedDomain.create({
         data: {
           domain,

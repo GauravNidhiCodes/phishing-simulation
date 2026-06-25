@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Aegis Guard | Ethical Phishing Simulation & Security Awareness Training Platform",
+  title: "Pinkman Protects | Ethical Phishing Simulation & Security Awareness Training Platform",
   description: "Authorize consent-based security awareness simulations and cybersecurity learning metrics.",
 };
 
