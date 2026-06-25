@@ -27,7 +27,7 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { name, templateId, scheduledStart, targetDepartment } = body;
+    const { name, templateId, scheduledStart, targetDepartment, targetUserIds } = body;
 
     if (!name || !templateId) {
       return NextResponse.json({ error: 'Name and Template are required' }, { status: 400 });
@@ -56,12 +56,15 @@ export async function POST(request: Request) {
     });
 
     // If campaign is active or scheduled, let's create mock logs for employees
-    // Filtering by department if specified
+    // Filtering by targetUserIds if specified, otherwise department
     const targetEmployees = await prisma.user.findMany({
       where: {
         role: 'EMPLOYEE',
         organizationId: org.id,
-        ...(targetDepartment && targetDepartment !== 'ALL' ? { department: targetDepartment } : {})
+        ...(targetUserIds && targetUserIds.length > 0
+          ? { id: { in: targetUserIds } }
+          : (targetDepartment && targetDepartment !== 'ALL' ? { department: targetDepartment } : {})
+        )
       }
     });
 
