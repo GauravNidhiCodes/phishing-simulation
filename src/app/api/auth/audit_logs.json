@@ -1,0 +1,18 @@
+[
+  {
+    "id": "AUDIT-101",
+    "timestamp": "2026-06-25T09:00:00.000Z",
+    "eventType": "LOGIN_SUCCESS",
+    "email": "superadmin@company.in",
+    "ipAddress": "192.168.1.45",
+    "details": "Super Admin logged in successfully from Pune branch."
+  },
+  {
+    "id": "AUDIT-102",
+    "timestamp": "2026-06-25T09:15:00.000Z",
+    "eventType": "LOGIN_SUCCESS",
+    "email": "admin@company.in",
+    "ipAddress": "192.168.1.112",
+    "details": "Security Admin logged in successfully from Bengaluru branch."
+  }
+]

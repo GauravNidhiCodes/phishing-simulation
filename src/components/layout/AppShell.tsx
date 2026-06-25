@@ -18,7 +18,9 @@ import {
   CheckCircle2, 
   ChevronLeft,
   ChevronRight,
-  User
+  User,
+  LogOut,
+  Building
 } from 'lucide-react';
 
 interface SidebarItemProps {
@@ -79,9 +81,34 @@ export const AppShell: React.FC<{ children: React.ReactNode }> = ({ children }) 
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const [sessionUser, setSessionUser] = useState<any>(null);
 
-  // If path is simulation landing page, do not render layout shell (needs full-screen realistic mock browser environment)
+  // Check if it is a simulation intercept page or an auth centered route
   const isSimulationPage = pathname?.includes('/simulation/landing/');
+  const isAuthPage = pathname?.startsWith('/auth');
+
+  // Fetch session details on mount
+  useEffect(() => {
+    if (!isSimulationPage && !isAuthPage) {
+      fetch('/api/auth/session')
+        .then(res => res.json())
+        .then(data => {
+          if (data.authenticated && data.user) {
+            setSessionUser(data.user);
+          }
+        })
+        .catch(err => console.error(err));
+    }
+  }, [pathname, isSimulationPage, isAuthPage]);
+
+  // If auth page, render centered full-screen content without standard sidebar wrap
+  if (isAuthPage) {
+    return (
+      <main className="flex-1 w-full min-h-screen bg-cyber-dark text-foreground flex flex-col justify-center">
+        {children}
+      </main>
+    );
+  }
 
   if (isSimulationPage) {
     return <main className="flex-1 w-full min-h-screen bg-white text-gray-900">{children}</main>;
@@ -99,6 +126,26 @@ export const AppShell: React.FC<{ children: React.ReactNode }> = ({ children }) 
   const employeeMenu = [
     { href: '/learning', label: 'Learning Center', icon: <GraduationCap size={16} /> },
   ];
+
+  // Role-based menu filtering
+  const userRole = sessionUser?.role || 'EMPLOYEE';
+  const visibleAdminMenu = adminMenu.filter(item => {
+    if (userRole === 'SUPERADMIN') return true;
+    if (userRole === 'SECURITY_ADMIN') {
+      return item.href !== '/admin/employees';
+    }
+    if (userRole === 'HR_MANAGER') {
+      return item.href !== '/admin/campaigns' && item.href !== '/admin/templates';
+    }
+    if (userRole === 'DEPT_MANAGER') {
+      return item.href !== '/admin/campaigns' && item.href !== '/admin/templates' && item.href !== '/admin/employees';
+    }
+    return false; // Employees have no access to admin links
+  });
+
+  const getInitials = (name: string) => {
+    return name ? name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase() : 'US';
+  };
 
   return (
     <div className="flex min-h-screen w-full relative bg-cyber-dark">
@@ -139,24 +186,28 @@ export const AppShell: React.FC<{ children: React.ReactNode }> = ({ children }) 
 
         {/* Navigation items */}
         <div className="flex-1 overflow-y-auto px-3 py-6 space-y-7 scrollbar-thin">
-          <div>
-            {!isCollapsed && (
-              <span className="px-3 text-[9px] uppercase font-mono font-bold tracking-widest text-gray-500 block mb-2">Operations</span>
-            )}
-            <div className="space-y-1">
-              {adminMenu.map((item) => (
-                <SidebarItem 
-                  key={item.href}
-                  href={item.href}
-                  label={item.label}
-                  icon={item.icon}
-                  active={pathname === item.href}
-                  isCollapsed={isCollapsed}
-                />
-              ))}
+          {/* Render Admin Menu if not employee */}
+          {userRole !== 'EMPLOYEE' && visibleAdminMenu.length > 0 && (
+            <div>
+              {!isCollapsed && (
+                <span className="px-3 text-[9px] uppercase font-mono font-bold tracking-widest text-gray-500 block mb-2">Operations</span>
+              )}
+              <div className="space-y-1">
+                {visibleAdminMenu.map((item) => (
+                  <SidebarItem 
+                    key={item.href}
+                    href={item.href}
+                    label={item.label}
+                    icon={item.icon}
+                    active={pathname === item.href}
+                    isCollapsed={isCollapsed}
+                  />
+                ))}
+              </div>
             </div>
-          </div>
+          )}
 
+          {/* Render Employee Menu */}
           <div>
             {!isCollapsed && (
               <span className="px-3 text-[9px] uppercase font-mono font-bold tracking-widest text-gray-500 block mb-2">Awareness</span>
@@ -176,25 +227,27 @@ export const AppShell: React.FC<{ children: React.ReactNode }> = ({ children }) 
           </div>
         </div>
 
-        {/* Footer client card */}
+        {/* Footer client card / Link to Profile page */}
         <div className="p-3 border-t border-cyber-border/40">
-          <div className="bg-white/3 rounded-xl p-2.5 flex items-center gap-2.5 overflow-hidden">
-            <div className="w-7 h-7 rounded-lg bg-brand-cyan/20 border border-brand-cyan/30 flex items-center justify-center text-brand-cyan text-[10px] font-bold font-mono shrink-0">
-              AC
+          <Link href="/auth/profile" className="bg-white/3 rounded-xl p-2 flex items-center gap-2.5 overflow-hidden hover:bg-white/5 border border-transparent hover:border-white/5 transition block">
+            <div className="w-8 h-8 rounded-lg bg-brand-cyan/25 border border-brand-cyan/30 flex items-center justify-center text-brand-cyan text-[10px] font-bold font-mono shrink-0">
+              {sessionUser ? getInitials(sessionUser.name) : 'US'}
             </div>
             {!isCollapsed && (
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className="truncate"
+                className="truncate flex-1 text-left"
               >
-                <p className="text-[10px] font-bold text-white truncate">Acme Corp</p>
-                <span className="text-[8px] text-emerald-400 font-mono flex items-center">
-                  <CheckCircle2 size={8} className="mr-0.5" /> Verified
+                <p className="text-[10px] font-bold text-white truncate leading-tight">
+                  {sessionUser ? sessionUser.name : 'SecOps Node'}
+                </p>
+                <span className="text-[8px] text-gray-400 font-mono flex items-center gap-1 mt-0.5">
+                  <Building size={8} /> {sessionUser ? sessionUser.orgName.split(' ')[0] : 'Enterprise'}
                 </span>
               </motion.div>
             )}
-          </div>
+          </Link>
         </div>
       </motion.aside>
 
@@ -235,7 +288,9 @@ export const AppShell: React.FC<{ children: React.ReactNode }> = ({ children }) 
               <div className="h-3 w-px bg-cyber-border" />
               <div className="flex items-center gap-1.5">
                 <span className="text-gray-500">Risk Matrix:</span>
-                <span className="text-brand-cyan font-bold">SECURE</span>
+                <span className={`text-[10px] font-bold ${userRole === 'SUPERADMIN' ? 'text-brand-cyan' : 'text-brand-purple'}`}>
+                  {userRole}
+                </span>
               </div>
             </div>
 
@@ -289,23 +344,27 @@ export const AppShell: React.FC<{ children: React.ReactNode }> = ({ children }) 
                 </div>
 
                 <div className="space-y-6">
-                  <div>
-                    <span className="text-[9px] uppercase font-mono font-bold tracking-widest text-gray-500 block mb-2">Operations</span>
-                    <div className="space-y-1">
-                      {adminMenu.map((item) => (
-                        <div key={item.href} onClick={() => setMobileMenuOpen(false)}>
-                          <SidebarItem 
-                            href={item.href}
-                            label={item.label}
-                            icon={item.icon}
-                            active={pathname === item.href}
-                            isCollapsed={false}
-                          />
-                        </div>
-                      ))}
+                  {/* Admin visible menu */}
+                  {userRole !== 'EMPLOYEE' && visibleAdminMenu.length > 0 && (
+                    <div>
+                      <span className="text-[9px] uppercase font-mono font-bold tracking-widest text-gray-500 block mb-2">Operations</span>
+                      <div className="space-y-1">
+                        {visibleAdminMenu.map((item) => (
+                          <div key={item.href} onClick={() => setMobileMenuOpen(false)}>
+                            <SidebarItem 
+                              href={item.href}
+                              label={item.label}
+                              icon={item.icon}
+                              active={pathname === item.href}
+                              isCollapsed={false}
+                            />
+                          </div>
+                        ))}
+                      </div>
                     </div>
-                  </div>
+                  )}
 
+                  {/* Employee Menu */}
                   <div>
                     <span className="text-[9px] uppercase font-mono font-bold tracking-widest text-gray-500 block mb-2">Awareness</span>
                     <div className="space-y-1">
@@ -325,16 +384,25 @@ export const AppShell: React.FC<{ children: React.ReactNode }> = ({ children }) 
                 </div>
               </div>
 
+              {/* Mobile bottom profile card */}
               <div className="pt-4 border-t border-cyber-border/40">
-                <div className="bg-white/3 rounded-xl p-2.5 flex items-center gap-3">
+                <Link 
+                  href="/auth/profile" 
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="bg-white/3 rounded-xl p-2.5 flex items-center gap-3 hover:bg-white/5 border border-white/5 transition block"
+                >
                   <div className="w-8 h-8 rounded-full bg-brand-cyan/20 flex items-center justify-center text-brand-cyan text-xs font-bold font-mono">
-                    AC
+                    {sessionUser ? getInitials(sessionUser.name) : 'US'}
                   </div>
                   <div>
-                    <p className="text-xs font-semibold text-white">Acme Corp</p>
-                    <span className="text-[10px] text-emerald-400 font-mono">Tenant Mode</span>
+                    <p className="text-xs font-semibold text-white">
+                      {sessionUser ? sessionUser.name : 'SecOps Node'}
+                    </p>
+                    <span className="text-[10px] text-brand-cyan font-mono">
+                      {sessionUser ? sessionUser.orgName : 'Pinkman Protects'}
+                    </span>
                   </div>
-                </div>
+                </Link>
               </div>
             </motion.div>
           </>
