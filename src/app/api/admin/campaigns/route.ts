@@ -27,10 +27,37 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { name, templateId, scheduledStart, targetDepartment, targetUserIds } = body;
+    const { 
+      name, 
+      description,
+      category,
+      riskLevel,
+      organizationName,
+      templateId, 
+      scheduledStart, 
+      targetDepartments, // array of strings
+      targetBranches,    // array of strings
+      targetUserIds      // array of strings
+    } = body;
 
-    if (!name || !templateId) {
-      return NextResponse.json({ error: 'Name and Template are required' }, { status: 400 });
+    // Required fields validation
+    if (!name || !name.trim()) {
+      return NextResponse.json({ error: 'Campaign Name is required' }, { status: 400 });
+    }
+    if (!description || !description.trim()) {
+      return NextResponse.json({ error: 'Campaign Description is required' }, { status: 400 });
+    }
+    if (!category) {
+      return NextResponse.json({ error: 'Campaign Category is required' }, { status: 400 });
+    }
+    if (!riskLevel) {
+      return NextResponse.json({ error: 'Risk Level is required' }, { status: 400 });
+    }
+    if (!organizationName || !organizationName.trim()) {
+      return NextResponse.json({ error: 'Organization Name is required' }, { status: 400 });
+    }
+    if (!templateId) {
+      return NextResponse.json({ error: 'Email Template is required' }, { status: 400 });
     }
 
     const org = await prisma.organization.findFirst();
@@ -38,37 +65,80 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'No organization tenant initialized' }, { status: 500 });
     }
 
-    // Create the campaign in DRAFT or SCHEDULED
-    const scheduledDate = scheduledStart ? new Date(scheduledStart) : null;
-    const initialStatus = scheduledDate ? 'SCHEDULED' : 'DRAFT';
-
-    const campaign = await prisma.campaign.create({
-      data: {
-        name,
-        templateId,
-        scheduledStart: scheduledDate,
-        status: initialStatus,
-        organizationId: org.id,
-      },
-      include: {
-        template: true
+    // Duplicate campaign name check
+    const duplicate = await prisma.campaign.findFirst({
+      where: {
+        name: name.trim(),
+        organizationId: org.id
       }
     });
+    if (duplicate) {
+      return NextResponse.json({ error: 'A campaign with this name already exists in your organization' }, { status: 400 });
+    }
 
-    // If campaign is active or scheduled, let's create mock logs for employees
-    // Filtering by targetUserIds if specified, otherwise department
+    // Date/time validation
+    let scheduledDate: Date | null = null;
+    if (scheduledStart) {
+      scheduledDate = new Date(scheduledStart);
+      if (isNaN(scheduledDate.getTime())) {
+        return NextResponse.json({ error: 'Invalid scheduled date/time format' }, { status: 400 });
+      }
+      
+      const now = new Date();
+      if (scheduledDate <= now) {
+        return NextResponse.json({ error: 'Scheduled start date/time must be in the future' }, { status: 400 });
+      }
+    }
+
+    // Resolve targeted employees
+    // If targetUserIds is specified explicitly, use it.
+    // Otherwise, filter dynamically by selected targetDepartments and/or targetBranches
     const targetEmployees = await prisma.user.findMany({
       where: {
         role: 'EMPLOYEE',
         organizationId: org.id,
         ...(targetUserIds && targetUserIds.length > 0
           ? { id: { in: targetUserIds } }
-          : (targetDepartment && targetDepartment !== 'ALL' ? { department: targetDepartment } : {})
+          : {
+              ...(targetDepartments && targetDepartments.length > 0 && !targetDepartments.includes('ALL')
+                ? { department: { in: targetDepartments } }
+                : {}),
+              ...(targetBranches && targetBranches.length > 0 && !targetBranches.includes('ALL')
+                ? { branch: { in: targetBranches } }
+                : {})
+            }
         )
       }
     });
 
-    // Initialize blank log slots for these users in this campaign
+    // Employee selection validation
+    if (targetEmployees.length === 0) {
+      return NextResponse.json({ error: 'Employee selection validation failed: No matching active employees found for the selected targets' }, { status: 400 });
+    }
+
+    // Create the campaign in DRAFT or SCHEDULED
+    const initialStatus = scheduledDate ? 'SCHEDULED' : 'DRAFT';
+
+    const campaign = await prisma.campaign.create({
+      data: {
+        name: name.trim(),
+        description: description.trim(),
+        category,
+        riskLevel,
+        organizationName: organizationName.trim(),
+        templateId,
+        scheduledStart: scheduledDate,
+        status: initialStatus,
+        organizationId: org.id,
+        branches: JSON.stringify(targetBranches || []),
+        departments: JSON.stringify(targetDepartments || [])
+      },
+      include: {
+        template: true
+      }
+    });
+
+    // Initialize logs for targeted users
     for (const emp of targetEmployees) {
       await prisma.campaignLog.create({
         data: {

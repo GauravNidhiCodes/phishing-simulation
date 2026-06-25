@@ -61,21 +61,28 @@ async function main() {
 
   const employeesData = [
     // Engineering
-    { name: "Alex Rivera", email: "alex.r@acme.com", department: "Engineering", score: 92, risk: "LOW" },
-    { name: "Jessica Wang", email: "jess.w@acme.com", department: "Engineering", score: 85, risk: "LOW" },
-    { name: "Marcus Brody", email: "marcus.b@acme.com", department: "Engineering", score: 55, risk: "HIGH" },
+    { name: "Arjun Mehta", email: "arjun.mehta@tata.co.in", department: "Engineering", branch: "Bengaluru", score: 92, risk: "LOW" },
+    { name: "Priya Sharma", email: "priya.sharma@tata.co.in", department: "Engineering", branch: "Pune", score: 85, risk: "LOW" },
+    { name: "Rajesh Kumar", email: "rajesh.kumar@reliance.in", department: "Engineering", branch: "Hyderabad", score: 55, risk: "HIGH" },
     // HR
-    { name: "Emily Blunt", email: "emily.b@acme.com", department: "Human Resources", score: 78, risk: "MEDIUM" },
-    { name: "David Vance", email: "david.v@acme.com", department: "Human Resources", score: 90, risk: "LOW" },
+    { name: "Deepika Patel", email: "deepika.patel@tata.co.in", department: "HR", branch: "Mumbai", score: 78, risk: "MEDIUM" },
+    { name: "Amit Singh", email: "amit.singh@reliance.in", department: "HR", branch: "Delhi", score: 90, risk: "LOW" },
     // Sales
-    { name: "John Miller", email: "john.m@acme.com", department: "Sales", score: 45, risk: "HIGH" },
-    { name: "Chloe Price", email: "chloe.p@acme.com", department: "Sales", score: 72, risk: "MEDIUM" },
-    { name: "Robert Downey", email: "robert.d@acme.com", department: "Sales", score: 64, risk: "MEDIUM" },
+    { name: "Vikram Malhotra", email: "vikram.malhotra@tata.co.in", department: "Sales", branch: "Pune", score: 45, risk: "HIGH" },
+    { name: "Ananya Iyer", email: "ananya.iyer@reliance.in", department: "Sales", branch: "Chennai", score: 72, risk: "MEDIUM" },
+    { name: "Suresh Nair", email: "suresh.nair@tata.co.in", department: "Sales", branch: "Kolkata", score: 64, risk: "MEDIUM" },
     // Finance
-    { name: "Lisa Kudrow", email: "lisa.k@acme.com", department: "Finance", score: 89, risk: "LOW" },
-    { name: "Matthew Perry", email: "matthew.p@acme.com", department: "Finance", score: 58, risk: "HIGH" },
-    // Legal
-    { name: "Harvey Specter", email: "harvey.s@acme.com", department: "Legal", score: 95, risk: "LOW" },
+    { name: "Neha Gupta", email: "neha.gupta@reliance.in", department: "Finance", branch: "Mumbai", score: 89, risk: "LOW" },
+    { name: "Rohan Das", email: "rohan.das@tata.co.in", department: "Finance", branch: "Kolkata", score: 58, risk: "HIGH" },
+    // Marketing
+    { name: "Karan Johar", email: "karan.johar@reliance.in", department: "Marketing", branch: "Mumbai", score: 95, risk: "LOW" },
+    { name: "Shalini Sen", email: "shalini.sen@tata.co.in", department: "Marketing", branch: "Delhi", score: 68, risk: "MEDIUM" },
+    // Operations
+    { name: "Aditya Verma", email: "aditya.verma@reliance.in", department: "Operations", branch: "Hyderabad", score: 74, risk: "MEDIUM" },
+    { name: "Meera Bai", email: "meera.bai@tata.co.in", department: "Operations", branch: "Bengaluru", score: 82, risk: "LOW" },
+    // IT Support
+    { name: "Sanjay Dutt", email: "sanjay.dutt@reliance.in", department: "IT Support", branch: "Pune", score: 91, risk: "LOW" },
+    { name: "Jyoti Rao", email: "jyoti.rao@tata.co.in", department: "IT Support", branch: "Bengaluru", score: 50, risk: "HIGH" }
   ];
 
   const employees = [];
@@ -86,6 +93,7 @@ async function main() {
         email: emp.email,
         role: "EMPLOYEE",
         department: emp.department,
+        branch: emp.branch,
         awarenessScore: emp.score,
         riskCategory: emp.risk,
         organizationId: org.id,
@@ -94,72 +102,202 @@ async function main() {
     employees.push(user);
   }
 
-  // 4. Create Prebuilt Templates
+  // 4. Create Prebuilt Indian Corporate Templates
   const template1 = await prisma.emailTemplate.create({
     data: {
-      name: "IT Password Audit Alert",
-      subject: "IMMEDIATE: Mandatory Password Policy Update",
+      name: "Microsoft 365 Password Reset",
+      subject: "Action Required: Microsoft 365 Password Reset for {{name}}",
       bodyHtml: `
-        <div style="font-family: sans-serif; padding: 20px; color: #333;">
-          <h2 style="color: #d32f2f;">Critical System Access Security Check</h2>
-          <p>Dear {{name}},</p>
-          <p>Our intrusion detection systems have flagged unusual activity originating from your active region. As part of Acme Corporation's updated cybersecurity compliance program, you are required to re-authenticate and review your credentials immediately.</p>
-          <p style="margin: 25px 0;">
-            <a href="{{link}}" style="background-color: #d32f2f; color: white; padding: 12px 24px; text-decoration: none; border-radius: 4px; font-weight: bold;">Verify Credentials Now</a>
-          </p>
-          <p>Failure to complete this verification within 24 hours will result in automatic lockout of your corporate active directory account.</p>
-          <p>Best regards,<br/>IT Infrastructure Operations Team<br/><strong>support@acme-secure-portal.com</strong></p>
+        <div style="font-family: sans-serif; padding: 20px; color: #333; max-width: 600px; margin: 0 auto; border: 1px solid #e0e0e0; border-radius: 8px;">
+          <div style="background-color: #0078d4; padding: 15px; border-top-left-radius: 8px; border-top-right-radius: 8px; color: white; font-weight: bold; font-size: 18px;">
+            Microsoft IT Security Operations
+          </div>
+          <div style="padding: 20px;">
+            <p>Dear {{name}},</p>
+            <p>Our global security telemetry systems have identified suspicious authentication requests originating from an unverified IP address in your region. In accordance with corporate compliance guidelines, a mandatory password reset is required immediately.</p>
+            <p style="margin: 25px 0; text-align: center;">
+              <a href="{{link}}" style="background-color: #0078d4; color: white; padding: 12px 24px; text-decoration: none; border-radius: 4px; font-weight: bold; display: inline-block;">Update Password Now</a>
+            </p>
+            <p style="font-size: 11px; color: #666; line-height: 1.5;">This linkage verification link will expire in 2 hours. Failure to authenticate will trigger automatic suspension of your active directory account to prevent potential data exfiltration.</p>
+          </div>
+          <div style="background-color: #f4f4f4; padding: 12px; border-bottom-left-radius: 8px; border-bottom-right-radius: 8px; text-align: center; font-size: 11px; color: #666;">
+            Internal IT Helpdesk Operations | secure-portal-m365.co.in
+          </div>
         </div>
       `,
       indicators: JSON.stringify([
-        { id: 1, type: "sender", label: "Mismatched Domain", text: "Sent from 'acme-secure-portal.com' instead of 'acme.com'" },
-        { id: 2, type: "urgency", label: "Artificial Urgency", text: "Contains coercive statements ('within 24 hours', 'automatic lockout') to induce panic" },
-        { id: 3, type: "link", label: "Deceptive Link Destination", text: "Link redirects to an external simulation server rather than internal SSO portal" }
+        { id: 1, type: "sender", label: "Deceptive Mail Server Domain", text: "Sent from 'secure-portal-m365.co.in' instead of verified '@company.co.in'" },
+        { id: 2, type: "urgency", label: "Extreme Time Coercion", text: "Demands resolution 'within 2 hours' or 'automatic suspension' to force immediate action" }
       ]),
     },
   });
 
   const template2 = await prisma.emailTemplate.create({
     data: {
-      name: "HR Benefits Annual Update",
-      subject: "URGENT: Review Your 2026 Health Plan Enrollment details",
+      name: "HR Leave Policy Update",
+      subject: "URGENT: Revised Corporate Leave Policy & FY26 Holiday Calendar",
       bodyHtml: `
-        <div style="font-family: sans-serif; padding: 20px; color: #333;">
-          <p>Hello {{name}},</p>
-          <p>Acme Corporation HR benefits updates have been finalized for the upcoming quarter. Due to corporate subsidy changes, there are adjustments to your healthcare deductions. Please check the new enrollment spreadsheet to ensure your deductions remain accurate.</p>
+        <div style="font-family: sans-serif; padding: 20px; color: #333; max-width: 600px; margin: 0 auto; border: 1px solid #e0e0e0; border-radius: 8px;">
+          <p>Dear Employees,</p>
+          <p>Please note that the executive committee has approved revisions to the corporate leave policy, effective next week. The carry-forward limits and earned leave calculations have been modified for all business divisions.</p>
+          <p>Please review the updated policy handbook and the FY26 Holiday Calendar spreadsheet immediately to confirm your eligibility:</p>
           <p style="margin: 20px 0;">
-            <a href="{{link}}" style="color: #1a73e8; text-decoration: underline; font-weight: bold;">Download_Benefits_Sheet_2026.xlsx</a>
+            <a href="{{link}}" style="color: #0078d4; font-weight: bold; text-decoration: underline;">Revised_Leave_Policy_FY26.xlsx</a>
           </p>
-          <p>Thank you,</p>
-          <p>HR Compensation & Benefits Department</p>
+          <p>Regards,</p>
+          <p><strong>Corporate HR Operations Team</strong><br/>compensation-benefits@company.co.in</p>
         </div>
       `,
       indicators: JSON.stringify([
-        { id: 1, type: "link", label: "Unexpected Attachment Link", text: "Hyperlink acts as a document loader rather than standard employee portal links" },
-        { id: 2, type: "greeting", label: "Generic Salutation", text: "Uses generic greeting 'Hello {{name}}' rather than standard personalized business greeting" }
+        { id: 1, type: "link", label: "Suspicious Download Destination", text: "Hyperlink points to an external simulation tracking portal instead of an internal HRMS system" }
       ]),
     },
   });
 
   const template3 = await prisma.emailTemplate.create({
     data: {
-      name: "Finance Invoice Dispute",
-      subject: "Unpaid Invoice #88493 - Overdue Notification",
+      name: "Salary Credit Notification",
+      subject: "Disbursement Confirmation: Salary Credited for {{name}}",
       bodyHtml: `
-        <div style="font-family: sans-serif; padding: 20px; color: #333;">
-          <p>To Whom It May Concern,</p>
-          <p>Please find attached our overdue invoice #88493. We have not received payment for services rendered in March 2026. If payment is not submitted by Friday, interest fees of 1.5% weekly will be appended to the balance.</p>
-          <p>Please review the details in our accounting server dashboard:</p>
+        <div style="font-family: sans-serif; padding: 20px; color: #333; max-width: 600px; margin: 0 auto; border: 1px solid #e0e0e0; border-radius: 8px;">
+          <h3 style="color: #1b5e20;">Corporate Payroll Administration</h3>
+          <p>Dear {{name}},</p>
+          <p>This is to confirm that your payroll disbursement for the current month has been successfully processed and credited to your registered bank account.</p>
+          <p>You can check and download your digital payslip, including tax deductions and benefits adjustments, at our secure portal below:</p>
           <p style="margin: 20px 0;">
-            <a href="{{link}}" style="background-color: #f0ad4e; color: black; padding: 10px 20px; text-decoration: none; border-radius: 4px; font-weight: bold;">Access Invoice Statement</a>
+            <a href="{{link}}" style="background-color: #1b5e20; color: white; padding: 10px 20px; text-decoration: none; border-radius: 4px; font-weight: bold; display: inline-block;">Download Payslip (PDF)</a>
           </p>
-          <p>Sincerely,</p>
-          <p>Global Billing Services<br/>billing@accounting-notices.net</p>
+          <p>Thanks,</p>
+          <p>Finance & Accounts Division</p>
         </div>
       `,
       indicators: JSON.stringify([
-        { id: 1, type: "sender", label: "Unknown Third Party", text: "Sent from '@accounting-notices.net' which has no vendor association" },
-        { id: 2, type: "financial", label: "Financial Coercion", text: "Demands payments and threatens penalty fees to bypass standard purchase order audits" }
+        { id: 1, type: "financial", label: "Financial Incentive", text: "Exploits high-curiosity payroll information to lure user to input credentials" }
+      ]),
+    },
+  });
+
+  const template4 = await prisma.emailTemplate.create({
+    data: {
+      name: "IT Helpdesk Security Alert",
+      subject: "Critical Notice: Blocked IP Alert on Your Office Workstation",
+      bodyHtml: `
+        <div style="font-family: sans-serif; padding: 20px; color: #333; max-width: 600px; margin: 0 auto; border: 1px solid #e0e0e0; border-radius: 8px;">
+          <h3 style="color: #c62828;">IT Infrastructure Command Center</h3>
+          <p>Attention {{name}},</p>
+          <p>Our internal firewall has blocked multiple suspicious outbound communication requests originating from your active workstation IP. To prevent quarantine of your machine, you must run the diagnostic agent and verify your SSO token immediately.</p>
+          <p style="margin: 20px 0; text-align: center;">
+            <a href="{{link}}" style="background-color: #c62828; color: white; padding: 12px 24px; text-decoration: none; border-radius: 4px; font-weight: bold; display: inline-block;">Run Security Agent</a>
+          </p>
+          <p>IT Helpdesk Support Node</p>
+        </div>
+      `,
+      indicators: JSON.stringify([
+        { id: 1, type: "urgency", label: "Scare Tactics", text: "Uses threatening language ('quarantine of machine', 'blocked IP') to prompt immediate link click" }
+      ]),
+    },
+  });
+
+  const template5 = await prisma.emailTemplate.create({
+    data: {
+      name: "PF / EPFO Update",
+      subject: "EPFO e-Sewa Notification: Mandatory Aadhaar-UAN Linkage Action",
+      bodyHtml: `
+        <div style="font-family: sans-serif; padding: 20px; color: #333; max-width: 600px; margin: 0 auto; border: 1px solid #e0e0e0; border-radius: 8px;">
+          <h3 style="color: #0d47a1;">Employees' Provident Fund Organisation (India)</h3>
+          <p>Dear Subscriber,</p>
+          <p>Under statutory EPFO compliance circulars, all subscribers are mandated to link their Aadhaar number to their Universal Account Number (UAN) to avoid suspension of provident fund contributions and interest credits.</p>
+          <p>Please authenticate your UAN profile credentials in the Unified Portal to complete the linkage process immediately:</p>
+          <p style="margin: 20px 0; text-align: center;">
+            <a href="{{link}}" style="background-color: #0d47a1; color: white; padding: 12px 24px; text-decoration: none; border-radius: 4px; font-weight: bold; display: inline-block;">Link Aadhaar-UAN Online</a>
+          </p>
+          <p>This is a system generated notice. Do not reply to this email.</p>
+        </div>
+      `,
+      indicators: JSON.stringify([
+        { id: 1, type: "sender", label: "Government Spoofer", text: "EPFO emails will only arrive from verified government domains (gov.in) and never corporate internal routers" }
+      ]),
+    },
+  });
+
+  const template6 = await prisma.emailTemplate.create({
+    data: {
+      name: "Income Tax Declaration Reminder",
+      subject: "Tax Compliance: Investment Declaration Submission Deadline for FY26",
+      bodyHtml: `
+        <div style="font-family: sans-serif; padding: 20px; color: #333; max-width: 600px; margin: 0 auto; border: 1px solid #e0e0e0; border-radius: 8px;">
+          <p>Hello {{name}},</p>
+          <p>This is a reminder that the window for submitting your IT Investment Declarations for the current financial year closes in 48 hours. Failure to declare will result in higher tax deduction at source (TDS) in this month's payroll.</p>
+          <p>Please upload all relevant receipts and forms in our employee tax utility dashboard:</p>
+          <p style="margin: 20px 0;">
+            <a href="{{link}}" style="color: #0078d4; font-weight: bold; text-decoration: underline;">Access Tax Declaration Portal</a>
+          </p>
+          <p>Finance Operations - Payroll Desk</p>
+        </div>
+      `,
+      indicators: JSON.stringify([
+        { id: 1, type: "urgency", label: "Financial Urgency", text: "Forces action by threat of immediate salary deductions" }
+      ]),
+    },
+  });
+
+  const template7 = await prisma.emailTemplate.create({
+    data: {
+      name: "Vendor Invoice Approval",
+      subject: "Finance Portal: Review Pending Invoice Approval for Vendor Services",
+      bodyHtml: `
+        <div style="font-family: sans-serif; padding: 20px; color: #333; max-width: 600px; margin: 0 auto; border: 1px solid #e0e0e0; border-radius: 8px;">
+          <p>Hi Team,</p>
+          <p>We have received an overdue invoice from our service provider for project milestones delivered last month. To prevent delay penalties, please audit and approve the invoice spreadsheet below:</p>
+          <p style="margin: 20px 0;">
+            <a href="{{link}}" style="color: #0078d4; font-weight: bold; text-decoration: underline;">Approve_Invoice_88492.pdf</a>
+          </p>
+          <p>Finance operations</p>
+        </div>
+      `,
+      indicators: JSON.stringify([
+        { id: 1, type: "sender", label: "Vague Sender details", text: "Sent with generic footer 'Finance operations' without vendor names or tracking logs" }
+      ]),
+    },
+  });
+
+  const template8 = await prisma.emailTemplate.create({
+    data: {
+      name: "Internal Meeting Invitation",
+      subject: "CEO Townhall Meet: Discussion on FY26 Appraisals & Strategy",
+      bodyHtml: `
+        <div style="font-family: sans-serif; padding: 20px; color: #333; max-width: 600px; margin: 0 auto; border: 1px solid #e0e0e0; border-radius: 8px;">
+          <p>Hello Team,</p>
+          <p>You are invited to join the upcoming CEO Townhall video session. We will cover key business strategy updates, organizational shifts, and the upcoming FY26 appraisal cycles.</p>
+          <p>Please register and confirm your attendance link to secure your connection slot:</p>
+          <p style="margin: 20px 0; text-align: center;">
+            <a href="{{link}}" style="background-color: #f57c00; color: white; padding: 12px 24px; text-decoration: none; border-radius: 4px; font-weight: bold; display: inline-block;">Accept Invite & Join Meeting</a>
+          </p>
+          <p>Executive Office Assistant Desk</p>
+        </div>
+      `,
+      indicators: JSON.stringify([
+        { id: 1, type: "link", label: "Deceptive Meeting Link", text: "Accept meeting link routes to an external login gate instead of Zoom/Teams corporate connectors" }
+      ]),
+    },
+  });
+
+  const template9 = await prisma.emailTemplate.create({
+    data: {
+      name: "Company VPN Access Renewal",
+      subject: "IT Infrastructure: Corporate VPN Access Token Expiration Notice",
+      bodyHtml: `
+        <div style="font-family: sans-serif; padding: 20px; color: #333; max-width: 600px; margin: 0 auto; border: 1px solid #e0e0e0; border-radius: 8px;">
+          <p>Hi {{name}},</p>
+          <p>Your corporate VPN remote access token is scheduled to expire at the end of this week. To prevent loss of connection to secure staging nodes and internal dashboards, you must renew your credentials immediately.</p>
+          <p style="margin: 20px 0; text-align: center;">
+            <a href="{{link}}" style="background-color: #0288d1; color: white; padding: 12px 24px; text-decoration: none; border-radius: 4px; font-weight: bold; display: inline-block;">Renew VPN Token Now</a>
+          </p>
+          <p>Infrastructure Team Support Node</p>
+        </div>
+      `,
+      indicators: JSON.stringify([
+        { id: 1, type: "urgency", label: "Operational Disruption Threat", text: "Triggers panic regarding loss of corporate network connectivity" }
       ]),
     },
   });

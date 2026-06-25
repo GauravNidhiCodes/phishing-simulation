@@ -33,6 +33,7 @@ model User {
   name           String?
   role           String         @default("EMPLOYEE") // SUPERADMIN, ORG_ADMIN, EMPLOYEE
   department     String?
+  branch         String?        // e.g. Pune, Bengaluru, Hyderabad, Mumbai, Delhi, Chennai, Kolkata
   organizationId String
   organization   Organization   @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   campaignLogs   CampaignLog[]
@@ -43,18 +44,24 @@ model User {
 }
 
 model Campaign {
-  id             String         @id @default(uuid())
-  name           String
-  status         String         @default("DRAFT") // DRAFT, SCHEDULED, ACTIVE, COMPLETED
-  templateId     String
-  template       EmailTemplate  @relation(fields: [templateId], references: [id])
-  organizationId String
-  organization   Organization   @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  scheduledStart DateTime?
-  startedAt      DateTime?
-  completedAt    DateTime?
-  logs           CampaignLog[]
-  createdAt      DateTime       @default(now())
+  id               String         @id @default(uuid())
+  name             String
+  status           String         @default("DRAFT") // DRAFT, SCHEDULED, ACTIVE, COMPLETED
+  templateId       String
+  template         EmailTemplate  @relation(fields: [templateId], references: [id])
+  organizationId   String
+  organization     Organization   @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  description      String?
+  category         String?        // Password Reset, HR Notice, IT Support, Finance, Compliance, Festival Awareness
+  riskLevel        String?        @default("MEDIUM") // LOW, MEDIUM, HIGH
+  branches         String?        // serialized JSON of branches targeted
+  departments      String?        // serialized JSON of departments targeted
+  organizationName String?
+  scheduledStart   DateTime?
+  startedAt        DateTime?
+  completedAt      DateTime?
+  logs             CampaignLog[]
+  createdAt        DateTime       @default(now())
 }
 
 model EmailTemplate {

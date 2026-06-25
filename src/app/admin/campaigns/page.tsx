@@ -29,7 +29,10 @@ import {
   AlertCircle,
   Sliders,
   UserCheck,
-  ShieldAlert
+  ShieldAlert,
+  Building,
+  MapPin,
+  CheckSquare
 } from 'lucide-react';
 
 interface Campaign {
@@ -40,6 +43,12 @@ interface Campaign {
   scheduledStart: string | null;
   startedAt: string | null;
   completedAt: string | null;
+  description?: string | null;
+  category?: string | null;
+  riskLevel?: string | null;
+  organizationName?: string | null;
+  branches?: string | null;
+  departments?: string | null;
 }
 
 interface Template {
@@ -55,43 +64,88 @@ interface Employee {
   name: string | null;
   email: string;
   department: string | null;
+  branch: string | null;
   riskCategory: string;
   awarenessScore: number;
 }
+
+const INDIAN_BRANCHES = [
+  'Pune', 
+  'Bengaluru', 
+  'Hyderabad', 
+  'Mumbai', 
+  'Delhi', 
+  'Chennai', 
+  'Kolkata'
+];
+
+const DEPARTMENTS = [
+  'Engineering', 
+  'HR', 
+  'Finance', 
+  'Sales', 
+  'Marketing', 
+  'Operations', 
+  'IT Support'
+];
+
+const CATEGORIES = [
+  'Password Reset', 
+  'HR Notice', 
+  'IT Support', 
+  'Finance', 
+  'Compliance', 
+  'Festival Awareness'
+];
 
 export default function CampaignsPage() {
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
   const [templates, setTemplates] = useState<Template[]>([]);
   const [employees, setEmployees] = useState<Employee[]>([]);
-  const [departments, setDepartments] = useState<string[]>([]);
   
   const [loading, setLoading] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
-
+  const [successModalOpen, setSuccessModalOpen] = useState(false);
+  
   // Wizard Step State
   const [step, setStep] = useState(1);
 
-  // Form states
+  // Success Confirmation State
+  const [createdCampaignDetails, setCreatedCampaignDetails] = useState<{
+    id: string;
+    name: string;
+    scheduledTime: string;
+    targetCount: number;
+    category: string;
+    riskLevel: string;
+    templateName: string;
+  } | null>(null);
+
+  // STEP 1 Form states
   const [campaignName, setCampaignName] = useState('');
-  const [campaignObjective, setCampaignObjective] = useState('Standard Phishing Assessment');
-  const [targetDept, setTargetDept] = useState('ALL');
+  const [campaignDescription, setCampaignDescription] = useState('');
+  const [businessUnit, setBusinessUnit] = useState('Engineering');
+  const [organizationName, setOrganizationName] = useState('Acme India Corp');
+  const [campaignCategory, setCampaignCategory] = useState('Password Reset');
+  const [riskLevel, setRiskLevel] = useState('MEDIUM');
   
-  // Target Selection states
+  // STEP 2 Target Audience states
+  const [selectedDeptFilters, setSelectedDeptFilters] = useState<string[]>([]);
+  const [selectedBranchFilters, setSelectedBranchFilters] = useState<string[]>([]);
   const [selectedUserIds, setSelectedUserIds] = useState<string[]>([]);
   const [employeeSearchTerm, setEmployeeSearchTerm] = useState('');
-  const [riskFilter, setRiskFilter] = useState<'ALL' | 'HIGH' | 'MEDIUM' | 'LOW'>('ALL');
 
-  // Template states
+  // STEP 3 Template states
   const [selectedTemplate, setSelectedTemplate] = useState('');
   const [templateSearchTerm, setTemplateSearchTerm] = useState('');
   const [previewTemplate, setPreviewTemplate] = useState<Template | null>(null);
 
-  // Schedule states
+  // STEP 4 Schedule states
   const [dispatchType, setDispatchType] = useState<'IMMEDIATE' | 'SCHEDULED'>('IMMEDIATE');
+  const [scheduleDate, setScheduleDate] = useState('');
   const [scheduleTime, setScheduleTime] = useState('');
-  const [deliveryThrottle, setDeliveryThrottle] = useState<'INSTANT' | '2H' | '24H'>('INSTANT');
 
-  // Review states
+  // Ethical check / Submit errors
   const [ethicsAcknowledge, setEthicsAcknowledge] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
@@ -107,17 +161,8 @@ export default function CampaignsPage() {
         
         if (data.templates && data.templates.length > 0) {
           setSelectedTemplate(data.templates[0].id);
+          setPreviewTemplate(data.templates[0]);
         }
-        
-        // Extract unique departments
-        const depts: string[] = Array.from(
-          new Set(
-            (data.employees || [])
-              .map((e: Employee) => e.department)
-              .filter(Boolean)
-          )
-        );
-        setDepartments(depts);
         setLoading(false);
       })
       .catch(err => {
@@ -130,25 +175,29 @@ export default function CampaignsPage() {
     loadData();
   }, []);
 
-  // Preset operations names for premium cyber UX feel
-  const generateOpsName = () => {
-    const prefixes = ['OP-SILENT-SPEAR', 'OP-CYBER-PULSE', 'OP-ECLIPSE-VORTEX', 'OP-AEGIS-PROMPT', 'OP-AURORA-SHIELD'];
-    const randomNum = Math.floor(1000 + Math.random() * 9000);
+  // Preset operations code names for Indian theme
+  const generateIndianOpsName = () => {
+    const prefixes = ['OP-DESI-SHIELD', 'OP-MONSOON-SEC', 'OP-CHAI-TAP', 'OP-DECCAN-GATE', 'OP-HIMALAYA-VORTEX'];
+    const randomNum = Math.floor(100 + Math.random() * 900);
     setCampaignName(`${prefixes[Math.floor(Math.random() * prefixes.length)]}-${randomNum}`);
   };
 
-  // Reset wizard state
   const openWizard = () => {
     setStep(1);
-    generateOpsName();
-    setTargetDept('ALL');
+    generateIndianOpsName();
+    setCampaignDescription('Annual security readiness verification and spear phishing compliance check.');
+    setBusinessUnit('Engineering');
+    setOrganizationName('Acme India Corp');
+    setCampaignCategory('Password Reset');
+    setRiskLevel('MEDIUM');
+    setSelectedDeptFilters([]);
+    setSelectedBranchFilters([]);
     setSelectedUserIds([]);
     setEmployeeSearchTerm('');
-    setRiskFilter('ALL');
     setTemplateSearchTerm('');
     setDispatchType('IMMEDIATE');
+    setScheduleDate('');
     setScheduleTime('');
-    setDeliveryThrottle('INSTANT');
     setEthicsAcknowledge(false);
     setErrorMsg('');
     
@@ -159,37 +208,35 @@ export default function CampaignsPage() {
     setModalOpen(true);
   };
 
-  // Filtered employees for Step 2
+  // Filtered employees for Step 2 targeting preview
   const filteredEmployees = useMemo(() => {
     return employees.filter(emp => {
-      const matchesDept = targetDept === 'ALL' || emp.department === targetDept;
+      const matchesDept = selectedDeptFilters.length === 0 || (emp.department && selectedDeptFilters.includes(emp.department));
+      const matchesBranch = selectedBranchFilters.length === 0 || (emp.branch && selectedBranchFilters.includes(emp.branch));
       const matchesSearch = !employeeSearchTerm.trim() || 
         (emp.name && emp.name.toLowerCase().includes(employeeSearchTerm.toLowerCase())) ||
         emp.email.toLowerCase().includes(employeeSearchTerm.toLowerCase());
-      const matchesRisk = riskFilter === 'ALL' || emp.riskCategory === riskFilter;
-      return matchesDept && matchesSearch && matchesRisk;
+      return matchesDept && matchesBranch && matchesSearch;
     });
-  }, [employees, targetDept, employeeSearchTerm, riskFilter]);
+  }, [employees, selectedDeptFilters, selectedBranchFilters, employeeSearchTerm]);
 
-  // Handle auto-populating select-all for filtered targets
+  // Synchronize target selections when filters change
   useEffect(() => {
-    if (step === 2 && selectedUserIds.length === 0) {
-      // By default, auto-select all filtered targets matching the department filter
+    if (step === 2) {
       setSelectedUserIds(filteredEmployees.map(e => e.id));
     }
-  }, [step, targetDept]);
+  }, [selectedDeptFilters, selectedBranchFilters, step]);
 
-  const handleSelectAllFiltered = () => {
-    const filteredIds = filteredEmployees.map(e => e.id);
-    const allSelected = filteredIds.every(id => selectedUserIds.includes(id));
+  const handleToggleDeptFilter = (dept: string) => {
+    setSelectedDeptFilters(prev => 
+      prev.includes(dept) ? prev.filter(d => d !== dept) : [...prev, dept]
+    );
+  };
 
-    if (allSelected) {
-      // Remove currently filtered IDs from selection
-      setSelectedUserIds(prev => prev.filter(id => !filteredIds.includes(id)));
-    } else {
-      // Add missing filtered IDs to selection
-      setSelectedUserIds(prev => Array.from(new Set([...prev, ...filteredIds])));
-    }
+  const handleToggleBranchFilter = (branch: string) => {
+    setSelectedBranchFilters(prev => 
+      prev.includes(branch) ? prev.filter(b => b !== branch) : [...prev, branch]
+    );
   };
 
   const handleToggleUserSelect = (id: string) => {
@@ -198,11 +245,82 @@ export default function CampaignsPage() {
     );
   };
 
-  const handleCreateCampaign = async () => {
-    if (!campaignName.trim() || !selectedTemplate || !ethicsAcknowledge) return;
+  const handleSelectAllFiltered = () => {
+    const filteredIds = filteredEmployees.map(e => e.id);
+    const allSelected = filteredIds.every(id => selectedUserIds.includes(id));
+    if (allSelected) {
+      setSelectedUserIds(prev => prev.filter(id => !filteredIds.includes(id)));
+    } else {
+      setSelectedUserIds(prev => Array.from(new Set([...prev, ...filteredIds])));
+    }
+  };
 
+  // Validation routines per step
+  const handleNextStep = () => {
+    setErrorMsg('');
+    
+    if (step === 1) {
+      if (!campaignName.trim()) {
+        setErrorMsg('Campaign Name is required.');
+        return;
+      }
+      // Duplicate campaign name check
+      const nameExists = campaigns.some(c => c.name.toLowerCase().trim() === campaignName.toLowerCase().trim());
+      if (nameExists) {
+        setErrorMsg('A campaign with this name already exists in your registry.');
+        return;
+      }
+      if (!campaignDescription.trim()) {
+        setErrorMsg('Campaign Description is required.');
+        return;
+      }
+      if (!organizationName.trim()) {
+        setErrorMsg('Organization Name is required.');
+        return;
+      }
+    }
+
+    if (step === 2) {
+      // Employee selection validation
+      if (selectedUserIds.length === 0) {
+        setErrorMsg('Employee selection validation failed: You must target at least 1 employee.');
+        return;
+      }
+    }
+
+    if (step === 3) {
+      if (!selectedTemplate) {
+        setErrorMsg('Please select an email template.');
+        return;
+      }
+    }
+
+    if (step === 4) {
+      // Date/time validation for scheduled type
+      if (dispatchType === 'SCHEDULED') {
+        if (!scheduleDate || !scheduleTime) {
+          setErrorMsg('Please select both date and time for the scheduled release.');
+          return;
+        }
+        const selectedDateTime = new Date(`${scheduleDate}T${scheduleTime}`);
+        if (isNaN(selectedDateTime.getTime()) || selectedDateTime <= new Date()) {
+          setErrorMsg('Scheduled start date/time must be in the future.');
+          return;
+        }
+      }
+    }
+
+    setStep(prev => prev + 1);
+  };
+
+  const handleCreateCampaign = async () => {
+    if (!ethicsAcknowledge) return;
     setSubmitting(true);
     setErrorMsg('');
+
+    const scheduledStartISO = dispatchType === 'SCHEDULED' && scheduleDate && scheduleTime 
+      ? new Date(`${scheduleDate}T${scheduleTime}`).toISOString()
+      : null;
 
     try {
       const res = await fetch('/api/admin/campaigns', {
@@ -210,27 +328,51 @@ export default function CampaignsPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           name: campaignName,
+          description: campaignDescription,
+          category: campaignCategory,
+          riskLevel,
+          organizationName,
           templateId: selectedTemplate,
-          scheduledStart: dispatchType === 'SCHEDULED' && scheduleTime ? new Date(scheduleTime).toISOString() : null,
-          targetDepartment: targetDept,
+          scheduledStart: scheduledStartISO,
+          targetDepartments: selectedDeptFilters.length > 0 ? selectedDeptFilters : ['ALL'],
+          targetBranches: selectedBranchFilters.length > 0 ? selectedBranchFilters : ['ALL'],
           targetUserIds: selectedUserIds
         })
       });
 
       if (!res.ok) {
         const err = await res.json();
-        throw new Error(err.error || 'Failed to create campaign');
+        throw new Error(err.error || 'Failed to deploy campaign');
       }
 
+      const created = await res.json();
+
+      // Configure details to display in premium success modal
+      setCreatedCampaignDetails({
+        id: created.id,
+        name: created.name,
+        scheduledTime: scheduledStartISO 
+          ? new Date(scheduledStartISO).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }) + ' (IST)' 
+          : 'Immediate Dispatch',
+        targetCount: selectedUserIds.length,
+        category: campaignCategory,
+        riskLevel,
+        templateName: selectedTemplateDetails?.name || 'Custom Email Template'
+      });
+
       setModalOpen(false);
+      setSuccessModalOpen(true);
       loadData();
     } catch (err: any) {
       setErrorMsg(err.message);
-      setStep(5); // Bring back to review step if error occurs
     } finally {
       setSubmitting(false);
     }
   };
+
+  const selectedTemplateDetails = useMemo(() => {
+    return templates.find(t => t.id === selectedTemplate);
+  }, [templates, selectedTemplate]);
 
   const handleToggleStatus = async (id: string, newStatus: 'ACTIVE' | 'COMPLETED') => {
     try {
@@ -245,16 +387,10 @@ export default function CampaignsPage() {
     }
   };
 
-  // Group campaigns by status
   const drafts = campaigns.filter(c => c.status === 'DRAFT');
   const scheduled = campaigns.filter(c => c.status === 'SCHEDULED');
   const active = campaigns.filter(c => c.status === 'ACTIVE');
   const completed = campaigns.filter(c => c.status === 'COMPLETED');
-
-  // Selected template details helper
-  const selectedTemplateDetails = useMemo(() => {
-    return templates.find(t => t.id === selectedTemplate);
-  }, [templates, selectedTemplate]);
 
   return (
     <div className="space-y-10 relative">
@@ -265,32 +401,24 @@ export default function CampaignsPage() {
         <div className="space-y-1.5">
           <div className="flex items-center gap-2">
             <span className="h-1.5 w-1.5 rounded-full bg-brand-cyan shadow-[0_0_8px_#06b6d4]" />
-            <span className="text-[10px] font-mono uppercase tracking-widest text-brand-cyan font-bold">Training Registry</span>
+            <span className="text-[10px] font-mono uppercase tracking-widest text-brand-cyan font-bold">Indian Compliance Suite</span>
           </div>
           <h1 className="text-3xl font-extrabold tracking-tight leading-none bg-gradient-to-r from-white via-zinc-100 to-zinc-500 bg-clip-text text-transparent">
             Campaign Operations
           </h1>
-          <p className="text-xs text-zinc-400 font-mono">Configure, dispatch, and terminate authorized cybersecurity awareness simulation exercises.</p>
+          <p className="text-xs text-zinc-400 font-mono">Configure, dispatch, and terminate authorized cybersecurity awareness simulation exercises in Indian branches.</p>
         </div>
 
         <button
           onClick={openWizard}
-          className="flex items-center justify-center gap-2 bg-gradient-to-r from-brand-cyan via-brand-blue to-brand-purple hover:brightness-110 active:scale-[0.98] text-white font-bold px-5 py-3 rounded-xl transition-all duration-300 shadow-[0_4px_25px_rgba(6,182,212,0.22)] text-xs font-mono uppercase tracking-wider shrink-0 border border-white/10 cursor-pointer"
+          className="flex items-center justify-center gap-2 bg-gradient-to-r from-brand-cyan via-brand-blue to-brand-purple hover:brightness-110 active:scale-[0.98] text-white font-bold px-5 py-3 rounded-xl transition-all duration-300 shadow-[0_4px_25px_rgba(6,182,212,0.22)] text-xs font-mono uppercase tracking-wider shrink-0 border border-white/10 cursor-pointer animate-pulse"
         >
-          <Plus size={14} className="stroke-[3]" /> Create Simulation
+          <Plus size={14} className="stroke-[3]" /> Launch India Drill
         </button>
       </div>
 
       {/* Kanban lanes structure */}
-      <motion.div 
-        variants={{
-          hidden: { opacity: 0 },
-          show: { opacity: 1, transition: { staggerChildren: 0.05 } }
-        }}
-        initial="hidden"
-        animate="show"
-        className="grid md:grid-cols-2 lg:grid-cols-4 gap-6"
-      >
+      <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
         
         {/* Lane 1: Active */}
         <div className="space-y-5">
@@ -368,13 +496,12 @@ export default function CampaignsPage() {
           </div>
         </div>
 
-      </motion.div>
+      </div>
 
       {/* Creation Multi-Step Wizard Modal */}
       <AnimatePresence>
         {modalOpen && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-            {/* Backdrop */}
             <motion.div 
               initial={{ opacity: 0 }}
               animate={{ opacity: 0.7 }}
@@ -382,7 +509,6 @@ export default function CampaignsPage() {
               onClick={() => setModalOpen(false)}
               className="absolute inset-0 bg-black/85 backdrop-blur-md"
             />
-            {/* Modal Box */}
             <motion.div 
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -400,8 +526,8 @@ export default function CampaignsPage() {
                     <Sparkles size={18} className="animate-pulse" />
                   </div>
                   <div>
-                    <h2 className="text-xl font-extrabold text-white tracking-tight">Campaign Deployer Wizard</h2>
-                    <p className="text-[9px] text-zinc-400 font-mono tracking-widest uppercase">Targeted Simulation Infrastructure Setup</p>
+                    <h2 className="text-xl font-extrabold text-white tracking-tight">Deploy Awareness Drill</h2>
+                    <p className="text-[9px] text-zinc-400 font-mono tracking-widest uppercase">Targeted Campaign Setup Suite</p>
                   </div>
                 </div>
                 <button 
@@ -416,10 +542,10 @@ export default function CampaignsPage() {
               <div className="grid grid-cols-5 gap-2 pb-5 border-b border-white/[0.04] mb-6 shrink-0 font-mono text-[9px]">
                 {[
                   { num: 1, label: 'Identity' },
-                  { num: 2, label: 'Targets' },
-                  { num: 3, label: 'Template' },
+                  { num: 2, label: 'Audience' },
+                  { num: 3, label: 'Scenario' },
                   { num: 4, label: 'Schedule' },
-                  { num: 5, label: 'Review' }
+                  { num: 5, label: 'Audit' }
                 ].map((s) => {
                   const isActive = step === s.num;
                   const isCompleted = step > s.num;
@@ -465,7 +591,7 @@ export default function CampaignsPage() {
               {/* Wizard Scrollable Content area */}
               <div className="flex-1 overflow-y-auto pr-1 select-none space-y-6">
                 
-                {/* STEP 1: IDENTITY */}
+                {/* STEP 1: CAMPAIGN DETAILS */}
                 {step === 1 && (
                   <motion.div 
                     initial={{ opacity: 0, x: 20 }}
@@ -474,78 +600,108 @@ export default function CampaignsPage() {
                   >
                     <div className="space-y-2">
                       <h3 className="text-sm font-bold text-white tracking-tight flex items-center gap-2">
-                        <Folder size={14} className="text-brand-cyan" /> Define Campaign Scope & Identity
+                        <Folder size={14} className="text-brand-cyan" /> Campaign Details & Scope
                       </h3>
-                      <p className="text-[10px] text-zinc-400">Establish the operational identifiers and department-level baseline boundary for this training simulation.</p>
+                      <p className="text-[10px] text-zinc-400 font-mono">STEP 1: Define baseline parameters and regulatory contexts for the simulation exercise.</p>
                     </div>
 
-                    <div className="space-y-4">
-                      <div>
-                        <div className="flex justify-between items-center mb-2">
-                          <label className="block text-[9px] font-mono uppercase tracking-wider text-zinc-400 font-semibold">Campaign Operation Name</label>
-                          <button 
-                            type="button"
-                            onClick={generateOpsName}
-                            className="text-[9px] font-mono text-brand-cyan hover:underline hover:brightness-110 cursor-pointer"
-                          >
-                            Regenerate Code Name
-                          </button>
+                    <div className="grid sm:grid-cols-2 gap-5">
+                      <div className="space-y-4">
+                        <div>
+                          <label className="block text-[9px] font-mono uppercase tracking-wider text-zinc-400 mb-1.5 font-semibold">Campaign Name</label>
+                          <input
+                            type="text"
+                            required
+                            placeholder="e.g. OP-DESI-SHIELD-349"
+                            value={campaignName}
+                            onChange={(e) => setCampaignName(e.target.value)}
+                            className="w-full px-4 py-2.5 rounded-xl glass-input text-xs font-mono"
+                          />
                         </div>
-                        <input
-                          type="text"
-                          required
-                          placeholder="e.g. OP-SILENT-SPEAR-9402"
-                          value={campaignName}
-                          onChange={(e) => setCampaignName(e.target.value)}
-                          className="w-full px-4 py-3 rounded-xl glass-input text-xs font-mono"
-                        />
+
+                        <div>
+                          <label className="block text-[9px] font-mono uppercase tracking-wider text-zinc-400 mb-1.5 font-semibold">Campaign Description</label>
+                          <textarea
+                            required
+                            rows={3}
+                            placeholder="Describe the goals and compliance scope of this campaign..."
+                            value={campaignDescription}
+                            onChange={(e) => setCampaignDescription(e.target.value)}
+                            className="w-full px-4 py-2.5 rounded-xl glass-input text-xs font-mono"
+                          />
+                        </div>
                       </div>
 
-                      <div>
-                        <label className="block text-[9px] font-mono uppercase tracking-wider text-zinc-400 mb-2 font-semibold">Operational Security Objective</label>
-                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                          {[
-                            { value: 'Standard Phishing Assessment', desc: 'Baseline awareness check across regular threat indicators.' },
-                            { value: 'Spear Phishing Simulation', desc: 'Highly personalized template targeting specific divisions.' },
-                            { value: 'Credential Harvest Audit', desc: 'Evaluates employee submission of fake portal credentials.' }
-                          ].map((obj) => (
-                            <div 
-                              key={obj.value}
-                              onClick={() => setCampaignObjective(obj.value)}
-                              className={`p-3.5 rounded-xl border transition-all duration-300 cursor-pointer flex flex-col justify-between text-left ${
-                                campaignObjective === obj.value 
-                                  ? 'bg-brand-cyan/5 border-brand-cyan text-white shadow-[0_0_15px_rgba(6,182,212,0.06)]' 
-                                  : 'bg-white/[0.01] border-white/[0.04] text-zinc-400 hover:border-white/10 hover:bg-white/[0.02]'
-                              }`}
+                      <div className="space-y-4">
+                        <div className="grid grid-cols-2 gap-3">
+                          <div>
+                            <label className="block text-[9px] font-mono uppercase tracking-wider text-zinc-400 mb-1.5 font-semibold">Business Unit / Dept</label>
+                            <select
+                              value={businessUnit}
+                              onChange={(e) => setBusinessUnit(e.target.value)}
+                              className="w-full px-4 py-2.5 rounded-xl glass-input text-xs font-mono"
                             >
-                              <span className="text-xs font-extrabold block text-white">{obj.value}</span>
-                              <span className="text-[9px] leading-relaxed font-mono block mt-2 text-zinc-500">{obj.desc}</span>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
+                              {DEPARTMENTS.map(d => (
+                                <option key={d} value={d}>{d}</option>
+                              ))}
+                            </select>
+                          </div>
 
-                      <div>
-                        <label className="block text-[9px] font-mono uppercase tracking-wider text-zinc-400 mb-2 font-semibold">Primary Target Department</label>
-                        <select
-                          value={targetDept}
-                          onChange={(e) => {
-                            setTargetDept(e.target.value);
-                            setSelectedUserIds([]); // reset selection to trigger auto-select inside useEffect
-                          }}
-                          className="w-full px-4 py-3 rounded-xl glass-input text-xs font-mono"
-                        >
-                          <option value="ALL">All Departments (Organization-Wide)</option>
-                          {departments.map(d => (
-                            <option key={d} value={d}>{d}</option>
-                          ))}
-                        </select>
+                          <div>
+                            <label className="block text-[9px] font-mono uppercase tracking-wider text-zinc-400 mb-1.5 font-semibold">Organization Name</label>
+                            <input
+                              type="text"
+                              required
+                              placeholder="e.g. Acme India Ltd"
+                              value={organizationName}
+                              onChange={(e) => setOrganizationName(e.target.value)}
+                              className="w-full px-4 py-2.5 rounded-xl glass-input text-xs font-mono"
+                            />
+                          </div>
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-3">
+                          <div>
+                            <label className="block text-[9px] font-mono uppercase tracking-wider text-zinc-400 mb-1.5 font-semibold">Campaign Category</label>
+                            <select
+                              value={campaignCategory}
+                              onChange={(e) => setCampaignCategory(e.target.value)}
+                              className="w-full px-4 py-2.5 rounded-xl glass-input text-xs font-mono"
+                            >
+                              {CATEGORIES.map(c => (
+                                <option key={c} value={c}>{c}</option>
+                              ))}
+                            </select>
+                          </div>
+
+                          <div>
+                            <label className="block text-[9px] font-mono uppercase tracking-wider text-zinc-400 mb-1.5 font-semibold">Risk Level</label>
+                            <div className="flex items-center gap-1.5 bg-white/[0.01] border border-white/[0.03] p-1 rounded-xl">
+                              {(['LOW', 'MEDIUM', 'HIGH'] as const).map((r) => (
+                                <button
+                                  key={r}
+                                  type="button"
+                                  onClick={() => setRiskLevel(r)}
+                                  className={`flex-1 py-1 rounded-lg text-[9px] font-mono font-bold transition-all cursor-pointer ${
+                                    riskLevel === r 
+                                      ? r === 'HIGH' ? 'bg-brand-rose/10 border border-brand-rose/25 text-brand-rose' :
+                                        r === 'MEDIUM' ? 'bg-brand-amber/10 border border-brand-amber/25 text-brand-amber' :
+                                        'bg-brand-emerald/10 border border-brand-emerald/25 text-brand-emerald'
+                                      : 'bg-transparent border border-transparent text-zinc-500 hover:text-zinc-300'
+                                  }`}
+                                >
+                                  {r}
+                                </button>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </motion.div>
                 )}
 
-                {/* STEP 2: TARGET EMPLOYEE SELECTION */}
+                {/* STEP 2: TARGET AUDIENCE */}
                 {step === 2 && (
                   <motion.div 
                     initial={{ opacity: 0, x: 20 }}
@@ -555,144 +711,170 @@ export default function CampaignsPage() {
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                       <div className="space-y-1">
                         <h3 className="text-sm font-bold text-white tracking-tight flex items-center gap-2">
-                          <UserCheck size={14} className="text-brand-cyan" /> Select Target Nodes
+                          <UserCheck size={14} className="text-brand-cyan" /> Define Target Audience
                         </h3>
-                        <p className="text-[10px] text-zinc-400">Search and selectively filter specific employee target records to deploy simulations to.</p>
+                        <p className="text-[10px] text-zinc-400 font-mono">STEP 2: Filter targeted employee nodes dynamically by branches and divisions.</p>
                       </div>
-                      <div className="text-right shrink-0">
-                        <span className="text-xs font-black font-mono text-brand-cyan">
-                          {selectedUserIds.length} / {filteredEmployees.length} Targets Selected
+                      <div className="text-right shrink-0 p-3 rounded-2xl bg-brand-cyan/5 border border-brand-cyan/15">
+                        <span className="text-[9px] uppercase font-mono text-zinc-400 block font-bold">Target Employee Preview</span>
+                        <span className="text-xl font-black font-mono text-brand-cyan">
+                          {selectedUserIds.length} employees selected
                         </span>
                       </div>
                     </div>
 
-                    {/* Filter Controls Bar */}
-                    <div className="flex flex-col sm:flex-row gap-3">
-                      <div className="relative flex-1">
-                        <Search className="absolute left-3.5 top-3 text-zinc-500" size={14} />
-                        <input
-                          type="text"
-                          placeholder="Search target employee name or email..."
-                          value={employeeSearchTerm}
-                          onChange={(e) => setEmployeeSearchTerm(e.target.value)}
-                          className="w-full pl-10 pr-4 py-2.5 rounded-xl glass-input text-xs font-mono placeholder:text-zinc-600"
-                        />
-                      </div>
-
-                      {/* Risk filter selector */}
-                      <div className="flex items-center gap-1 bg-white/[0.01] border border-white/[0.03] p-1 rounded-xl shrink-0">
-                        {(['ALL', 'HIGH', 'MEDIUM', 'LOW'] as const).map((r) => (
-                          <button
-                            key={r}
-                            type="button"
-                            onClick={() => setRiskFilter(r)}
-                            className={`px-3 py-1.5 rounded-lg text-[9px] font-mono font-bold transition-all cursor-pointer ${
-                              riskFilter === r 
-                                ? 'bg-brand-cyan/10 border border-brand-cyan/20 text-brand-cyan' 
-                                : 'bg-transparent border border-transparent text-zinc-500 hover:text-zinc-300'
-                            }`}
-                          >
-                            {r}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* Selected List Panel */}
-                    <div className="border border-white/[0.04] rounded-2xl overflow-hidden bg-white/[0.005]">
-                      <div className="grid grid-cols-12 gap-3 px-4 py-2.5 bg-white/[0.02] border-b border-white/[0.04] font-mono text-[9px] text-zinc-500 font-bold items-center">
-                        <div className="col-span-1 flex items-center">
-                          <input
-                            type="checkbox"
-                            checked={filteredEmployees.length > 0 && filteredEmployees.every(e => selectedUserIds.includes(e.id))}
-                            onChange={handleSelectAllFiltered}
-                            className="peer shrink-0 appearance-none w-3.5 h-3.5 rounded border border-white/10 bg-black/40 checked:bg-brand-cyan checked:border-brand-cyan focus:outline-none transition-all cursor-pointer"
-                          />
-                        </div>
-                        <div className="col-span-4">EMPLOYEE NAME</div>
-                        <div className="col-span-4">EMAIL ADDRESS</div>
-                        <div className="col-span-2">DEPARTMENT</div>
-                        <div className="col-span-1 text-right">RISK</div>
-                      </div>
-
-                      <div className="max-h-[220px] overflow-y-auto divide-y divide-white/[0.03] scrollbar-thin">
-                        {filteredEmployees.length > 0 ? (
-                          filteredEmployees.map((emp) => {
-                            const isSelected = selectedUserIds.includes(emp.id);
-                            return (
-                              <div 
-                                key={emp.id}
-                                onClick={() => handleToggleUserSelect(emp.id)}
-                                className={`grid grid-cols-12 gap-3 px-4 py-2.5 items-center cursor-pointer transition-all hover:bg-white/[0.02] text-[10px] ${
-                                  isSelected ? 'bg-brand-blue/5' : ''
-                                }`}
-                              >
-                                <div className="col-span-1 flex items-center" onClick={(e) => e.stopPropagation()}>
+                    <div className="grid md:grid-cols-3 gap-6">
+                      {/* Left: Department & Branch Filters */}
+                      <div className="space-y-5 md:col-span-1">
+                        <div className="space-y-3 p-4 rounded-2xl bg-white/[0.01] border border-white/[0.03]">
+                          <div className="flex items-center gap-1.5 text-zinc-300 font-mono text-[9px] font-bold">
+                            <Building size={11} className="text-brand-cyan" /> SELECT DEPARTMENTS
+                          </div>
+                          <div className="space-y-2 max-h-[140px] overflow-y-auto pr-1 scrollbar-thin">
+                            {DEPARTMENTS.map(d => {
+                              const isChecked = selectedDeptFilters.includes(d);
+                              return (
+                                <label key={d} className="flex items-center gap-2 text-[10px] font-mono text-zinc-400 hover:text-white cursor-pointer select-none">
                                   <input
                                     type="checkbox"
-                                    checked={isSelected}
-                                    onChange={() => handleToggleUserSelect(emp.id)}
+                                    checked={isChecked}
+                                    onChange={() => handleToggleDeptFilter(d)}
                                     className="peer shrink-0 appearance-none w-3.5 h-3.5 rounded border border-white/10 bg-black/40 checked:bg-brand-cyan checked:border-brand-cyan focus:outline-none transition-all cursor-pointer"
                                   />
-                                </div>
-                                <div className="col-span-4 font-extrabold text-white flex items-center gap-2 truncate">
-                                  <div className="w-5 h-5 rounded-full bg-white/5 border border-white/10 flex items-center justify-center shrink-0">
-                                    <User size={10} className="text-zinc-500" />
-                                  </div>
-                                  <span className="truncate">{emp.name || 'Anonymous Target'}</span>
-                                </div>
-                                <div className="col-span-4 font-mono text-zinc-400 truncate">{emp.email}</div>
-                                <div className="col-span-2 font-mono text-zinc-500 uppercase truncate">{emp.department || 'N/A'}</div>
-                                <div className="col-span-1 text-right">
-                                  <span className={`px-1.5 py-0.5 rounded text-[8px] font-mono font-bold ${
-                                    emp.riskCategory === 'HIGH' ? 'bg-brand-rose/10 border border-brand-rose/20 text-brand-rose' :
-                                    emp.riskCategory === 'MEDIUM' ? 'bg-brand-amber/10 border border-brand-amber/20 text-brand-amber' :
-                                    'bg-brand-emerald/10 border border-brand-emerald/20 text-brand-emerald'
-                                  }`}>
-                                    {emp.riskCategory}
-                                  </span>
-                                </div>
-                              </div>
-                            );
-                          })
-                        ) : (
-                          <div className="p-8 text-center text-zinc-600 font-mono text-[9px] uppercase tracking-widest">
-                            No employees match criteria
+                                  <span>{d}</span>
+                                </label>
+                              );
+                            })}
                           </div>
-                        )}
+                        </div>
+
+                        <div className="space-y-3 p-4 rounded-2xl bg-white/[0.01] border border-white/[0.03]">
+                          <div className="flex items-center gap-1.5 text-zinc-300 font-mono text-[9px] font-bold">
+                            <MapPin size={11} className="text-brand-purple" /> SELECT BRANCHES
+                          </div>
+                          <div className="space-y-2 max-h-[140px] overflow-y-auto pr-1 scrollbar-thin">
+                            {INDIAN_BRANCHES.map(b => {
+                              const isChecked = selectedBranchFilters.includes(b);
+                              return (
+                                <label key={b} className="flex items-center gap-2 text-[10px] font-mono text-zinc-400 hover:text-white cursor-pointer select-none">
+                                  <input
+                                    type="checkbox"
+                                    checked={isChecked}
+                                    onChange={() => handleToggleBranchFilter(b)}
+                                    className="peer shrink-0 appearance-none w-3.5 h-3.5 rounded border border-white/10 bg-black/40 checked:bg-brand-purple checked:border-brand-purple focus:outline-none transition-all cursor-pointer"
+                                  />
+                                  <span>{b}</span>
+                                </label>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Right: Employee Directory Table */}
+                      <div className="md:col-span-2 space-y-3">
+                        <div className="relative">
+                          <Search className="absolute left-3 top-2.5 text-zinc-500" size={12} />
+                          <input
+                            type="text"
+                            placeholder="Filter matching employees by name or email..."
+                            value={employeeSearchTerm}
+                            onChange={(e) => setEmployeeSearchTerm(e.target.value)}
+                            className="w-full pl-9 pr-4 py-2 rounded-xl glass-input text-xs font-mono placeholder:text-zinc-600"
+                          />
+                        </div>
+
+                        <div className="border border-white/[0.04] rounded-2xl overflow-hidden bg-white/[0.005]">
+                          <div className="grid grid-cols-12 gap-2 px-3 py-2 bg-white/[0.02] border-b border-white/[0.04] font-mono text-[8px] text-zinc-500 font-bold items-center">
+                            <div className="col-span-1">
+                              <input
+                                type="checkbox"
+                                checked={filteredEmployees.length > 0 && filteredEmployees.every(e => selectedUserIds.includes(e.id))}
+                                onChange={handleSelectAllFiltered}
+                                className="peer shrink-0 appearance-none w-3.5 h-3.5 rounded border border-white/10 bg-black/40 checked:bg-brand-cyan checked:border-brand-cyan focus:outline-none transition-all cursor-pointer"
+                              />
+                            </div>
+                            <div className="col-span-4">NAME</div>
+                            <div className="col-span-4">EMAIL</div>
+                            <div className="col-span-2">BRANCH</div>
+                            <div className="col-span-1 text-right">RISK</div>
+                          </div>
+
+                          <div className="max-h-[220px] overflow-y-auto divide-y divide-white/[0.03] scrollbar-thin">
+                            {filteredEmployees.length > 0 ? (
+                              filteredEmployees.map((emp) => {
+                                const isSelected = selectedUserIds.includes(emp.id);
+                                return (
+                                  <div 
+                                    key={emp.id}
+                                    onClick={() => handleToggleUserSelect(emp.id)}
+                                    className={`grid grid-cols-12 gap-2 px-3 py-2 items-center cursor-pointer transition-all hover:bg-white/[0.02] text-[10px] ${
+                                      isSelected ? 'bg-brand-blue/5' : ''
+                                    }`}
+                                  >
+                                    <div className="col-span-1 flex items-center" onClick={(e) => e.stopPropagation()}>
+                                      <input
+                                        type="checkbox"
+                                        checked={isSelected}
+                                        onChange={() => handleToggleUserSelect(emp.id)}
+                                        className="peer shrink-0 appearance-none w-3.5 h-3.5 rounded border border-white/10 bg-black/40 checked:bg-brand-cyan checked:border-brand-cyan focus:outline-none transition-all cursor-pointer"
+                                      />
+                                    </div>
+                                    <div className="col-span-4 font-extrabold text-white truncate">{emp.name || 'Anonymous Target'}</div>
+                                    <div className="col-span-4 font-mono text-zinc-400 truncate">{emp.email}</div>
+                                    <div className="col-span-2 font-mono text-zinc-500 uppercase">{emp.branch || 'N/A'}</div>
+                                    <div className="col-span-1 text-right">
+                                      <span className={`px-1 py-0.5 rounded text-[8px] font-mono font-bold ${
+                                        emp.riskCategory === 'HIGH' ? 'bg-brand-rose/10 text-brand-rose' :
+                                        emp.riskCategory === 'MEDIUM' ? 'bg-brand-amber/10 text-brand-amber' :
+                                        'bg-brand-emerald/10 text-brand-emerald'
+                                      }`}>
+                                        {emp.riskCategory.substring(0, 3)}
+                                      </span>
+                                    </div>
+                                  </div>
+                                );
+                              })
+                            ) : (
+                              <div className="p-8 text-center text-zinc-600 font-mono text-[9px] uppercase tracking-widest">
+                                No employees match criteria
+                              </div>
+                            )}
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </motion.div>
                 )}
 
-                {/* STEP 3: EMAIL TEMPLATE SELECTION */}
+                {/* STEP 3: EMAIL TEMPLATES */}
                 {step === 3 && (
                   <motion.div 
                     initial={{ opacity: 0, x: 20 }}
                     animate={{ opacity: 1, x: 0 }}
                     className="grid md:grid-cols-2 gap-6"
                   >
-                    {/* Left Column: Selector */}
+                    {/* Scenario List */}
                     <div className="space-y-4 flex flex-col min-h-0">
                       <div className="space-y-1">
                         <h3 className="text-sm font-bold text-white tracking-tight flex items-center gap-2">
-                          <Compass size={14} className="text-brand-cyan" /> Phishing Attack Vector
+                          <Compass size={14} className="text-brand-cyan" /> Indian Corporate Scenarios
                         </h3>
-                        <p className="text-[10px] text-zinc-400">Select an email payload template template from the authorized tenant catalog.</p>
+                        <p className="text-[10px] text-zinc-400 font-mono">STEP 3: Select the phishing simulation template to test validation skills.</p>
                       </div>
 
                       <div className="relative">
-                        <Search className="absolute left-3.5 top-3 text-zinc-500" size={14} />
+                        <Search className="absolute left-3 top-2.5 text-zinc-500" size={12} />
                         <input
                           type="text"
-                          placeholder="Search payload templates..."
+                          placeholder="Search Indian scenarios..."
                           value={templateSearchTerm}
                           onChange={(e) => setTemplateSearchTerm(e.target.value)}
-                          className="w-full pl-10 pr-4 py-2.5 rounded-xl glass-input text-xs font-mono placeholder:text-zinc-600"
+                          className="w-full pl-9 pr-4 py-2 rounded-xl glass-input text-xs font-mono placeholder:text-zinc-600"
                         />
                       </div>
 
-                      <div className="overflow-y-auto space-y-3 max-h-[250px] pr-1 scrollbar-thin flex-1">
+                      <div className="overflow-y-auto space-y-2 max-h-[240px] pr-1 scrollbar-thin flex-1">
                         {templates
                           .filter(t => !templateSearchTerm.trim() || t.name.toLowerCase().includes(templateSearchTerm.toLowerCase()))
                           .map((t) => {
@@ -704,30 +886,37 @@ export default function CampaignsPage() {
                                   setSelectedTemplate(t.id);
                                   setPreviewTemplate(t);
                                 }}
-                                className={`p-4 rounded-xl border transition-all duration-300 cursor-pointer relative group flex justify-between items-start text-left ${
+                                className={`p-3 rounded-xl border transition-all duration-300 cursor-pointer flex justify-between items-center text-left ${
                                   isSelected 
                                     ? 'bg-brand-cyan/5 border-brand-cyan text-white shadow-[0_0_15px_rgba(6,182,212,0.06)]' 
                                     : 'bg-white/[0.01] border-white/[0.04] text-zinc-400 hover:border-white/10 hover:bg-white/[0.02]'
                                 }`}
                               >
-                                <div className="space-y-1 select-none pr-6">
-                                  <span className="text-xs font-extrabold text-white block">{t.name}</span>
-                                  <span className="text-[9px] font-mono text-zinc-500 block truncate max-w-[240px]">SUBJECT: {t.subject}</span>
+                                <div className="space-y-0.5 select-none pr-3 truncate">
+                                  <span className="text-xs font-extrabold text-white block truncate">{t.name}</span>
+                                  <span className="text-[9px] font-mono text-zinc-500 block truncate">SUBJECT: {t.subject}</span>
                                 </div>
-                                <div className="shrink-0 flex items-center gap-1.5">
-                                  {isSelected && <span className="p-1 rounded-full bg-brand-cyan text-black"><Check size={8} className="stroke-[3]" /></span>}
+                                <div className="shrink-0">
+                                  {isSelected && <span className="p-0.5 rounded-full bg-brand-cyan text-black"><Check size={8} className="stroke-[3]" /></span>}
                                 </div>
                               </div>
                             );
                           })}
                       </div>
+
+                      <div className="p-3 rounded-xl bg-brand-cyan/5 border border-brand-cyan/20 text-[9px] font-mono text-brand-cyan flex items-start gap-2 leading-relaxed">
+                        <Info size={12} className="shrink-0 mt-0.5" />
+                        <div>
+                          <strong>Domain spoofing telemetry enabled.</strong> This campaign will test employee verification by using simulated corporate domains such as <strong>@company.co.in</strong> and <strong>@company.in</strong>.
+                        </div>
+                      </div>
                     </div>
 
-                    {/* Right Column: Dynamic Preview Container */}
-                    <div className="glass-panel p-5 rounded-2xl border border-white/[0.04] flex flex-col h-full min-h-[300px] overflow-hidden bg-black/40">
-                      <div className="flex items-center justify-between border-b border-white/[0.04] pb-2.5 mb-3.5 shrink-0">
-                        <span className="text-[9px] font-mono text-zinc-400 font-bold uppercase tracking-wider">Mock Mail Gateway Sandbox</span>
-                        <div className="flex gap-1.5">
+                    {/* Preview Box */}
+                    <div className="glass-panel p-4.5 rounded-2xl border border-white/[0.04] flex flex-col h-full min-h-[300px] overflow-hidden bg-black/40">
+                      <div className="flex items-center justify-between border-b border-white/[0.04] pb-2 mb-3 shrink-0">
+                        <span className="text-[9px] font-mono text-zinc-400 font-bold uppercase tracking-wider">Mail Sandbox Sandbox</span>
+                        <div className="flex gap-1">
                           <span className="w-1.5 h-1.5 rounded-full bg-red-500/50" />
                           <span className="w-1.5 h-1.5 rounded-full bg-yellow-500/50" />
                           <span className="w-1.5 h-1.5 rounded-full bg-green-500/50" />
@@ -736,13 +925,12 @@ export default function CampaignsPage() {
 
                       {previewTemplate ? (
                         <div className="flex-1 flex flex-col min-h-0 text-[10px]">
-                          <div className="space-y-1 font-mono text-[9px] text-zinc-400 border-b border-white/[0.04] pb-3 shrink-0">
-                            <div><span className="text-zinc-600">FROM:</span> Aegis Simulation Dispatcher &lt;sandbox-inbound@security-node.acme.com&gt;</div>
+                          <div className="space-y-1 font-mono text-[9px] text-zinc-400 border-b border-white/[0.04] pb-2.5 shrink-0">
+                            <div><span className="text-zinc-600">FROM:</span> Indian Security Operations Center &lt;dispatcher@acme.co.in&gt;</div>
                             <div><span className="text-zinc-600">SUBJECT:</span> <span className="text-white font-semibold font-sans text-[10px]">{previewTemplate.subject}</span></div>
                           </div>
                           
-                          <div className="flex-1 overflow-y-auto mt-3 p-3 bg-white/[0.01] border border-white/[0.03] rounded-xl text-zinc-300 font-sans text-xs scrollbar-thin select-text leading-relaxed">
-                            {/* Visual wrapper for html bodies */}
+                          <div className="flex-1 overflow-y-auto mt-2.5 p-2.5 bg-white/[0.01] border border-white/[0.03] rounded-xl text-zinc-300 font-sans text-xs scrollbar-thin select-text leading-relaxed">
                             <div 
                               dangerouslySetInnerHTML={{ __html: previewTemplate.bodyHtml }} 
                               className="prose prose-invert max-w-none text-[11px]"
@@ -751,7 +939,7 @@ export default function CampaignsPage() {
                         </div>
                       ) : (
                         <div className="flex-1 flex flex-col items-center justify-center text-center text-zinc-600 font-mono text-[9px] uppercase tracking-widest">
-                          <Eye size={20} className="mb-2 text-zinc-700" />
+                          <Eye size={18} className="mb-1 text-zinc-700" />
                           No preview selected
                         </div>
                       )}
@@ -759,7 +947,7 @@ export default function CampaignsPage() {
                   </motion.div>
                 )}
 
-                {/* STEP 4: DISPATCH & SCHEDULE */}
+                {/* STEP 4: SCHEDULE CAMPAIGN */}
                 {step === 4 && (
                   <motion.div 
                     initial={{ opacity: 0, x: 20 }}
@@ -768,16 +956,16 @@ export default function CampaignsPage() {
                   >
                     <div className="space-y-2">
                       <h3 className="text-sm font-bold text-white tracking-tight flex items-center gap-2">
-                        <Calendar size={14} className="text-brand-cyan" /> Define Dispatch Timing & Flow
+                        <Calendar size={14} className="text-brand-cyan" /> Scheduling & Delivery Options
                       </h3>
-                      <p className="text-[10px] text-zinc-400">Control campaign deployment timestamps and throttle limits to mimic real cyber-phishing behavior.</p>
+                      <p className="text-[10px] text-zinc-400 font-mono">STEP 4: Set the campaign dispatch details. Timing is aligned with Asia/Kolkata (IST).</p>
                     </div>
 
                     <div className="space-y-6">
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div
                           onClick={() => setDispatchType('IMMEDIATE')}
-                          className={`p-4 rounded-xl border transition-all duration-300 cursor-pointer flex items-start gap-3.5 text-left ${
+                          className={`p-4.5 rounded-xl border transition-all duration-300 cursor-pointer flex items-start gap-3.5 text-left ${
                             dispatchType === 'IMMEDIATE' 
                               ? 'bg-brand-cyan/5 border-brand-cyan text-white shadow-[0_0_15px_rgba(6,182,212,0.06)]' 
                               : 'bg-white/[0.01] border-white/[0.04] text-zinc-400 hover:border-white/10 hover:bg-white/[0.02]'
@@ -787,14 +975,14 @@ export default function CampaignsPage() {
                             <Play size={14} className="fill-current" />
                           </div>
                           <div className="space-y-1">
-                            <span className="text-xs font-extrabold text-white block">Instant Dispatch</span>
-                            <span className="text-[9px] leading-relaxed font-mono block text-zinc-500">Initialize campaign node and send simulated emails directly after approval.</span>
+                            <span className="text-xs font-extrabold text-white block">Send Immediately</span>
+                            <span className="text-[9px] leading-relaxed font-mono block text-zinc-500">Initiate operations and send simulated payloads directly after launch confirmation.</span>
                           </div>
                         </div>
 
                         <div
                           onClick={() => setDispatchType('SCHEDULED')}
-                          className={`p-4 rounded-xl border transition-all duration-300 cursor-pointer flex items-start gap-3.5 text-left ${
+                          className={`p-4.5 rounded-xl border transition-all duration-300 cursor-pointer flex items-start gap-3.5 text-left ${
                             dispatchType === 'SCHEDULED' 
                               ? 'bg-brand-cyan/5 border-brand-cyan text-white shadow-[0_0_15px_rgba(6,182,212,0.06)]' 
                               : 'bg-white/[0.01] border-white/[0.04] text-zinc-400 hover:border-white/10 hover:bg-white/[0.02]'
@@ -804,8 +992,8 @@ export default function CampaignsPage() {
                             <Clock size={14} />
                           </div>
                           <div className="space-y-1">
-                            <span className="text-xs font-extrabold text-white block">Time Scheduled</span>
-                            <span className="text-[9px] leading-relaxed font-mono block text-zinc-500">Delay execution flow. Campaign state moves to SCHEDULED automatically.</span>
+                            <span className="text-xs font-extrabold text-white block">Schedule Later</span>
+                            <span className="text-[9px] leading-relaxed font-mono block text-zinc-500">Delay campaign startup to a designated date and time window.</span>
                           </div>
                         </div>
                       </div>
@@ -814,51 +1002,43 @@ export default function CampaignsPage() {
                         <motion.div
                           initial={{ opacity: 0, y: -10 }}
                           animate={{ opacity: 1, y: 0 }}
-                          className="p-4 rounded-2xl bg-white/[0.01] border border-white/[0.03] space-y-3"
+                          className="p-5 rounded-2xl bg-white/[0.01] border border-white/[0.03] grid sm:grid-cols-2 gap-4"
                         >
-                          <label className="block text-[9px] font-mono uppercase tracking-wider text-zinc-400 font-semibold">Execution Trigger Date & Time</label>
-                          <input
-                            type="datetime-local"
-                            required
-                            value={scheduleTime}
-                            onChange={(e) => setScheduleTime(e.target.value)}
-                            className="w-full px-4 py-3 rounded-xl glass-input text-xs font-mono"
-                          />
+                          <div>
+                            <label className="block text-[9px] font-mono uppercase tracking-wider text-zinc-400 mb-1.5 font-semibold">Scheduled Date (IST)</label>
+                            <input
+                              type="date"
+                              required
+                              value={scheduleDate}
+                              onChange={(e) => setScheduleDate(e.target.value)}
+                              className="w-full px-4 py-2.5 rounded-xl glass-input text-xs font-mono"
+                            />
+                          </div>
+
+                          <div>
+                            <label className="block text-[9px] font-mono uppercase tracking-wider text-zinc-400 mb-1.5 font-semibold">Scheduled Time (IST)</label>
+                            <input
+                              type="time"
+                              required
+                              value={scheduleTime}
+                              onChange={(e) => setScheduleTime(e.target.value)}
+                              className="w-full px-4 py-2.5 rounded-xl glass-input text-xs font-mono"
+                            />
+                          </div>
                         </motion.div>
                       )}
 
-                      {/* Delivery rate controls */}
-                      <div>
-                        <label className="block text-[9px] font-mono uppercase tracking-wider text-zinc-400 mb-2.5 font-semibold">Delivery Throttle & Drip Rate</label>
-                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                          {[
-                            { value: 'INSTANT', label: 'Blast Delivery', desc: 'Deliver instantly at once' },
-                            { value: '2H', label: 'Linear Drip (2h)', desc: 'Throttled over 2 hours' },
-                            { value: '24H', label: 'Persistent Drip (24h)', desc: 'Staggered over 24 hours' }
-                          ].map((t) => (
-                            <div 
-                              key={t.value}
-                              onClick={() => setDeliveryThrottle(t.value as any)}
-                              className={`p-3 rounded-xl border transition-all duration-300 cursor-pointer flex flex-col justify-between text-left ${
-                                deliveryThrottle === t.value 
-                                  ? 'bg-brand-cyan/5 border-brand-cyan text-white shadow-[0_0_15px_rgba(6,182,212,0.06)]' 
-                                  : 'bg-white/[0.01] border-white/[0.04] text-zinc-400 hover:border-white/10 hover:bg-white/[0.02]'
-                              }`}
-                            >
-                              <div className="flex justify-between items-center">
-                                <span className="text-[11px] font-extrabold text-white">{t.label}</span>
-                                <Sliders size={10} className={deliveryThrottle === t.value ? 'text-brand-cyan' : 'text-zinc-600'} />
-                              </div>
-                              <span className="text-[9px] leading-relaxed font-mono block mt-2 text-zinc-500">{t.desc}</span>
-                            </div>
-                          ))}
-                        </div>
+                      <div className="p-4 rounded-xl bg-white/[0.01] border border-white/[0.03] flex items-center justify-between text-xs font-mono">
+                        <span className="text-zinc-500 uppercase tracking-widest text-[9px] font-bold">Standard Time Zone</span>
+                        <span className="text-white font-extrabold flex items-center gap-1.5">
+                          <GlobeIndia size={12} className="text-brand-cyan" /> Asia/Kolkata (IST)
+                        </span>
                       </div>
                     </div>
                   </motion.div>
                 )}
 
-                {/* STEP 5: REVIEW AND LAUNCH SCREEN */}
+                {/* STEP 5: REVIEW & LAUNCH */}
                 {step === 5 && (
                   <motion.div 
                     initial={{ opacity: 0, x: 20 }}
@@ -867,96 +1047,87 @@ export default function CampaignsPage() {
                   >
                     <div className="space-y-2">
                       <h3 className="text-sm font-bold text-white tracking-tight flex items-center gap-2">
-                        <ShieldAlert size={14} className="text-brand-rose" /> Launch Verification Checklist
+                        <ShieldAlert size={14} className="text-brand-rose" /> Final Audit & Launch Approval
                       </h3>
-                      <p className="text-[10px] text-zinc-400">Conduct final code audit and tenant checks prior to active campaign deployment.</p>
+                      <p className="text-[10px] text-zinc-400 font-mono">STEP 5: Validate campaign configuration details prior to execution.</p>
                     </div>
 
                     <div className="grid md:grid-cols-2 gap-5">
                       
-                      {/* Left side summary detail cards */}
-                      <div className="space-y-4">
-                        <div className="p-4.5 rounded-2xl bg-white/[0.01] border border-white/[0.04] space-y-3.5 relative overflow-hidden font-mono text-[9px]">
-                          <div className="absolute top-0 right-0 w-24 h-24 bg-brand-cyan/2 rounded-full blur-xl pointer-events-none" />
-                          <h4 className="text-[10px] font-bold text-white/90 uppercase tracking-widest flex items-center gap-2">
-                            <Info size={12} className="text-brand-cyan" /> Simulation Specs
-                          </h4>
-                          
-                          <div className="space-y-2 divide-y divide-white/[0.03] pt-1">
-                            <div className="flex justify-between py-1.5">
-                              <span className="text-zinc-500">CAMPAIGN NAME:</span>
-                              <span className="text-white font-extrabold">{campaignName}</span>
-                            </div>
-                            <div className="flex justify-between py-1.5">
-                              <span className="text-zinc-500">OBJECTIVE:</span>
-                              <span className="text-zinc-300 font-extrabold">{campaignObjective}</span>
-                            </div>
-                            <div className="flex justify-between py-1.5">
-                              <span className="text-zinc-500">DEPARTMENT BORDER:</span>
-                              <span className="text-zinc-300 font-extrabold uppercase">{targetDept}</span>
-                            </div>
-                            <div className="flex justify-between py-1.5">
-                              <span className="text-zinc-500">TARGET SIZE:</span>
-                              <span className="text-brand-cyan font-black">{selectedUserIds.length} employees</span>
-                            </div>
-                            <div className="flex justify-between py-1.5">
-                              <span className="text-zinc-500">EMAIL TEMPLATE:</span>
-                              <span className="text-zinc-300 font-extrabold uppercase truncate max-w-[140px]" title={selectedTemplateDetails?.name}>
-                                {selectedTemplateDetails?.name || 'N/A'}
-                              </span>
-                            </div>
-                            <div className="flex justify-between py-1.5">
-                              <span className="text-zinc-500">DISPATCH TIME:</span>
-                              <span className="text-white font-extrabold flex items-center gap-1">
-                                {dispatchType === 'IMMEDIATE' ? (
-                                  <>LAUNCH IMMEDIATELY</>
-                                ) : (
-                                  <><Clock size={9} /> {scheduleTime ? new Date(scheduleTime).toLocaleString() : 'N/A'}</>
-                                )}
-                              </span>
-                            </div>
-                            <div className="flex justify-between py-1.5">
-                              <span className="text-zinc-500">DRIP THROTTLE:</span>
-                              <span className="text-zinc-300 font-extrabold uppercase">{deliveryThrottle}</span>
-                            </div>
+                      {/* Configuration Sheet */}
+                      <div className="p-4.5 rounded-2xl bg-white/[0.01] border border-white/[0.04] space-y-3 relative overflow-hidden font-mono text-[9px]">
+                        <div className="absolute top-0 right-0 w-24 h-24 bg-brand-cyan/2 rounded-full blur-xl pointer-events-none" />
+                        <h4 className="text-[10px] font-bold text-white/90 uppercase tracking-widest flex items-center gap-1.5">
+                          <Info size={12} className="text-brand-cyan" /> SIMULATION SUMMARY
+                        </h4>
+                        
+                        <div className="space-y-2 divide-y divide-white/[0.03] pt-1">
+                          <div className="flex justify-between py-1">
+                            <span className="text-zinc-500">CAMPAIGN NAME:</span>
+                            <span className="text-white font-extrabold">{campaignName}</span>
+                          </div>
+                          <div className="flex justify-between py-1">
+                            <span className="text-zinc-500">BUSINESS UNIT:</span>
+                            <span className="text-zinc-300 font-extrabold">{businessUnit}</span>
+                          </div>
+                          <div className="flex justify-between py-1">
+                            <span className="text-zinc-500">ORGANIZATION:</span>
+                            <span className="text-zinc-300 font-extrabold">{organizationName}</span>
+                          </div>
+                          <div className="flex justify-between py-1">
+                            <span className="text-zinc-500">CATEGORY:</span>
+                            <span className="text-brand-cyan font-black">{campaignCategory}</span>
+                          </div>
+                          <div className="flex justify-between py-1">
+                            <span className="text-zinc-500">RISK THRESHOLD:</span>
+                            <span className="text-zinc-300 font-extrabold">{riskLevel}</span>
+                          </div>
+                          <div className="flex justify-between py-1">
+                            <span className="text-zinc-500">TARGET SCALE:</span>
+                            <span className="text-white font-extrabold">{selectedUserIds.length} employees</span>
+                          </div>
+                          <div className="flex justify-between py-1">
+                            <span className="text-zinc-500">SCENARIO:</span>
+                            <span className="text-zinc-300 font-extrabold uppercase truncate max-w-[130px]" title={selectedTemplateDetails?.name}>
+                              {selectedTemplateDetails?.name || 'N/A'}
+                            </span>
+                          </div>
+                          <div className="flex justify-between py-1">
+                            <span className="text-zinc-500">DISPATCH (IST):</span>
+                            <span className="text-brand-cyan font-extrabold">
+                              {dispatchType === 'IMMEDIATE' ? 'LAUNCH IMMEDIATELY' : `${scheduleDate} ${scheduleTime}`}
+                            </span>
                           </div>
                         </div>
                       </div>
 
-                      {/* Right side ethics, checkmark alerts */}
-                      <div className="space-y-4">
-                        {/* Consent & Ethics Checklist Panel */}
-                        <div className="p-4.5 rounded-2xl bg-brand-rose/5 border border-brand-rose/20 space-y-3.5 relative overflow-hidden text-[9px] font-mono text-zinc-300">
-                          <div className="absolute top-0 right-0 w-24 h-24 bg-brand-rose/2 rounded-full blur-xl pointer-events-none" />
+                      {/* Consent Checkbox */}
+                      <div className="p-4.5 rounded-2xl bg-brand-rose/5 border border-brand-rose/20 space-y-3.5 relative overflow-hidden text-[9px] font-mono text-zinc-300 flex flex-col justify-between">
+                        <div className="absolute top-0 right-0 w-24 h-24 bg-brand-rose/2 rounded-full blur-xl pointer-events-none" />
+                        <div className="space-y-3">
                           <div className="flex gap-2 items-center">
                             <ShieldAlert size={14} className="text-brand-rose shrink-0" />
-                            <p className="text-[10px] text-brand-rose font-bold uppercase tracking-wider">Safety & Privacy Assurances</p>
+                            <p className="text-[10px] text-brand-rose font-bold uppercase tracking-wider">Ethics & compliance Authorization</p>
                           </div>
-                          
-                          <div className="space-y-2 leading-relaxed">
-                            <p>
-                              1. <strong>Strict Data Privacy</strong>: Aegis does NOT cache, index, or store credentials submitted during the simulation intercept step.
-                            </p>
-                            <p>
-                              2. <strong>Tenant Authorization</strong>: Simulations must only target verified organization domains. All logs remain local.
-                            </p>
-                          </div>
-                          
-                          <label className="flex items-center gap-3.5 cursor-pointer mt-2 pt-3 border-t border-white/[0.04]">
-                            <div className="relative flex items-center">
-                              <input
-                                type="checkbox"
-                                checked={ethicsAcknowledge}
-                                onChange={(e) => setEthicsAcknowledge(e.target.checked)}
-                                className="peer shrink-0 appearance-none w-4.5 h-4.5 rounded border border-white/10 bg-black/40 checked:bg-brand-rose checked:border-brand-rose focus:outline-none transition-all cursor-pointer"
-                              />
-                              <CheckCircle className="absolute w-3.5 h-3.5 text-black pointer-events-none scale-0 peer-checked:scale-100 transition-transform left-[2px] top-[2px]" />
-                            </div>
-                            <span className="text-[9px] uppercase font-bold text-zinc-300 select-none">
-                              I certify full consent and compliance
-                            </span>
-                          </label>
+                          <p className="leading-relaxed">
+                            Under organized security drills, you certify targeted domains and employees have consented to receive mock phishing exercises. <strong>Real password strings and inputs are client-intercepted and not cached.</strong>
+                          </p>
                         </div>
+                        
+                        <label className="flex items-center gap-3 cursor-pointer mt-4 pt-3 border-t border-white/[0.04]">
+                          <div className="relative flex items-center">
+                            <input
+                              type="checkbox"
+                              checked={ethicsAcknowledge}
+                              onChange={(e) => setEthicsAcknowledge(e.target.checked)}
+                              className="peer shrink-0 appearance-none w-4.5 h-4.5 rounded border border-white/10 bg-black/40 checked:bg-brand-rose checked:border-brand-rose focus:outline-none transition-all cursor-pointer"
+                            />
+                            <CheckCircle className="absolute w-3.5 h-3.5 text-black pointer-events-none scale-0 peer-checked:scale-100 transition-transform left-[2px] top-[2px]" />
+                          </div>
+                          <span className="text-[9px] uppercase font-bold text-zinc-300 select-none">
+                            I verify and authorize compliance
+                          </span>
+                        </label>
                       </div>
 
                     </div>
@@ -971,7 +1142,7 @@ export default function CampaignsPage() {
                   <button
                     type="button"
                     onClick={() => setStep(prev => prev - 1)}
-                    className="px-4 py-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/5 text-zinc-300 hover:text-white font-bold transition text-xs flex items-center gap-1.5 cursor-pointer"
+                    className="px-4 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/5 text-zinc-300 hover:text-white font-bold transition text-xs flex items-center gap-1.5 cursor-pointer"
                   >
                     <ChevronLeft size={14} /> Back
                   </button>
@@ -980,7 +1151,7 @@ export default function CampaignsPage() {
                 <button
                   type="button"
                   onClick={() => setModalOpen(false)}
-                  className="px-4 py-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/5 text-zinc-500 hover:text-zinc-300 font-bold transition text-xs uppercase tracking-wider cursor-pointer"
+                  className="px-4 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/5 text-zinc-500 hover:text-zinc-300 font-bold transition text-xs uppercase tracking-wider cursor-pointer"
                 >
                   Cancel
                 </button>
@@ -990,9 +1161,8 @@ export default function CampaignsPage() {
                 {step < 5 ? (
                   <button
                     type="button"
-                    onClick={() => setStep(prev => prev + 1)}
-                    disabled={step === 2 && selectedUserIds.length === 0}
-                    className="px-5 py-3 rounded-xl bg-white/10 hover:bg-brand-cyan hover:text-black border border-white/5 text-white disabled:opacity-30 disabled:hover:bg-white/10 disabled:hover:text-white font-bold transition-all text-xs flex items-center gap-1.5 uppercase tracking-wider cursor-pointer"
+                    onClick={handleNextStep}
+                    className="px-5 py-2.5 rounded-xl bg-white/10 hover:bg-brand-cyan hover:text-black border border-white/5 text-white font-bold transition-all text-xs flex items-center gap-1.5 uppercase tracking-wider cursor-pointer"
                   >
                     Continue <ChevronRight size={14} />
                   </button>
@@ -1000,10 +1170,10 @@ export default function CampaignsPage() {
                   <button
                     type="button"
                     onClick={handleCreateCampaign}
-                    disabled={!ethicsAcknowledge || submitting || selectedUserIds.length === 0}
-                    className="px-5 py-3 rounded-xl bg-gradient-to-r from-brand-cyan via-brand-blue to-brand-purple disabled:from-zinc-700 disabled:to-zinc-800 disabled:opacity-50 hover:brightness-110 active:scale-[0.98] text-white font-bold transition-all text-xs uppercase tracking-wider border border-white/10 cursor-pointer"
+                    disabled={!ethicsAcknowledge || submitting}
+                    className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-brand-cyan via-brand-blue to-brand-purple disabled:from-zinc-700 disabled:to-zinc-800 disabled:opacity-50 hover:brightness-110 active:scale-[0.98] text-white font-bold transition-all text-xs uppercase tracking-wider border border-white/10 cursor-pointer"
                   >
-                    {submitting ? 'Deploying Node...' : 'Launch Simulation'}
+                    {submitting ? 'Deploying...' : 'Launch Simulation'}
                   </button>
                 )}
               </div>
@@ -1011,6 +1181,81 @@ export default function CampaignsPage() {
           </div>
         )}
       </AnimatePresence>
+
+      {/* Success Confirmation Modal */}
+      <AnimatePresence>
+        {successModalOpen && createdCampaignDetails && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 0.8 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setSuccessModalOpen(false)}
+              className="absolute inset-0 bg-black/90 backdrop-blur-md"
+            />
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.9, y: 30 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 30 }}
+              className="glass-panel p-8 rounded-[32px] max-w-lg w-full relative z-10 border border-brand-emerald/20 overflow-hidden bg-zinc-950 shadow-[0_0_50px_rgba(16,185,129,0.1)] text-center space-y-6"
+            >
+              <div className="absolute top-0 right-0 w-48 h-48 bg-brand-emerald/2 rounded-full blur-3xl pointer-events-none" />
+              
+              {/* Success Mark */}
+              <div className="w-16 h-16 rounded-full bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center mx-auto text-emerald-400 shadow-[0_0_20px_rgba(16,185,129,0.2)]">
+                <CheckCircle2 size={36} className="animate-bounce" />
+              </div>
+
+              <div className="space-y-1.5">
+                <h3 className="text-xl font-extrabold text-white tracking-tight">Campaign Launched Successfully</h3>
+                <p className="text-[10px] text-zinc-400 font-mono uppercase tracking-widest">DRILL AGENT REGISTERED IN NETWORK</p>
+              </div>
+
+              {/* Specs box styled like a security terminal log */}
+              <div className="p-5 rounded-2xl border border-white/[0.04] bg-white/[0.01] text-left font-mono text-[10px] leading-relaxed text-zinc-400 space-y-2">
+                <div className="flex justify-between border-b border-white/[0.03] pb-1.5">
+                  <span className="text-zinc-500">CAMPAIGN ID:</span>
+                  <span className="text-white font-extrabold">{createdCampaignDetails.id}</span>
+                </div>
+                <div className="flex justify-between border-b border-white/[0.03] pb-1.5">
+                  <span className="text-zinc-500">CODE NAME:</span>
+                  <span className="text-brand-cyan font-bold">{createdCampaignDetails.name}</span>
+                </div>
+                <div className="flex justify-between border-b border-white/[0.03] pb-1.5">
+                  <span className="text-zinc-500">DISPATCH SCHEDULE (IST):</span>
+                  <span className="text-white font-bold">{createdCampaignDetails.scheduledTime}</span>
+                </div>
+                <div className="flex justify-between border-b border-white/[0.03] pb-1.5">
+                  <span className="text-zinc-500">TARGET ROSTER:</span>
+                  <span className="text-brand-emerald font-extrabold">{createdCampaignDetails.targetCount} employees</span>
+                </div>
+                <div className="flex justify-between border-b border-white/[0.03] pb-1.5">
+                  <span className="text-zinc-500">ATTACK CATEGORY:</span>
+                  <span className="text-white">{createdCampaignDetails.category}</span>
+                </div>
+                <div className="flex justify-between border-b border-white/[0.03] pb-1.5">
+                  <span className="text-zinc-500">RISK LEVEL:</span>
+                  <span className="text-brand-amber font-bold">{createdCampaignDetails.riskLevel}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-zinc-500">EMAIL TEMPLATE:</span>
+                  <span className="text-white truncate max-w-[170px]" title={createdCampaignDetails.templateName}>
+                    {createdCampaignDetails.templateName}
+                  </span>
+                </div>
+              </div>
+
+              <button
+                onClick={() => setSuccessModalOpen(false)}
+                className="w-full px-5 py-3 rounded-xl bg-gradient-to-r from-brand-emerald to-emerald-600 hover:brightness-110 active:scale-[0.98] text-black font-extrabold transition-all text-xs font-mono uppercase tracking-wider border border-white/10 cursor-pointer"
+              >
+                Close Console
+              </button>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
     </div>
   );
 }
@@ -1043,13 +1288,22 @@ const CampaignCard: React.FC<{
           <h4 className="font-extrabold text-white text-xs tracking-tight leading-snug group-hover:text-brand-cyan transition duration-300">{campaign.name}</h4>
           <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${statusGlow}`} />
         </div>
+        
+        {campaign.description && (
+          <p className="text-[9px] text-zinc-500 font-mono leading-normal line-clamp-2">{campaign.description}</p>
+        )}
+
         <div className="space-y-1">
-          <span className="text-[9px] text-zinc-500 font-mono block">
-            ID: <span className="text-zinc-400">{campaign.id.substring(0, 8)}...</span>
-          </span>
-          <span className="text-[9px] text-zinc-500 font-mono block truncate">
-            TEMPLATE: <span className="text-zinc-400">{campaign.template?.name || 'Standard Email'}</span>
-          </span>
+          <div className="flex justify-between text-[9px] text-zinc-500 font-mono">
+            <span>CATEGORY:</span>
+            <span className="text-zinc-400">{campaign.category || 'Phishing'}</span>
+          </div>
+          <div className="flex justify-between text-[9px] text-zinc-500 font-mono">
+            <span>TEMPLATE:</span>
+            <span className="text-zinc-400 truncate max-w-[110px]" title={campaign.template?.name}>
+              {campaign.template?.name || 'Standard Email'}
+            </span>
+          </div>
         </div>
       </div>
 
@@ -1105,6 +1359,27 @@ const CampaignCard: React.FC<{
 
 const EmptyLaneMessage = () => (
   <div className="border border-dashed border-white/[0.05] rounded-2xl p-8 text-center text-[9px] font-mono text-zinc-600 uppercase tracking-widest bg-white/[0.005]">
-    No Active campaigns
+    No campaigns in lane
   </div>
+);
+
+// Map pin/Globe icon for India timezone reference
+const GlobeIndia = ({ className, size }: { className?: string, size?: number }) => (
+  <svg 
+    xmlns="http://www.w3.org/2000/svg" 
+    width={size || 14} 
+    height={size || 14} 
+    viewBox="0 0 24 24" 
+    fill="none" 
+    stroke="currentColor" 
+    strokeWidth="2" 
+    strokeLinecap="round" 
+    strokeLinejoin="round" 
+    className={className}
+  >
+    <circle cx="12" cy="12" r="10" />
+    <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" />
+    <path d="M2 12h20" />
+    <path d="M12 8a3 3 0 1 0 0 6 3 3 0 0 0 0-6" fill="currentColor" />
+  </svg>
 );
