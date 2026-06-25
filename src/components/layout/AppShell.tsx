@@ -93,6 +93,7 @@ export const AppShell: React.FC<{ children: React.ReactNode }> = ({ children }) 
     { href: '/admin/templates', label: 'Template Library', icon: <FileText size={16} /> },
     { href: '/admin/analytics', label: 'Analytics & Logs', icon: <BarChart3 size={16} /> },
     { href: '/admin/employees', label: 'Employee Registry', icon: <Users size={16} /> },
+    { href: '/admin/reports', label: 'Reports & Compliance', icon: <FileText size={16} /> },
   ];
 
   const employeeMenu = [
