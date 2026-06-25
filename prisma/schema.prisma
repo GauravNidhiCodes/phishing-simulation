@@ -34,6 +34,8 @@ model User {
   role           String         @default("EMPLOYEE") // SUPERADMIN, ORG_ADMIN, EMPLOYEE
   department     String?
   branch         String?        // e.g. Pune, Bengaluru, Hyderabad, Mumbai, Delhi, Chennai, Kolkata
+  managerName    String?
+  joiningDate    DateTime?
   organizationId String
   organization   Organization   @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   campaignLogs   CampaignLog[]

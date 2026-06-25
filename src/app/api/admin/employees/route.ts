@@ -1,13 +1,60 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
+    const { searchParams } = new URL(request.url);
+    const id = searchParams.get('id');
+
     const org = await prisma.organization.findFirst();
     if (!org) {
       return NextResponse.json({ error: 'Tenant not initialized' }, { status: 500 });
     }
 
+    if (id) {
+      // Single employee details
+      const employee = await prisma.user.findUnique({
+        where: { id, role: 'EMPLOYEE', organizationId: org.id }
+      });
+
+      if (!employee) {
+        return NextResponse.json({ error: 'Employee not found' }, { status: 404 });
+      }
+
+      // Simulation history logs
+      const campaignLogs = await prisma.campaignLog.findMany({
+        where: { userId: id },
+        include: {
+          campaign: {
+            include: {
+              template: true
+            }
+          }
+        },
+        orderBy: { createdAt: 'desc' }
+      });
+
+      // Training progress logs
+      const quizProgress = await prisma.quizProgress.findMany({
+        where: { userId: id },
+        include: {
+          module: true
+        },
+        orderBy: { updatedAt: 'desc' }
+      });
+
+      // All available modules (to build recommendation rules)
+      const allModules = await prisma.trainingModule.findMany();
+
+      return NextResponse.json({
+        employee,
+        campaignLogs,
+        quizProgress,
+        allModules
+      });
+    }
+
+    // Default: list all employees and authorized domains
     const employees = await prisma.user.findMany({
       where: { role: 'EMPLOYEE', organizationId: org.id },
       orderBy: { name: 'asc' }
@@ -27,7 +74,7 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { action, name, email, department, domain } = body;
+    const { action, name, email, department, branch, managerName, domain } = body;
 
     const org = await prisma.organization.findFirst();
     if (!org) {
@@ -56,6 +103,9 @@ export async function POST(request: Request) {
           name,
           email,
           department: department || 'General',
+          branch: branch || 'Pune',
+          managerName: managerName || 'Sarah Jenkins',
+          joiningDate: new Date(),
           organizationId: org.id,
           role: 'EMPLOYEE',
           awarenessScore: 100,
@@ -98,10 +148,6 @@ export async function PATCH(request: Request) {
       return NextResponse.json({ error: 'Domain ID is required' }, { status: 400 });
     }
 
-    // In a real-world platform we would query DNS resolving:
-    // const dns = require('dns').promises;
-    // const records = await dns.resolveTxt(domain);
-    // Here we simulate successful resolution of the txtRecordKey for verification
     const domainObj = await prisma.verifiedDomain.findUnique({
       where: { id: domainId }
     });

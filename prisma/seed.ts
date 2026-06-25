@@ -61,28 +61,28 @@ async function main() {
 
   const employeesData = [
     // Engineering
-    { name: "Arjun Mehta", email: "arjun.mehta@tata.co.in", department: "Engineering", branch: "Bengaluru", score: 92, risk: "LOW" },
-    { name: "Priya Sharma", email: "priya.sharma@tata.co.in", department: "Engineering", branch: "Pune", score: 85, risk: "LOW" },
-    { name: "Rajesh Kumar", email: "rajesh.kumar@reliance.in", department: "Engineering", branch: "Hyderabad", score: 55, risk: "HIGH" },
+    { name: "Arjun Mehta", email: "arjun.mehta@tata.co.in", department: "Engineering", branch: "Bengaluru", score: 92, risk: "LOW", manager: "Sarah Jenkins", joined: new Date("2024-03-15") },
+    { name: "Priya Sharma", email: "priya.sharma@tata.co.in", department: "Engineering", branch: "Pune", score: 85, risk: "LOW", manager: "Sarah Jenkins", joined: new Date("2023-08-20") },
+    { name: "Rajesh Kumar", email: "rajesh.kumar@reliance.in", department: "Engineering", branch: "Hyderabad", score: 55, risk: "HIGH", manager: "Sarah Jenkins", joined: new Date("2025-01-10") },
     // HR
-    { name: "Deepika Patel", email: "deepika.patel@tata.co.in", department: "HR", branch: "Mumbai", score: 78, risk: "MEDIUM" },
-    { name: "Amit Singh", email: "amit.singh@reliance.in", department: "HR", branch: "Delhi", score: 90, risk: "LOW" },
+    { name: "Deepika Patel", email: "deepika.patel@tata.co.in", department: "HR", branch: "Mumbai", score: 78, risk: "MEDIUM", manager: "Sarah Jenkins", joined: new Date("2022-11-05") },
+    { name: "Amit Singh", email: "amit.singh@reliance.in", department: "HR", branch: "Delhi", score: 90, risk: "LOW", manager: "Sarah Jenkins", joined: new Date("2024-06-12") },
     // Sales
-    { name: "Vikram Malhotra", email: "vikram.malhotra@tata.co.in", department: "Sales", branch: "Pune", score: 45, risk: "HIGH" },
-    { name: "Ananya Iyer", email: "ananya.iyer@reliance.in", department: "Sales", branch: "Chennai", score: 72, risk: "MEDIUM" },
-    { name: "Suresh Nair", email: "suresh.nair@tata.co.in", department: "Sales", branch: "Kolkata", score: 64, risk: "MEDIUM" },
+    { name: "Vikram Malhotra", email: "vikram.malhotra@tata.co.in", department: "Sales", branch: "Pune", score: 45, risk: "HIGH", manager: "Sarah Jenkins", joined: new Date("2025-02-28") },
+    { name: "Ananya Iyer", email: "ananya.iyer@reliance.in", department: "Sales", branch: "Chennai", score: 72, risk: "MEDIUM", manager: "Sarah Jenkins", joined: new Date("2023-04-17") },
+    { name: "Suresh Nair", email: "suresh.nair@tata.co.in", department: "Sales", branch: "Kolkata", score: 64, risk: "MEDIUM", manager: "Sarah Jenkins", joined: new Date("2024-09-01") },
     // Finance
-    { name: "Neha Gupta", email: "neha.gupta@reliance.in", department: "Finance", branch: "Mumbai", score: 89, risk: "LOW" },
-    { name: "Rohan Das", email: "rohan.das@tata.co.in", department: "Finance", branch: "Kolkata", score: 58, risk: "HIGH" },
+    { name: "Neha Gupta", email: "neha.gupta@reliance.in", department: "Finance", branch: "Mumbai", score: 89, risk: "LOW", manager: "Sarah Jenkins", joined: new Date("2023-01-25") },
+    { name: "Rohan Das", email: "rohan.das@tata.co.in", department: "Finance", branch: "Kolkata", score: 58, risk: "HIGH", manager: "Sarah Jenkins", joined: new Date("2024-10-10") },
     // Marketing
-    { name: "Karan Johar", email: "karan.johar@reliance.in", department: "Marketing", branch: "Mumbai", score: 95, risk: "LOW" },
-    { name: "Shalini Sen", email: "shalini.sen@tata.co.in", department: "Marketing", branch: "Delhi", score: 68, risk: "MEDIUM" },
+    { name: "Karan Johar", email: "karan.johar@reliance.in", department: "Marketing", branch: "Mumbai", score: 95, risk: "LOW", manager: "Sarah Jenkins", joined: new Date("2024-02-14") },
+    { name: "Shalini Sen", email: "shalini.sen@tata.co.in", department: "Marketing", branch: "Delhi", score: 68, risk: "MEDIUM", manager: "Sarah Jenkins", joined: new Date("2023-12-05") },
     // Operations
-    { name: "Aditya Verma", email: "aditya.verma@reliance.in", department: "Operations", branch: "Hyderabad", score: 74, risk: "MEDIUM" },
-    { name: "Meera Bai", email: "meera.bai@tata.co.in", department: "Operations", branch: "Bengaluru", score: 82, risk: "LOW" },
+    { name: "Aditya Verma", email: "aditya.verma@reliance.in", department: "Operations", branch: "Hyderabad", score: 74, risk: "MEDIUM", manager: "Sarah Jenkins", joined: new Date("2024-07-22") },
+    { name: "Meera Bai", email: "meera.bai@tata.co.in", department: "Operations", branch: "Bengaluru", score: 82, risk: "LOW", manager: "Sarah Jenkins", joined: new Date("2023-05-18") },
     // IT Support
-    { name: "Sanjay Dutt", email: "sanjay.dutt@reliance.in", department: "IT Support", branch: "Pune", score: 91, risk: "LOW" },
-    { name: "Jyoti Rao", email: "jyoti.rao@tata.co.in", department: "IT Support", branch: "Bengaluru", score: 50, risk: "HIGH" }
+    { name: "Sanjay Dutt", email: "sanjay.dutt@reliance.in", department: "IT Support", branch: "Pune", score: 91, risk: "LOW", manager: "Sarah Jenkins", joined: new Date("2024-01-15") },
+    { name: "Jyoti Rao", email: "jyoti.rao@tata.co.in", department: "IT Support", branch: "Bengaluru", score: 50, risk: "HIGH", manager: "Sarah Jenkins", joined: new Date("2025-03-01") }
   ];
 
   const employees = [];
@@ -94,6 +94,8 @@ async function main() {
         role: "EMPLOYEE",
         department: emp.department,
         branch: emp.branch,
+        managerName: emp.manager,
+        joiningDate: emp.joined,
         awarenessScore: emp.score,
         riskCategory: emp.risk,
         organizationId: org.id,
