@@ -1,0 +1,177 @@
+{
+  "profile": {
+    "name": "Pinkman Protects",
+    "logoUrl": "",
+    "domain": "pinkmanprotects.co.in",
+    "gstNumber": "27AAPCP1234M1Z5",
+    "cinNumber": "U74999MH2026PTC398247",
+    "address": "Plot No. 12, Cyber City, Phase 2, Hinjawadi, Pune, Maharashtra - 411057",
+    "supportEmail": "support@pinkmanprotects.co.in",
+    "contactNumber": "+91 20 4012 3456",
+    "website": "https://www.pinkmanprotects.co.in",
+    "timezone": "Asia/Kolkata",
+    "language": "English"
+  },
+  "branches": [
+    {
+      "id": "br-pune",
+      "name": "Pune",
+      "branchAdmin": "Sarah Jenkins",
+      "employeeCount": 15,
+      "activeCampaigns": 2,
+      "isEnabled": true
+    },
+    {
+      "id": "br-blr",
+      "name": "Bengaluru",
+      "branchAdmin": "Arjun Mehta",
+      "employeeCount": 22,
+      "activeCampaigns": 3,
+      "isEnabled": true
+    },
+    {
+      "id": "br-hyd",
+      "name": "Hyderabad",
+      "branchAdmin": "Rajesh Kumar",
+      "employeeCount": 18,
+      "activeCampaigns": 1,
+      "isEnabled": true
+    },
+    {
+      "id": "br-bom",
+      "name": "Mumbai",
+      "branchAdmin": "Deepika Patel",
+      "employeeCount": 12,
+      "activeCampaigns": 2,
+      "isEnabled": true
+    },
+    {
+      "id": "br-del",
+      "name": "Delhi",
+      "branchAdmin": "Amit Singh",
+      "employeeCount": 14,
+      "activeCampaigns": 1,
+      "isEnabled": true
+    },
+    {
+      "id": "br-maa",
+      "name": "Chennai",
+      "branchAdmin": "Ananya Iyer",
+      "employeeCount": 9,
+      "activeCampaigns": 0,
+      "isEnabled": true
+    },
+    {
+      "id": "br-ccu",
+      "name": "Kolkata",
+      "branchAdmin": "Suresh Nair",
+      "employeeCount": 8,
+      "activeCampaigns": 0,
+      "isEnabled": true
+    }
+  ],
+  "departments": [
+    {
+      "id": "dept-eng",
+      "name": "Engineering",
+      "managerName": "Arjun Mehta",
+      "employeeCount": 25,
+      "activeCampaigns": 2,
+      "isArchived": false
+    },
+    {
+      "id": "dept-hr",
+      "name": "HR",
+      "managerName": "Deepika Patel",
+      "employeeCount": 8,
+      "activeCampaigns": 1,
+      "isArchived": false
+    },
+    {
+      "id": "dept-fin",
+      "name": "Finance",
+      "managerName": "Neha Gupta",
+      "employeeCount": 6,
+      "activeCampaigns": 1,
+      "isArchived": false
+    },
+    {
+      "id": "dept-sales",
+      "name": "Sales",
+      "managerName": "Vikram Malhotra",
+      "employeeCount": 12,
+      "activeCampaigns": 1,
+      "isArchived": false
+    },
+    {
+      "id": "dept-mktg",
+      "name": "Marketing",
+      "managerName": "Karan Johar",
+      "employeeCount": 5,
+      "activeCampaigns": 0,
+      "isArchived": false
+    },
+    {
+      "id": "dept-support",
+      "name": "IT Support",
+      "managerName": "Sanjay Dutt",
+      "employeeCount": 4,
+      "activeCampaigns": 2,
+      "isArchived": false
+    },
+    {
+      "id": "dept-ops",
+      "name": "Operations",
+      "managerName": "Aditya Verma",
+      "employeeCount": 10,
+      "activeCampaigns": 1,
+      "isArchived": false
+    }
+  ],
+  "securityPolicies": {
+    "minPasswordLength": 12,
+    "passwordExpiry": 90,
+    "sessionTimeout": 15,
+    "mfaPolicy": "ENFORCED",
+    "loginAttemptLimit": 5,
+    "deviceTrustPolicy": "REQUIRED",
+    "accountLockDuration": 30
+  },
+  "notifications": {
+    "emailNotifications": true,
+    "campaignAlerts": true,
+    "weeklyReports": true,
+    "monthlyReports": true,
+    "securityAlerts": true,
+    "trainingReminders": true
+  },
+  "backups": {
+    "schedule": "DAILY",
+    "history": [
+      {
+        "id": "BK-101",
+        "name": "pinkman_backup_2026_06_25.sql",
+        "size": "45.2 MB",
+        "timestamp": "2026-06-25T02:00:00.000Z",
+        "status": "COMPLETED",
+        "type": "SCHEDULED"
+      },
+      {
+        "id": "BK-102",
+        "name": "pinkman_backup_2026_06_24.sql",
+        "size": "45.1 MB",
+        "timestamp": "2026-06-24T02:00:00.000Z",
+        "status": "COMPLETED",
+        "type": "SCHEDULED"
+      },
+      {
+        "id": "BK-103",
+        "name": "pinkman_backup_manual_pre_migration.sql",
+        "size": "44.8 MB",
+        "timestamp": "2026-06-23T18:30:00.000Z",
+        "status": "COMPLETED",
+        "type": "MANUAL"
+      }
+    ]
+  }
+}
