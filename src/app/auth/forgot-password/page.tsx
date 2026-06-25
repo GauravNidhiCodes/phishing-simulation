@@ -2,8 +2,9 @@
 
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { ShieldAlert, Mail, ArrowLeft, Info, CheckCircle2 } from 'lucide-react';
+import { Mail, ArrowLeft, Info, CheckCircle2 } from 'lucide-react';
 import Link from 'next/link';
+import PPLogo from '@/components/layout/PPLogo';
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState('');
@@ -41,10 +42,12 @@ export default function ForgotPasswordPage() {
 
   return (
     <div className="min-h-screen flex flex-col justify-center py-12 sm:px-6 lg:px-8 relative overflow-hidden bg-cyber-dark select-none">
-      <div className="absolute top-0 left-1/4 w-96 h-96 bg-brand-cyan/5 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute top-0 left-1/4 w-96 h-96 bg-brand-blue/5 rounded-full blur-3xl pointer-events-none" />
 
       <div className="sm:mx-auto sm:w-full sm:max-w-md text-center z-10 space-y-3">
-        <ShieldAlert className="text-brand-cyan mx-auto animate-pulse" size={40} />
+        <div className="flex justify-center mb-1">
+          <PPLogo size={40} className="animate-pulse" />
+        </div>
         <h2 className="text-2xl font-black text-white tracking-tight uppercase">Forgot Password</h2>
         <span className="text-[9px] font-mono text-gray-500 uppercase tracking-widest font-bold block">
           Pinkman Protects Secure Audit Node
@@ -74,7 +77,7 @@ export default function ForgotPasswordPage() {
                   </p>
                   <Link
                     href={`/auth/reset-password?email=${encodeURIComponent(email)}&token=${resetToken}`}
-                    className="inline-flex items-center gap-1 text-brand-cyan hover:underline font-bold"
+                    className="inline-flex items-center gap-1 text-brand-blue hover:underline font-bold"
                   >
                     Go to Reset Form <ArrowLeft size={12} className="rotate-180" />
                   </Link>
@@ -119,7 +122,7 @@ export default function ForgotPasswordPage() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full py-3 rounded-xl bg-gradient-to-r from-brand-cyan to-brand-purple text-white font-semibold flex items-center justify-center gap-1.5 hover:brightness-110 disabled:brightness-50 transition"
+                  className="w-full py-3 rounded-xl bg-brand-blue text-white font-semibold flex items-center justify-center gap-1.5 hover:brightness-110 hover:shadow-[0_0_15px_rgba(229,9,20,0.3)] shadow-lg shadow-brand-blue/10 disabled:brightness-50 transition border border-white/5 cursor-pointer"
                 >
                   {loading ? (
                     <div className="w-4 h-4 border-2 border-t-transparent border-white rounded-full animate-spin" />

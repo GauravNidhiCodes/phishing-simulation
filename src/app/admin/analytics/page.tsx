@@ -907,8 +907,8 @@ export default function AnalyticsDashboard() {
                         }}
                       />
                       <Legend verticalAlign="bottom" height={36} iconType="circle" formatter={(v) => <span className="text-[9px] text-zinc-400 font-mono">{v}</span>} />
-                      <Bar dataKey="successRate" name="Avoidance Success" fill="#10b981" radius={[4, 4, 0, 0]} />
-                      <Bar dataKey="clickRate" name="Click Failures" fill="#f43f5e" radius={[4, 4, 0, 0]} />
+                      <Bar dataKey="successRate" name="Avoidance Success" fill="#22C55E" radius={[4, 4, 0, 0]} />
+                      <Bar dataKey="clickRate" name="Click Failures" fill="#EF4444" radius={[4, 4, 0, 0]} />
                     </BarChart>
                   </ResponsiveContainer>
                 ) : (
@@ -959,9 +959,9 @@ export default function AnalyticsDashboard() {
                       }}
                     />
                     <Legend verticalAlign="bottom" height={36} iconType="circle" formatter={(v) => <span className="text-[9px] text-zinc-400 font-mono">{v}</span>} />
-                    <Line type="monotone" dataKey="opens" name="Opened Email" stroke="#8b5cf6" strokeWidth={2} activeDot={{ r: 6 }} />
-                    <Line type="monotone" dataKey="clicks" name="Clicked Link" stroke="#06b6d4" strokeWidth={2} activeDot={{ r: 6 }} />
-                    <Line type="monotone" dataKey="submissions" name="Entered Credentials" stroke="#f43f5e" strokeWidth={2} activeDot={{ r: 6 }} />
+                    <Line type="monotone" dataKey="opens" name="Opened Email" stroke="#ffffff" strokeWidth={2} activeDot={{ r: 6 }} />
+                    <Line type="monotone" dataKey="clicks" name="Clicked Link" stroke="#a8a8a8" strokeWidth={2} activeDot={{ r: 6 }} />
+                    <Line type="monotone" dataKey="submissions" name="Entered Credentials" stroke="#E50914" strokeWidth={2} activeDot={{ r: 6 }} />
                   </LineChart>
                 </ResponsiveContainer>
               </div>
@@ -982,8 +982,8 @@ export default function AnalyticsDashboard() {
                   <AreaChart data={data.charts.monthlyComplianceTrend} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                     <defs>
                       <linearGradient id="compGrad" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#10b981" stopOpacity={0.25}/>
-                        <stop offset="95%" stopColor="#10b981" stopOpacity={0}/>
+                        <stop offset="5%" stopColor="#22C55E" stopOpacity={0.25}/>
+                        <stop offset="95%" stopColor="#22C55E" stopOpacity={0}/>
                       </linearGradient>
                     </defs>
                     <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.015)" />
@@ -1005,7 +1005,7 @@ export default function AnalyticsDashboard() {
                         return null;
                       }}
                     />
-                    <Area type="monotone" dataKey="complianceRate" stroke="#10b981" strokeWidth={2.5} fillOpacity={1} fill="url(#compGrad)" />
+                    <Area type="monotone" dataKey="complianceRate" stroke="#22C55E" strokeWidth={2.5} fillOpacity={1} fill="url(#compGrad)" />
                   </AreaChart>
                 </ResponsiveContainer>
               </div>
@@ -1056,8 +1056,8 @@ export default function AnalyticsDashboard() {
                       }}
                     />
                     <Legend verticalAlign="bottom" height={36} iconType="circle" formatter={(v) => <span className="text-[9px] text-zinc-400 font-mono">{v}</span>} />
-                    <Bar dataKey="awarenessScore" name="Awareness score" fill="#06b6d4" radius={[4, 4, 0, 0]} />
-                    <Bar dataKey="clickRate" name="Trap Clicks" fill="#f43f5e" radius={[4, 4, 0, 0]} />
+                    <Bar dataKey="awarenessScore" name="Awareness score" fill="#a8a8a8" radius={[4, 4, 0, 0]} />
+                    <Bar dataKey="clickRate" name="Trap Clicks" fill="#E50914" radius={[4, 4, 0, 0]} />
                   </BarChart>
                 </ResponsiveContainer>
               </div>
@@ -1106,8 +1106,8 @@ export default function AnalyticsDashboard() {
                       }}
                     />
                     <Legend verticalAlign="bottom" height={36} iconType="circle" formatter={(v) => <span className="text-[9px] text-zinc-400 font-mono">{v}</span>} />
-                    <Bar dataKey="awarenessScore" name="Awareness Index" fill="#8b5cf6" radius={[0, 4, 4, 0]} barSize={10} />
-                    <Bar dataKey="clickRate" name="Click Rate" fill="#f43f5e" radius={[0, 4, 4, 0]} barSize={10} />
+                    <Bar dataKey="awarenessScore" name="Awareness Index" fill="#a8a8a8" radius={[0, 4, 4, 0]} barSize={10} />
+                    <Bar dataKey="clickRate" name="Click Rate" fill="#E50914" radius={[0, 4, 4, 0]} barSize={10} />
                   </BarChart>
                 </ResponsiveContainer>
               </div>
@@ -1147,7 +1147,7 @@ export default function AnalyticsDashboard() {
                       return null;
                     }}
                   />
-                  <Line type="monotone" dataKey="score" name="Company Security Score" stroke="#06b6d4" strokeWidth={3} activeDot={{ r: 6 }} dot={{ strokeWidth: 2, r: 3 }} />
+                  <Line type="monotone" dataKey="score" name="Company Security Score" stroke="#E50914" strokeWidth={3} activeDot={{ r: 6 }} dot={{ strokeWidth: 2, r: 3 }} />
                 </LineChart>
               </ResponsiveContainer>
             </div>

@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
+import PPLogo from './PPLogo';
 import { 
   ShieldAlert, 
   LayoutDashboard, 
@@ -40,7 +41,7 @@ const SidebarItem: React.FC<SidebarItemProps> = ({ href, label, icon, active, is
         isCollapsed ? 'justify-center p-3' : 'px-4 py-3'
       } ${
         active 
-          ? 'bg-gradient-to-r from-brand-blue/20 to-brand-cyan/10 border-l-2 border-brand-blue text-white font-medium shadow-[0_0_15px_rgba(37,99,235,0.05)]' 
+          ? 'bg-gradient-to-r from-brand-blue/20 to-brand-cyan/10 border-l-2 border-brand-blue text-white font-medium shadow-[0_0_15px_rgba(229,9,20,0.05)]' 
           : 'text-gray-400 hover:text-white hover:bg-white/5 border-l-2 border-transparent'
       }`}>
         <div className={`transition-colors shrink-0 ${active ? 'text-brand-cyan' : 'text-gray-400 group-hover:text-brand-cyan'}`}>
@@ -70,7 +71,7 @@ const SidebarItem: React.FC<SidebarItemProps> = ({ href, label, icon, active, is
         {active && !isCollapsed && (
           <motion.div 
             layoutId="sidebarActiveGlow"
-            className="absolute right-4 w-1.5 h-1.5 rounded-full bg-brand-cyan shadow-[0_0_8px_#06b6d4]"
+            className="absolute right-4 w-1.5 h-1.5 rounded-full bg-brand-cyan shadow-[0_0_8px_#E50914]"
             transition={{ type: 'spring', stiffness: 380, damping: 30 }}
           />
         )}
@@ -202,7 +203,7 @@ export const AppShell: React.FC<{ children: React.ReactNode }> = ({ children }) 
         {/* Brand Logo & Collapse Toggle */}
         <div className="flex items-center justify-between px-4 py-6 border-b border-cyber-border/40 relative">
           <Link href="/" className="flex items-center overflow-hidden">
-            <ShieldAlert className="text-brand-cyan shrink-0 animate-pulse" size={22} />
+            <PPLogo size={22} className="animate-pulse" />
             <AnimatePresence>
               {!isCollapsed && (
                 <motion.div
@@ -375,7 +376,7 @@ export const AppShell: React.FC<{ children: React.ReactNode }> = ({ children }) 
               <div className="space-y-8">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <ShieldAlert className="text-brand-cyan mr-1" size={20} />
+                    <PPLogo size={20} className="mr-1" />
                     <h1 className="font-extrabold text-white text-sm tracking-wider">PINKMAN PROTECTS</h1>
                   </div>
                   <button 

@@ -18,23 +18,24 @@ import {
   MousePointerClick
 } from 'lucide-react';
 import { TopoBackground } from '@/components/ui/TopoBackground';
+import PPLogo from '@/components/layout/PPLogo';
 
 export default function Home() {
   const features = [
     {
       title: 'Consent-Verified Delivery',
       desc: 'Automatic DNS verification ensures campaigns target only corporate-owned, authorized domains. Zero bypass configurations required.',
-      icon: <Target className="text-blue-500" size={18} />
+      icon: <Target className="text-brand-blue" size={18} />
     },
     {
       title: 'Ethical Intercept Mechanism',
       desc: 'Form templates log user click funnel actions but immediately intercept inputs on the client side. No password is ever stored or transmitted.',
-      icon: <Lock className="text-cyan-500" size={18} />
+      icon: <Lock className="text-brand-cyan" size={18} />
     },
     {
       title: 'Adaptive Learning Tracks',
       desc: 'Cybersecurity training modules match individual performance. Poor simulation actions trigger immediate indicators and short micro-quizzes.',
-      icon: <Zap className="text-purple-500" size={18} />
+      icon: <Zap className="text-brand-purple" size={18} />
     }
   ];
 
@@ -58,10 +59,8 @@ export default function Home() {
           className="inline-flex items-center bg-black/80 border border-cyber-border rounded-full px-5 py-2.5 backdrop-blur-xl shadow-2xl gap-8"
         >
           <Link href="/" className="flex items-center gap-2 pr-6 border-r border-cyber-border/40 shrink-0">
-            <div className="w-5.5 h-5.5 rounded-full bg-white flex items-center justify-center text-black font-black text-[10px] font-mono">
-              Φ
-            </div>
-            <span className="font-extrabold text-white text-xs tracking-tight">PhishDeck</span>
+            <PPLogo size={22} />
+            <span className="font-extrabold text-white text-xs tracking-tight uppercase">Pinkman Protects</span>
           </Link>
           
           <nav className="hidden sm:flex items-center gap-6 text-[9px] font-mono font-bold uppercase tracking-wider text-gray-400">
@@ -88,7 +87,7 @@ export default function Home() {
           transition={{ duration: 0.5 }}
           className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/5 border border-cyber-border text-[9px] font-mono uppercase tracking-widest text-gray-400"
         >
-          <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse" /> Consent Security Suite
+          <span className="w-1.5 h-1.5 rounded-full bg-brand-blue animate-pulse" /> Consent Security Suite
         </motion.div>
 
         {/* Headline */}
@@ -143,13 +142,13 @@ export default function Home() {
           className="w-full glass-panel rounded-3xl border border-cyber-border overflow-hidden p-1.5 bg-black/40 shadow-2xl relative"
         >
           {/* Animated corner border light */}
-          <div className="absolute top-0 right-1/4 w-32 h-[1px] bg-gradient-to-r from-transparent via-blue-500 to-transparent animate-pulse" />
+          <div className="absolute top-0 right-1/4 w-32 h-[1px] bg-gradient-to-r from-transparent via-brand-blue to-transparent animate-pulse" />
           
           <div className="border border-white/5 rounded-2.5xl overflow-hidden bg-zinc-950/80 flex flex-col">
             {/* Header control buttons */}
             <div className="flex items-center justify-between px-6 py-4 border-b border-cyber-border/60 bg-black/20 text-[10px] font-mono text-gray-500">
               <div className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
+                <span className="w-2 h-2 rounded-full bg-brand-blue animate-pulse" />
                 <span className="text-white font-semibold">CONSOLE_AUDIT_FUNNEL</span>
               </div>
               <div className="flex items-center gap-4">
@@ -182,7 +181,7 @@ export default function Home() {
               {/* Stat Card 3 */}
               <div className="p-5 rounded-2xl bg-white/2 border border-cyber-border/40 space-y-2">
                 <span className="text-[9px] font-mono uppercase tracking-wider text-gray-500">Current status</span>
-                <span className="px-2 py-0.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 font-mono text-[9px] font-bold inline-block w-fit">
+                <span className="px-2 py-0.5 rounded-full bg-brand-blue/10 border border-brand-blue/20 text-brand-blue font-mono text-[9px] font-bold inline-block w-fit">
                   MONITORING_ON
                 </span>
                 <p className="text-[10px] text-gray-500 font-mono mt-1">Campaign log queries OK</p>
@@ -262,8 +261,8 @@ export default function Home() {
               <p className="text-[11px] text-gray-400 min-h-[40px]">Up to 50 employees, 2 domains, and standard simulation templates.</p>
               <div className="h-px bg-cyber-border/40" />
               <ul className="space-y-2 text-[10px] text-gray-500 font-mono">
-                <li className="flex items-center gap-1.5"><Check size={12} className="text-blue-500" /> Monthly campaigns</li>
-                <li className="flex items-center gap-1.5"><Check size={12} className="text-blue-500" /> Standard quiz widgets</li>
+                <li className="flex items-center gap-1.5"><Check size={12} className="text-brand-blue" /> Monthly campaigns</li>
+                <li className="flex items-center gap-1.5"><Check size={12} className="text-brand-blue" /> Standard quiz widgets</li>
               </ul>
             </div>
             <Link href="/admin/dashboard" className="w-full text-center mt-6 py-2 rounded-full bg-white/5 border border-cyber-border hover:border-brand-blue text-xs font-mono font-semibold transition">
@@ -281,9 +280,9 @@ export default function Home() {
               <p className="text-[11px] text-gray-400 min-h-[40px]">Up to 500 employees, unlimited domain authing, custom email cues.</p>
               <div className="h-px bg-cyber-border/40" />
               <ul className="space-y-2 text-[10px] text-gray-500 font-mono">
-                <li className="flex items-center gap-1.5"><Check size={12} className="text-blue-500" /> Custom cue editors</li>
-                <li className="flex items-center gap-1.5"><Check size={12} className="text-blue-500" /> Real-time funnel audits</li>
-                <li className="flex items-center gap-1.5"><Check size={12} className="text-blue-500" /> CSV data exporters</li>
+                <li className="flex items-center gap-1.5"><Check size={12} className="text-brand-blue" /> Custom cue editors</li>
+                <li className="flex items-center gap-1.5"><Check size={12} className="text-brand-blue" /> Real-time funnel audits</li>
+                <li className="flex items-center gap-1.5"><Check size={12} className="text-brand-blue" /> CSV data exporters</li>
               </ul>
             </div>
             <Link href="/admin/dashboard" className="w-full text-center mt-6 py-2 rounded-full bg-white text-black hover:bg-gray-200 text-xs font-mono font-semibold transition">
@@ -301,8 +300,8 @@ export default function Home() {
               <p className="text-[11px] text-gray-400 min-h-[40px]">Unlimited seats, custom SMTP gateways, and dedicated support.</p>
               <div className="h-px bg-cyber-border/40" />
               <ul className="space-y-2 text-[10px] text-gray-500 font-mono">
-                <li className="flex items-center gap-1.5"><Check size={12} className="text-blue-500" /> REST API webhooks</li>
-                <li className="flex items-center gap-1.5"><Check size={12} className="text-blue-500" /> Custom mail SMTPs</li>
+                <li className="flex items-center gap-1.5"><Check size={12} className="text-brand-blue" /> REST API webhooks</li>
+                <li className="flex items-center gap-1.5"><Check size={12} className="text-brand-blue" /> Custom mail SMTPs</li>
               </ul>
             </div>
             <Link href="/admin/dashboard" className="w-full text-center mt-6 py-2 rounded-full bg-white/5 border border-cyber-border hover:border-brand-blue text-xs font-mono font-semibold transition">
@@ -327,7 +326,7 @@ export default function Home() {
       {/* Footer */}
       <footer className="border-t border-cyber-border/40 bg-black/40 py-10 px-6 text-center text-[10px] font-mono text-gray-500">
         <div className="max-w-5xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
-          <span>© 2026 PhishDeck Platforms Inc.</span>
+          <span>© 2026 Pinkman Protects Platforms Inc.</span>
           <div className="flex gap-4">
             <span>Ethical Boundary</span>
             <span>/</span>

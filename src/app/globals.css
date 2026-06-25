@@ -2,16 +2,16 @@
 
 @theme {
   --color-cyber-dark: #050505;
-  --color-cyber-card: rgba(10, 10, 12, 0.45);
-  --color-cyber-border: rgba(255, 255, 255, 0.05);
-  --color-cyber-border-hover: rgba(6, 182, 212, 0.3);
+  --color-cyber-card: #141414;
+  --color-cyber-border: #252525;
+  --color-cyber-border-hover: #E50914;
   
-  --color-brand-cyan: #06b6d4;
-  --color-brand-blue: #2563eb;
-  --color-brand-purple: #8b5cf6;
-  --color-brand-emerald: #10b981;
-  --color-brand-rose: #f43f5e;
-  --color-brand-amber: #f59e0b;
+  --color-brand-cyan: #FF2D20;
+  --color-brand-blue: #E50914;
+  --color-brand-purple: #D90429;
+  --color-brand-emerald: #22C55E;
+  --color-brand-rose: #EF4444;
+  --color-brand-amber: #F59E0B;
   
   --font-sans: var(--font-geist-sans), system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), monospace;
@@ -19,7 +19,7 @@
 
 :root {
   --background: #050505;
-  --foreground: #f8fafc;
+  --foreground: #ffffff;
 }
 
 body {
@@ -27,9 +27,9 @@ body {
   color: var(--foreground);
   font-family: var(--font-sans);
   background-image: 
-    radial-gradient(at 0% 0%, rgba(37, 99, 235, 0.07) 0px, transparent 50%),
-    radial-gradient(at 100% 0%, rgba(6, 182, 212, 0.07) 0px, transparent 50%),
-    radial-gradient(at 50% 50%, rgba(139, 92, 246, 0.02) 0px, transparent 60%);
+    radial-gradient(at 0% 0%, rgba(229, 9, 20, 0.05) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(255, 45, 32, 0.05) 0px, transparent 50%),
+    radial-gradient(at 50% 50%, rgba(217, 4, 41, 0.02) 0px, transparent 60%);
   background-attachment: fixed;
   overflow-x: hidden;
 }
@@ -61,48 +61,48 @@ body {
 
 /* Glassmorphism panel styling */
 .glass-panel {
-  background: rgba(10, 10, 12, 0.55);
+  background: rgba(20, 20, 20, 0.75);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.04);
+  border: 1px solid #252525;
   box-shadow: 0 10px 40px 0 rgba(0, 0, 0, 0.6);
   transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .glass-panel:hover {
-  border-color: rgba(37, 99, 235, 0.2);
-  box-shadow: 0 10px 40px 0 rgba(37, 99, 235, 0.04);
+  border-color: rgba(229, 9, 20, 0.25);
+  box-shadow: 0 10px 40px 0 rgba(229, 9, 20, 0.03);
 }
 
 .glass-input {
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: #141414;
+  border: 1px solid #252525;
   color: white;
   transition: all 0.3s ease;
 }
 
 .glass-input:focus {
   outline: none;
-  border-color: #2563eb;
-  box-shadow: 0 0 15px rgba(37, 99, 235, 0.15);
-  background: rgba(255, 255, 255, 0.04);
+  border-color: #E50914;
+  box-shadow: 0 0 15px rgba(229, 9, 20, 0.15);
+  background: #181818;
 }
 
 /* Neon Glow utilities */
 .glow-text-cyan {
-  text-shadow: 0 0 10px rgba(6, 182, 212, 0.4);
+  text-shadow: 0 0 10px rgba(229, 9, 20, 0.4);
 }
 
 .glow-text-blue {
-  text-shadow: 0 0 10px rgba(37, 99, 235, 0.4);
+  text-shadow: 0 0 10px rgba(229, 9, 20, 0.4);
 }
 
 .glow-border-blue {
-  box-shadow: 0 0 20px rgba(37, 99, 235, 0.1);
+  box-shadow: 0 0 20px rgba(229, 9, 20, 0.15);
 }
 
 .glow-border-cyan {
-  box-shadow: 0 0 20px rgba(6, 182, 212, 0.1);
+  box-shadow: 0 0 20px rgba(229, 9, 20, 0.15);
 }
 
 /* 3D-inspired visual depth utilities */

@@ -250,9 +250,9 @@ export default function Dashboard() {
   }
 
   const riskPieData = [
-    { name: 'Low Risk', value: data.riskCounts.LOW, color: '#10b981' },
-    { name: 'Medium Risk', value: data.riskCounts.MEDIUM, color: '#f59e0b' },
-    { name: 'High Risk', value: data.riskCounts.HIGH, color: '#f43f5e' },
+    { name: 'Low Risk', value: data.riskCounts.LOW, color: '#22C55E' },
+    { name: 'Medium Risk', value: data.riskCounts.MEDIUM, color: '#F59E0B' },
+    { name: 'High Risk', value: data.riskCounts.HIGH, color: '#EF4444' },
   ];
 
   const funnelData = [
@@ -474,20 +474,20 @@ export default function Dashboard() {
               <BarChart data={funnelData} layout="vertical" margin={{ left: 10, right: 30, bottom: 10 }}>
                 <defs>
                   <linearGradient id="gradientDelivered" x1="0" y1="0" x2="1" y2="0">
-                    <stop offset="0%" stopColor="#8b5cf6" stopOpacity={0.85}/>
-                    <stop offset="100%" stopColor="#8b5cf6" stopOpacity={0.15}/>
+                    <stop offset="0%" stopColor="#ffffff" stopOpacity={0.85}/>
+                    <stop offset="100%" stopColor="#ffffff" stopOpacity={0.15}/>
                   </linearGradient>
                   <linearGradient id="gradientOpened" x1="0" y1="0" x2="1" y2="0">
-                    <stop offset="0%" stopColor="#6366f1" stopOpacity={0.85}/>
-                    <stop offset="100%" stopColor="#6366f1" stopOpacity={0.15}/>
+                    <stop offset="0%" stopColor="#a8a8a8" stopOpacity={0.85}/>
+                    <stop offset="100%" stopColor="#a8a8a8" stopOpacity={0.15}/>
                   </linearGradient>
                   <linearGradient id="gradientClicked" x1="0" y1="0" x2="1" y2="0">
-                    <stop offset="0%" stopColor="#06b6d4" stopOpacity={0.85}/>
-                    <stop offset="100%" stopColor="#06b6d4" stopOpacity={0.15}/>
+                    <stop offset="0%" stopColor="#FF2D20" stopOpacity={0.85}/>
+                    <stop offset="100%" stopColor="#FF2D20" stopOpacity={0.15}/>
                   </linearGradient>
                   <linearGradient id="gradientSubmitted" x1="0" y1="0" x2="1" y2="0">
-                    <stop offset="0%" stopColor="#f43f5e" stopOpacity={0.85}/>
-                    <stop offset="100%" stopColor="#f43f5e" stopOpacity={0.15}/>
+                    <stop offset="0%" stopColor="#E50914" stopOpacity={0.85}/>
+                    <stop offset="100%" stopColor="#E50914" stopOpacity={0.15}/>
                   </linearGradient>
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.015)" horizontal={false} />
@@ -627,16 +627,16 @@ export default function Dashboard() {
                 <AreaChart data={data.campaignTrends} margin={{ left: -15, right: 10, top: 10, bottom: 5 }}>
                   <defs>
                     <linearGradient id="colorClick" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#06b6d4" stopOpacity={0.25}/>
-                      <stop offset="95%" stopColor="#06b6d4" stopOpacity={0}/>
+                      <stop offset="5%" stopColor="#a8a8a8" stopOpacity={0.25}/>
+                      <stop offset="95%" stopColor="#a8a8a8" stopOpacity={0}/>
                     </linearGradient>
                     <linearGradient id="colorSubmit" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#f43f5e" stopOpacity={0.25}/>
-                      <stop offset="95%" stopColor="#f43f5e" stopOpacity={0}/>
+                      <stop offset="5%" stopColor="#E50914" stopOpacity={0.25}/>
+                      <stop offset="95%" stopColor="#E50914" stopOpacity={0}/>
                     </linearGradient>
                     <linearGradient id="colorOpen" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#8b5cf6" stopOpacity={0.15}/>
-                      <stop offset="95%" stopColor="#8b5cf6" stopOpacity={0}/>
+                      <stop offset="5%" stopColor="#ffffff" stopOpacity={0.15}/>
+                      <stop offset="95%" stopColor="#ffffff" stopOpacity={0}/>
                     </linearGradient>
                   </defs>
                   <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.015)" />
@@ -668,9 +668,9 @@ export default function Dashboard() {
                     iconType="circle"
                     formatter={(value) => <span className="text-[10px] text-zinc-400 font-mono">{value}</span>}
                   />
-                  <Area type="monotone" dataKey="openRate" name="Open Rate" stroke="#8b5cf6" strokeWidth={2.5} fill="url(#colorOpen)" />
-                  <Area type="monotone" dataKey="clickRate" name="Link Click Rate" stroke="#06b6d4" strokeWidth={2.5} fill="url(#colorClick)" />
-                  <Area type="monotone" dataKey="submitRate" name="Credential Submission" stroke="#f43f5e" strokeWidth={2.5} fill="url(#colorSubmit)" />
+                  <Area type="monotone" dataKey="openRate" name="Open Rate" stroke="#ffffff" strokeWidth={2.5} fill="url(#colorOpen)" />
+                  <Area type="monotone" dataKey="clickRate" name="Link Click Rate" stroke="#a8a8a8" strokeWidth={2.5} fill="url(#colorClick)" />
+                  <Area type="monotone" dataKey="submitRate" name="Credential Submission" stroke="#E50914" strokeWidth={2.5} fill="url(#colorSubmit)" />
                 </AreaChart>
               </ResponsiveContainer>
             ) : (

@@ -4,7 +4,6 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { 
-  ShieldAlert, 
   Lock, 
   Mail, 
   Eye, 
@@ -14,6 +13,7 @@ import {
   CheckCircle2
 } from 'lucide-react';
 import Link from 'next/link';
+import PPLogo from '@/components/layout/PPLogo';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -61,14 +61,12 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen flex flex-col justify-center py-12 sm:px-6 lg:px-8 relative overflow-hidden bg-cyber-dark select-none">
       {/* Decorative Radial mesh backings */}
-      <div className="absolute top-0 left-1/4 w-96 h-96 bg-brand-cyan/5 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-brand-purple/5 rounded-full blur-3xl pointer-events-none" />
-
+      <div className="absolute top-0 left-1/4 w-96 h-96 bg-brand-blue/5 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-brand-purple/3 rounded-full blur-3xl pointer-events-none" />
+ 
       <div className="sm:mx-auto sm:w-full sm:max-w-md text-center z-10 space-y-3">
-        <div className="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-gradient-to-br from-brand-cyan to-brand-purple p-0.5 shadow-lg shadow-brand-purple/10">
-          <div className="w-full h-full rounded-[14px] bg-cyber-dark flex items-center justify-center">
-            <ShieldAlert className="text-brand-cyan shrink-0 animate-pulse" size={24} />
-          </div>
+        <div className="flex justify-center">
+          <PPLogo size={44} className="animate-pulse" />
         </div>
         <h2 className="text-2xl font-black text-white tracking-tight uppercase">
           Pinkman Protects
@@ -116,7 +114,7 @@ export default function LoginPage() {
                 <label className="text-gray-500 uppercase font-bold flex items-center gap-1">
                   <Lock size={12} /> Password
                 </label>
-                <Link href="/auth/forgot-password" className="text-[10px] text-brand-purple hover:underline">
+                <Link href="/auth/forgot-password" className="text-[10px] text-brand-blue hover:underline">
                   Forgot Password?
                 </Link>
               </div>
@@ -156,7 +154,7 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 rounded-xl bg-gradient-to-r from-brand-cyan to-brand-purple text-white font-semibold flex items-center justify-center gap-1.5 hover:brightness-110 shadow-lg shadow-brand-purple/10 disabled:brightness-50 transition"
+              className="w-full py-3 rounded-xl bg-brand-blue text-white font-semibold flex items-center justify-center gap-1.5 hover:brightness-110 hover:shadow-[0_0_15px_rgba(229,9,20,0.3)] shadow-lg shadow-brand-blue/10 disabled:brightness-50 transition border border-white/5 cursor-pointer"
             >
               {loading ? (
                 <div className="w-4 h-4 border-2 border-t-transparent border-white rounded-full animate-spin" />
@@ -176,11 +174,11 @@ export default function LoginPage() {
             {/* Quick credentials helper for testers */}
             <div className="bg-white/2 p-2.5 rounded-xl border border-white/5 space-y-1">
               <div className="font-bold text-white uppercase text-[8px] tracking-wider">Test Credentials (Indian Domains):</div>
-              <ul className="list-disc list-inside text-[8px] space-y-0.5">
-                <li>Superadmin: <span className="text-brand-cyan">superadmin@company.in</span> / <span className="text-brand-purple">Superadmin123!</span></li>
-                <li>IT Sec Admin: <span className="text-brand-cyan">admin@company.in</span> / <span className="text-brand-purple">Admin123!</span></li>
-                <li>HR Manager: <span className="text-brand-cyan">hr@company.in</span> / <span className="text-brand-purple">HrManager123!</span></li>
-                <li>Employee: <span className="text-brand-cyan">rahul@company.in</span> / <span className="text-brand-purple">password123</span></li>
+              <ul className="list-disc list-inside text-[8px] space-y-0.5 text-gray-400">
+                <li>Superadmin: <span className="text-brand-blue font-bold">superadmin@company.in</span> / <span className="text-brand-purple">Superadmin123!</span></li>
+                <li>IT Sec Admin: <span className="text-brand-blue font-bold">admin@company.in</span> / <span className="text-brand-purple">Admin123!</span></li>
+                <li>HR Manager: <span className="text-brand-blue font-bold">hr@company.in</span> / <span className="text-brand-purple">HrManager123!</span></li>
+                <li>Employee: <span className="text-brand-blue font-bold">rahul@company.in</span> / <span className="text-brand-purple">password123</span></li>
               </ul>
             </div>
           </div>

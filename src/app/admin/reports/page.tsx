@@ -282,7 +282,7 @@ export default function ReportsPage() {
     'Compliance Status'
   ];
 
-  const COLORS = ['#06b6d4', '#8b5cf6', '#f43f5e', '#10b981', '#f59e0b', '#2563eb', '#64748b'];
+  const COLORS = ['#E50914', '#ffffff', '#a8a8a8', '#22C55E', '#F59E0B', '#EF4444', '#71717a'];
 
   return (
     <div className="space-y-8 pb-16 print:bg-white print:text-black print:p-0 print:space-y-4">
@@ -551,7 +551,7 @@ export default function ReportsPage() {
                           <XAxis dataKey="name" stroke="#64748b" />
                           <YAxis stroke="#64748b" />
                           <Tooltip contentStyle={{ backgroundColor: '#0f172a', borderColor: 'rgba(255,255,255,0.05)' }} />
-                          <Bar dataKey="averageScore" fill="#06b6d4" radius={[4, 4, 0, 0]} />
+                          <Bar dataKey="averageScore" fill="#a8a8a8" radius={[4, 4, 0, 0]} />
                         </BarChart>
                       </ResponsiveContainer>
                     </div>
@@ -567,7 +567,7 @@ export default function ReportsPage() {
                           <XAxis dataKey="name" stroke="#64748b" />
                           <YAxis stroke="#64748b" />
                           <Tooltip contentStyle={{ backgroundColor: '#0f172a', borderColor: 'rgba(255,255,255,0.05)' }} />
-                          <Bar dataKey="averageScore" fill="#8b5cf6" radius={[4, 4, 0, 0]} />
+                          <Bar dataKey="averageScore" fill="#E50914" radius={[4, 4, 0, 0]} />
                         </BarChart>
                       </ResponsiveContainer>
                     </div>
@@ -577,7 +577,7 @@ export default function ReportsPage() {
 
                 {/* AI Insights glow card */}
                 {aiInsights && (
-                  <div className="p-6 rounded-3xl bg-brand-purple/5 border border-brand-purple/15 space-y-4 glow-border-cyan relative overflow-hidden print:bg-white print:border-black/20 print:shadow-none">
+                  <div className="p-6 rounded-3xl bg-brand-blue/5 border border-brand-blue/15 space-y-4 glow-border-blue relative overflow-hidden print:bg-white print:border-black/20 print:shadow-none">
                     <div className="absolute top-0 right-0 w-32 h-32 bg-brand-cyan/5 rounded-full blur-3xl pointer-events-none" />
                     
                     <div className="flex items-center gap-2">
