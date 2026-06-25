@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   ShieldAlert, 
@@ -79,6 +79,7 @@ const SidebarItem: React.FC<SidebarItemProps> = ({ href, label, icon, active, is
 
 export const AppShell: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const pathname = usePathname();
+  const router = useRouter();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [sessionUser, setSessionUser] = useState<any>(null);
@@ -100,6 +101,44 @@ export const AppShell: React.FC<{ children: React.ReactNode }> = ({ children }) 
         .catch(err => console.error(err));
     }
   }, [pathname, isSimulationPage, isAuthPage]);
+
+  // Inactivity timeout handler
+  useEffect(() => {
+    if (isSimulationPage || isAuthPage || !sessionUser) return;
+
+    let timeoutId: NodeJS.Timeout;
+
+    const resetTimer = () => {
+      clearTimeout(timeoutId);
+      // Set to 15 minutes = 900,000ms
+      timeoutId = setTimeout(async () => {
+        try {
+          await fetch('/api/auth/logout', { method: 'POST' });
+          setSessionUser(null);
+          router.push('/auth/session-expired');
+        } catch (e) {
+          console.error(e);
+        }
+      }, 15 * 60 * 1000);
+    };
+
+    // Listen to user activity events
+    window.addEventListener('mousemove', resetTimer);
+    window.addEventListener('keydown', resetTimer);
+    window.addEventListener('click', resetTimer);
+    window.addEventListener('scroll', resetTimer);
+
+    // Initialize timer
+    resetTimer();
+
+    return () => {
+      clearTimeout(timeoutId);
+      window.removeEventListener('mousemove', resetTimer);
+      window.removeEventListener('keydown', resetTimer);
+      window.removeEventListener('click', resetTimer);
+      window.removeEventListener('scroll', resetTimer);
+    };
+  }, [sessionUser, isSimulationPage, isAuthPage, router]);
 
   // If auth page, render centered full-screen content without standard sidebar wrap
   if (isAuthPage) {
@@ -229,7 +268,7 @@ export const AppShell: React.FC<{ children: React.ReactNode }> = ({ children }) 
 
         {/* Footer client card / Link to Profile page */}
         <div className="p-3 border-t border-cyber-border/40">
-          <Link href="/auth/profile" className="bg-white/3 rounded-xl p-2 flex items-center gap-2.5 overflow-hidden hover:bg-white/5 border border-transparent hover:border-white/5 transition block">
+          <Link href="/auth/logout" className="bg-white/3 rounded-xl p-2 flex items-center gap-2.5 overflow-hidden hover:bg-white/5 border border-transparent hover:border-white/5 transition block">
             <div className="w-8 h-8 rounded-lg bg-brand-cyan/25 border border-brand-cyan/30 flex items-center justify-center text-brand-cyan text-[10px] font-bold font-mono shrink-0">
               {sessionUser ? getInitials(sessionUser.name) : 'US'}
             </div>
@@ -387,7 +426,7 @@ export const AppShell: React.FC<{ children: React.ReactNode }> = ({ children }) 
               {/* Mobile bottom profile card */}
               <div className="pt-4 border-t border-cyber-border/40">
                 <Link 
-                  href="/auth/profile" 
+                  href="/auth/logout" 
                   onClick={() => setMobileMenuOpen(false)}
                   className="bg-white/3 rounded-xl p-2.5 flex items-center gap-3 hover:bg-white/5 border border-white/5 transition block"
                 >
