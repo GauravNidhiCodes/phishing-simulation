@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import PPLogo from './PPLogo';
+import AIAssistant from '../ai/AIAssistant';
 import { 
   ShieldAlert, 
   LayoutDashboard, 
@@ -452,6 +453,7 @@ export const AppShell: React.FC<{ children: React.ReactNode }> = ({ children }) 
           </>
         )}
       </AnimatePresence>
+      <AIAssistant />
     </div>
   );
 };
