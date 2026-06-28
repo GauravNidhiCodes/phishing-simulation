@@ -10,6 +10,7 @@ import NotificationCenter from '../notifications/NotificationCenter';
 import { 
   ShieldAlert, 
   LayoutDashboard, 
+  Activity,
   Send, 
   FileText, 
   BarChart3, 
@@ -160,6 +161,7 @@ export const AppShell: React.FC<{ children: React.ReactNode }> = ({ children }) 
 
   const adminMenu = [
     { href: '/admin/dashboard', label: 'Dashboard', icon: <LayoutDashboard size={16} /> },
+    { href: '/admin/soc', label: 'SOC Command', icon: <Activity size={16} /> },
     { href: '/admin/campaigns', label: 'Campaigns', icon: <Send size={16} /> },
     { href: '/admin/templates', label: 'Template Library', icon: <FileText size={16} /> },
     { href: '/admin/analytics', label: 'Analytics & Logs', icon: <BarChart3 size={16} /> },
