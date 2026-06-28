@@ -1,0 +1,9 @@
+{
+  "email": true,
+  "dashboard": true,
+  "learningReminders": true,
+  "campaignAlerts": true,
+  "weeklyReports": false,
+  "monthlyReports": true,
+  "criticalAlerts": true
+}

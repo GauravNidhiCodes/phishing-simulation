@@ -6,6 +6,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import PPLogo from './PPLogo';
 import AIAssistant from '../ai/AIAssistant';
+import NotificationCenter from '../notifications/NotificationCenter';
 import { 
   ShieldAlert, 
   LayoutDashboard, 
@@ -338,6 +339,9 @@ export const AppShell: React.FC<{ children: React.ReactNode }> = ({ children }) 
                 </span>
               </div>
             </div>
+
+            {/* Notification Bell & Drawer */}
+            <NotificationCenter />
 
             {/* Simulation tester link */}
             <Link 

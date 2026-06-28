@@ -1,0 +1,74 @@
+[
+  {
+    "id": "NTF-001",
+    "category": "SECURITY_ALERT",
+    "title": "Vulnerability Detected",
+    "message": "Finance department awareness score dropped by 7% below corporate security threshold.",
+    "priority": "HIGH",
+    "isRead": false,
+    "timestamp": "2026-06-28T16:00:00.000Z"
+  },
+  {
+    "id": "NTF-002",
+    "category": "AI_RECOMMENDATION",
+    "title": "Emergency Remediation Action",
+    "message": "AI Engine recommends assigning 'MFA Enforcements' training module to 12 high-risk employees.",
+    "priority": "CRITICAL",
+    "isRead": false,
+    "timestamp": "2026-06-28T14:15:00.000Z"
+  },
+  {
+    "id": "NTF-003",
+    "category": "CAMPAIGN",
+    "title": "Simulation Launched",
+    "message": "Phishing Simulation campaign 'EPFO Aadhaar Link Verification' has been launched for all branches.",
+    "priority": "MEDIUM",
+    "isRead": false,
+    "timestamp": "2026-06-28T11:30:00.000Z"
+  },
+  {
+    "id": "NTF-004",
+    "category": "REPORT",
+    "title": "Monthly Compliance Report",
+    "message": "The executive compliance summary for June 2026 is fully generated and ready for review.",
+    "priority": "LOW",
+    "isRead": true,
+    "timestamp": "2026-06-27T18:00:00.000Z"
+  },
+  {
+    "id": "NTF-005",
+    "category": "LEARNING",
+    "title": "Training Completion",
+    "message": "Pune operations team achieved 100% completion rate for the 'Ransomware Shielding' quiz.",
+    "priority": "MEDIUM",
+    "isRead": true,
+    "timestamp": "2026-06-27T09:45:00.000Z"
+  },
+  {
+    "id": "NTF-006",
+    "category": "MILESTONE",
+    "title": "Security Milestone",
+    "message": "Congratulations! Bengaluru branch completed 90 continuous days with zero phishing click failures.",
+    "priority": "MEDIUM",
+    "isRead": false,
+    "timestamp": "2026-06-26T15:20:00.000Z"
+  },
+  {
+    "id": "NTF-007",
+    "category": "ANNOUNCEMENT",
+    "title": "New Phishing Template",
+    "message": "New template 'Income Tax Refund Claim Form' added to pre-built catalog for immediate use.",
+    "priority": "LOW",
+    "isRead": true,
+    "timestamp": "2026-06-25T11:00:00.000Z"
+  },
+  {
+    "id": "NTF-008",
+    "category": "SYSTEM",
+    "title": "System Alert: Cron Executed",
+    "message": "Scheduler successfully executed the weekly backup task. Snapshot ID: BK-7741.",
+    "priority": "LOW",
+    "isRead": true,
+    "timestamp": "2026-06-24T00:01:00.000Z"
+  }
+]
