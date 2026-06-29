@@ -817,14 +817,14 @@ export default function TemplatesWorkspace() {
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-6">
-        <div className="relative w-16 h-16 flex items-center justify-center">
-          <div className="absolute inset-0 border-2 border-brand-cyan/20 rounded-full" />
-          <div className="absolute inset-0 border-t-2 border-brand-cyan border-r-2 border-transparent rounded-full animate-spin" />
-          <FileCode className="text-brand-cyan animate-pulse" size={20} />
+        <div className="relative w-12 h-12 flex items-center justify-center">
+          <div className="absolute inset-0 border border-white/10 rounded-full" />
+          <div className="absolute inset-0 border-t border-white border-r border-transparent rounded-full animate-spin" />
+          <FileCode className="text-white" size={16} />
         </div>
-        <div className="text-center space-y-1.5">
-          <span className="text-xs font-mono tracking-widest text-brand-cyan uppercase animate-pulse">Initializing Editor...</span>
-          <p className="text-[10px] font-mono text-zinc-500">Querying template indices and preloading libraries...</p>
+        <div className="text-center space-y-1">
+          <span className="text-[10px] font-mono tracking-widest text-white uppercase animate-pulse">Initializing Editor...</span>
+          <p className="text-[9px] font-mono text-zinc-500">Querying template indices and preloading libraries...</p>
         </div>
       </div>
     );
@@ -834,16 +834,14 @@ export default function TemplatesWorkspace() {
 
   return (
     <div className="space-y-8 relative pb-12 min-h-screen">
-      <div className="absolute top-[-10%] right-[10%] w-[450px] h-[450px] bg-brand-cyan/2 rounded-full blur-[140px] pointer-events-none" />
-
       {/* 1. Header Toolbar */}
-      <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-6 border-b border-white/[0.04] pb-6">
-        <div className="space-y-1.5">
+      <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-6 border-b border-[#1F1F1F] pb-5">
+        <div className="space-y-1">
           <div className="flex items-center gap-2">
-            <span className="h-1.5 w-1.5 rounded-full bg-brand-cyan shadow-[0_0_8px_#06b6d4]" />
-            <span className="text-[9px] font-mono uppercase tracking-widest text-brand-cyan font-bold">Template Workshop</span>
+            <span className="h-1.5 w-1.5 rounded-full bg-[#00D26A]" />
+            <span className="text-[9px] font-mono uppercase tracking-widest text-zinc-500 font-bold">Template Workshop</span>
           </div>
-          <h1 className="text-3xl font-extrabold tracking-tight leading-none bg-gradient-to-r from-white via-zinc-200 to-zinc-500 bg-clip-text text-transparent">
+          <h1 className="text-xl font-bold tracking-tight uppercase font-mono text-white">
             Corporate Templates Builder
           </h1>
           <p className="text-xs text-zinc-400 font-mono">
@@ -851,7 +849,7 @@ export default function TemplatesWorkspace() {
           </p>
         </div>
 
-        <div className="flex items-center gap-3 shrink-0">
+        <div className="flex items-center gap-2 shrink-0">
           <button
             onClick={() => {
               setIsCreateMode(true);
@@ -872,7 +870,7 @@ export default function TemplatesWorkspace() {
               setEditorTab('blocks');
               setIsEditorOpen(true);
             }}
-            className="flex items-center justify-center gap-2 bg-gradient-to-r from-brand-cyan via-brand-blue to-brand-purple hover:brightness-110 active:scale-[0.98] text-white font-bold px-5 py-3 rounded-xl transition duration-300 shadow-[0_4px_25px_rgba(6,182,212,0.22)] text-xs font-mono uppercase tracking-wider cursor-pointer border border-white/10"
+            className="flex items-center justify-center gap-2 bg-white hover:bg-zinc-200 text-black px-4 py-2 rounded-lg transition text-xs font-mono uppercase tracking-wider cursor-pointer border border-white/10"
           >
             <Plus size={14} className="stroke-[3]" /> Create New Template
           </button>
@@ -880,8 +878,7 @@ export default function TemplatesWorkspace() {
       </div>
 
       {/* 2. Filter Bar */}
-      <div className="glass-panel p-6 rounded-3xl border border-white/[0.04] grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 items-end relative">
-        <div className="absolute top-0 right-0 w-24 h-24 bg-brand-cyan/2 rounded-full blur-2xl pointer-events-none" />
+      <div className="p-5 border border-[#1F1F1F] bg-[#121212] rounded-2xl grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 items-end relative">
         
         {/* Search */}
         <div>
@@ -944,7 +941,7 @@ export default function TemplatesWorkspace() {
               title={showArchived ? "Show Active Templates" : "Show Archived Templates"}
               className={`p-2.5 rounded-xl border transition cursor-pointer flex items-center justify-center ${
                 showArchived 
-                  ? 'bg-brand-rose/10 border-brand-rose text-brand-rose'
+                  ? 'bg-[#121212] border-zinc-700 text-white'
                   : 'bg-white/5 border-white/10 text-zinc-400 hover:text-white'
               }`}
             >
@@ -959,7 +956,7 @@ export default function TemplatesWorkspace() {
             <button
               onClick={() => setViewMode('grid')}
               className={`flex-1 flex justify-center py-2 px-3 rounded-lg transition duration-200 cursor-pointer items-center gap-1.5 ${
-                viewMode === 'grid' ? 'bg-brand-cyan/20 text-brand-cyan border border-brand-cyan/20 font-bold' : 'text-zinc-500 hover:text-white'
+                viewMode === 'grid' ? 'bg-[#121212] text-white border border-[#1F1F1F] font-bold' : 'text-zinc-500 hover:text-white'
               }`}
             >
               <Grid size={12} /> Grid
@@ -967,7 +964,7 @@ export default function TemplatesWorkspace() {
             <button
               onClick={() => setViewMode('list')}
               className={`flex-1 flex justify-center py-2 px-3 rounded-lg transition duration-200 cursor-pointer items-center gap-1.5 ${
-                viewMode === 'list' ? 'bg-brand-cyan/20 text-brand-cyan border border-brand-cyan/20 font-bold' : 'text-zinc-500 hover:text-white'
+                viewMode === 'list' ? 'bg-[#121212] text-white border border-[#1F1F1F] font-bold' : 'text-zinc-500 hover:text-white'
               }`}
             >
               <List size={12} /> List
@@ -993,25 +990,25 @@ export default function TemplatesWorkspace() {
               return (
                 <motion.div
                   key={t.id}
-                  whileHover={{ y: -4, borderColor: 'rgba(6,182,212,0.25)' }}
-                  className={`glass-panel p-5 rounded-2.5xl flex flex-col justify-between border relative overflow-hidden transition-all duration-300 ${
-                    isSelected ? 'border-brand-cyan bg-brand-cyan/[0.02]' : 'border-white/[0.04]'
+                  whileHover={{ y: -2 }}
+                  className={`p-5 rounded-xl flex flex-col justify-between border relative overflow-hidden transition ${
+                    isSelected ? 'border-white bg-white/[0.02]' : 'border-[#1F1F1F] bg-[#121212]'
                   }`}
                 >
                   <div>
                     {/* Header: Favorite Toggle */}
                     <div className="flex justify-between items-start gap-2 mb-4">
-                      <span className={`px-2 py-0.5 rounded text-[8px] font-mono uppercase tracking-wider font-bold ${
-                        meta.riskLevel === 'HIGH' ? 'bg-brand-rose/10 border border-brand-rose/20 text-brand-rose' :
-                        meta.riskLevel === 'MEDIUM' ? 'bg-brand-amber/10 border border-brand-amber/20 text-brand-amber' :
-                        'bg-brand-emerald/10 border border-brand-emerald/20 text-brand-emerald'
+                      <span className={`px-2 py-0.5 rounded text-[8px] font-mono uppercase tracking-wider font-bold border ${
+                        meta.riskLevel === 'HIGH' ? 'bg-zinc-800/10 border-[#1F1F1F] text-white' :
+                        meta.riskLevel === 'MEDIUM' ? 'bg-[#050505] border-[#1F1F1F] text-zinc-400' :
+                        'bg-emerald-500/10 border-emerald-500/20 text-[#00D26A]'
                       }`}>
                         {meta.riskLevel} RISK
                       </span>
                       <button
                         onClick={() => handleToggleFavorite(t)}
                         className={`p-1 rounded-lg transition-colors cursor-pointer ${
-                          meta.isFavorite ? 'text-brand-amber' : 'text-zinc-600 hover:text-zinc-400'
+                          meta.isFavorite ? 'text-yellow-500' : 'text-zinc-600 hover:text-zinc-400'
                         }`}
                       >
                         <Star size={14} className={meta.isFavorite ? 'fill-current' : ''} />
@@ -1136,8 +1133,8 @@ export default function TemplatesWorkspace() {
                         {/* Risk */}
                         <td className="px-6 py-3 text-center">
                           <span className={`px-2 py-0.5 rounded text-[8px] font-bold ${
-                            meta.riskLevel === 'HIGH' ? 'text-brand-rose' :
-                            meta.riskLevel === 'MEDIUM' ? 'text-brand-amber' : 'text-brand-emerald'
+                            meta.riskLevel === 'HIGH' ? 'text-white' :
+                            meta.riskLevel === 'MEDIUM' ? 'text-zinc-400' : 'text-[#00D26A]'
                           }`}>
                             {meta.riskLevel}
                           </span>
@@ -1155,28 +1152,28 @@ export default function TemplatesWorkspace() {
                                 setIsCreateMode(false);
                                 setIsEditorOpen(true);
                               }}
-                              className="p-1.5 rounded-lg bg-white/5 border border-white/10 hover:border-brand-cyan/40 hover:bg-brand-cyan/10 text-white transition cursor-pointer"
+                              className="p-1.5 rounded-lg bg-white/5 border border-white/10 hover:border-zinc-700 hover:bg-white/10 text-white transition cursor-pointer"
                               title="Edit"
                             >
                               <Edit2 size={11} />
                             </button>
                             <button
                               onClick={() => handleDuplicate(t)}
-                              className="p-1.5 rounded-lg bg-white/5 border border-white/10 hover:border-brand-blue/40 hover:bg-brand-blue/10 text-white transition cursor-pointer"
+                              className="p-1.5 rounded-lg bg-white/5 border border-white/10 hover:border-zinc-700 hover:bg-white/10 text-white transition cursor-pointer"
                               title="Duplicate"
                             >
                               <Copy size={11} />
                             </button>
                             <button
                               onClick={() => handleToggleArchive(t)}
-                              className="p-1.5 rounded-lg bg-white/5 border border-white/10 hover:border-brand-purple/40 hover:bg-brand-purple/10 text-white transition cursor-pointer"
+                              className="p-1.5 rounded-lg bg-white/5 border border-white/10 hover:border-zinc-700 hover:bg-white/10 text-white transition cursor-pointer"
                               title={meta.isArchived ? "Restore" : "Archive"}
                             >
                               <Archive size={11} />
                             </button>
                             <button
                               onClick={() => handleDelete(t)}
-                              className="p-1.5 rounded-lg bg-white/5 border border-white/10 hover:border-brand-rose/40 hover:bg-brand-rose/10 text-brand-rose transition cursor-pointer"
+                              className="p-1.5 rounded-lg bg-white/5 border border-white/10 hover:border-zinc-700 hover:bg-white/10 text-zinc-400 hover:text-white transition cursor-pointer"
                               title="Delete"
                             >
                               <Trash2 size={11} />
@@ -1213,8 +1210,8 @@ export default function TemplatesWorkspace() {
             {/* Topbar navigation */}
             <div className="flex items-center justify-between px-6 py-4 bg-zinc-900 border-b border-white/[0.05] shrink-0">
               <div className="flex items-center gap-3">
-                <div className="p-2 rounded-lg bg-brand-cyan/10 border border-brand-cyan/20 text-brand-cyan">
-                  <Sparkles size={16} />
+                <div className="p-2 rounded bg-[#0A0A0A] border border-[#1F1F1F] text-white">
+                  <Sparkles size={14} />
                 </div>
                 <div>
                   <h2 className="text-sm font-bold text-white tracking-tight">
@@ -1224,18 +1221,18 @@ export default function TemplatesWorkspace() {
                 </div>
               </div>
 
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2">
                 <button
                   onClick={() => handleSaveTemplate(false)}
                   disabled={submitting}
-                  className="px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/5 text-zinc-300 font-bold transition text-xs font-mono uppercase tracking-wider cursor-pointer flex items-center gap-1.5"
+                  className="px-4 py-2 rounded-lg bg-[#121212] border border-[#1F1F1F] hover:border-zinc-700 text-zinc-300 font-bold transition text-xs font-mono uppercase tracking-wider cursor-pointer flex items-center gap-1.5"
                 >
                   <Save size={12} /> Save Draft
                 </button>
                 <button
                   onClick={() => handleSaveTemplate(true)}
                   disabled={submitting}
-                  className="px-4 py-2 rounded-xl bg-gradient-to-r from-brand-cyan to-brand-blue hover:brightness-110 active:scale-[0.98] text-white font-bold transition text-xs font-mono uppercase tracking-wider cursor-pointer border border-white/10 flex items-center gap-1.5"
+                  className="px-4 py-2 rounded-lg bg-white hover:bg-zinc-200 text-black font-bold transition text-xs font-mono uppercase tracking-wider cursor-pointer border border-white/10 flex items-center gap-1.5"
                 >
                   <CheckCircle size={12} /> Publish Template
                 </button>
@@ -1245,9 +1242,9 @@ export default function TemplatesWorkspace() {
                     setIsEditorOpen(false);
                     setIsCreateMode(false);
                   }}
-                  className="text-zinc-500 hover:text-white p-1.5 rounded-lg hover:bg-white/5 border border-transparent hover:border-white/5 transition-all cursor-pointer"
+                  className="text-zinc-500 hover:text-white p-1 rounded hover:bg-white/5 transition cursor-pointer"
                 >
-                  <X size={18} />
+                  <X size={16} />
                 </button>
               </div>
             </div>
@@ -1256,13 +1253,13 @@ export default function TemplatesWorkspace() {
             <div className="flex-1 flex flex-col lg:flex-row overflow-hidden">
               
               {/* Left pane: Modular inputs Form (Scrollable) */}
-              <div className="w-full lg:w-1/2 overflow-y-auto p-6 space-y-6 border-r border-white/[0.04] scrollbar-thin">
+              <div className="w-full lg:w-1/2 overflow-y-auto p-6 space-y-6 border-r border-[#1F1F1F] scrollbar-thin bg-black">
                 
                 {/* 4.1 Presets Library Picker */}
                 {isCreateMode && (
-                  <div className="glass-panel p-4 rounded-2xl border border-brand-purple/20 bg-brand-purple/[0.005] space-y-3">
-                    <h3 className="text-[10px] font-bold text-brand-purple font-mono uppercase tracking-widest flex items-center gap-1.5">
-                      <Sparkles size={11} className="animate-pulse" /> Corporate Presets Library
+                  <div className="p-4 rounded-xl border border-[#1F1F1F] bg-[#121212] space-y-3">
+                    <h3 className="text-[10px] font-bold text-white font-mono uppercase tracking-widest flex items-center gap-1.5">
+                      <Sparkles size={11} /> Corporate Presets Library
                     </h3>
                     <p className="text-[10px] text-zinc-400 leading-normal font-mono">Select a realistic Indian corporate template preset to load and customize:</p>
                     <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
@@ -1271,7 +1268,7 @@ export default function TemplatesWorkspace() {
                           key={idx}
                           type="button"
                           onClick={() => handleLoadPreset(preset)}
-                          className="p-2.5 rounded-xl bg-white/[0.01] hover:bg-white/[0.04] border border-white/[0.04] hover:border-brand-purple/40 text-[10px] text-left text-zinc-300 hover:text-white transition duration-200 cursor-pointer font-mono truncate"
+                          className="p-2.5 rounded bg-[#0A0A0A] hover:bg-[#1C1C1C] border border-[#1F1F1F] hover:border-zinc-700 text-[10px] text-left text-zinc-300 hover:text-white transition duration-150 cursor-pointer font-mono truncate"
                           title={preset.name}
                         >
                           {preset.name}

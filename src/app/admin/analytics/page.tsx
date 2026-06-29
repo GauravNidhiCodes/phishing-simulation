@@ -281,19 +281,15 @@ export default function AnalyticsDashboard() {
 
   return (
     <div className="space-y-8 relative min-h-screen pb-16">
-      {/* Background radial atmosphere glow */}
-      <div className="absolute top-[-10%] left-[5%] w-[450px] h-[450px] bg-brand-cyan/2 rounded-full blur-[140px] pointer-events-none" />
-      <div className="absolute bottom-[20%] right-[5%] w-[400px] h-[400px] bg-brand-purple/2 rounded-full blur-[130px] pointer-events-none" />
-
       {/* 1. Header Area */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 border-b border-white/[0.04] pb-6">
-        <div className="space-y-1.5">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 border-b border-[#1F1F1F] pb-5">
+        <div className="space-y-1">
           <div className="flex items-center gap-2">
-            <span className="h-1.5 w-1.5 rounded-full bg-brand-cyan shadow-[0_0_8px_#06b6d4]" />
-            <span className="text-[9px] font-mono uppercase tracking-widest text-brand-cyan font-bold">Audit Analytics Hub</span>
+            <span className="h-1.5 w-1.5 rounded-full bg-[#00D26A]" />
+            <span className="text-[9px] font-mono uppercase tracking-widest text-zinc-500 font-bold">Audit Analytics Hub</span>
           </div>
-          <h1 className="text-3xl font-extrabold tracking-tight leading-none bg-gradient-to-r from-white via-zinc-200 to-zinc-500 bg-clip-text text-transparent">
-            Security Analytics & Telemetry
+          <h1 className="text-xl font-bold tracking-tight uppercase font-mono text-white">
+            System Telemetry & Analytics
           </h1>
           <p className="text-xs text-zinc-400 font-mono">
             Granular employee behavioral threat indicators, campaign funnels, and compliance growth telemetry.
@@ -507,25 +503,24 @@ export default function AnalyticsDashboard() {
               {/* Card 1: Awareness Index */}
               <motion.div 
                 variants={itemVariants}
-                whileHover={{ y: -4, borderColor: 'rgba(6,182,212,0.25)', boxShadow: '0 12px 30px rgba(6,182,212,0.06)' }}
-                className="glass-panel p-6 rounded-2.5xl flex flex-col justify-between border border-white/[0.04] border-t-white/[0.1] relative group overflow-hidden"
+                whileHover={{ y: -2 }}
+                className="glass-panel p-6 rounded-xl flex flex-col justify-between border border-[#1F1F1F] relative group overflow-hidden"
               >
-                <div className="absolute top-0 right-0 w-24 h-24 bg-brand-cyan/5 rounded-full blur-2xl opacity-50 pointer-events-none" />
                 <div className="flex justify-between items-start mb-6">
                   <div className="space-y-0.5">
                     <span className="text-[8px] uppercase font-mono text-zinc-500 tracking-wider font-semibold">Security Health</span>
                     <h4 className="text-xs font-bold text-white/90">Awareness Index</h4>
                   </div>
-                  <div className="p-2 rounded-xl bg-brand-cyan/10 border border-brand-cyan/20 text-brand-cyan">
-                    <Award size={14} />
+                  <div className="p-2 rounded bg-[#0A0A0A] border border-[#1F1F1F] text-white">
+                    <Award size={12} />
                   </div>
                 </div>
                 <div>
-                  <div className="text-4xl font-extrabold text-white font-mono tracking-tight glow-text-cyan">
+                  <div className="text-3xl font-bold text-white font-mono tracking-tight">
                     <AnimatedCounter value={data.metrics.avgScore} suffix="%" />
                   </div>
-                  <p className="text-[9px] text-emerald-400 font-mono mt-3 flex items-center gap-1">
-                    <ArrowUpRight size={11} /> +{data.insights.awarenessImprovement}% index growth
+                  <p className="text-[9px] text-[#00D26A] font-mono mt-3 flex items-center gap-1">
+                    <ArrowUpRight size={11} /> +{data.insights.awarenessImprovement}% growth
                   </p>
                 </div>
               </motion.div>
@@ -533,25 +528,24 @@ export default function AnalyticsDashboard() {
               {/* Card 2: Failure Avoidance Success Rate */}
               <motion.div 
                 variants={itemVariants}
-                whileHover={{ y: -4, borderColor: 'rgba(16,185,129,0.25)', boxShadow: '0 12px 30px rgba(16,185,129,0.06)' }}
-                className="glass-panel p-6 rounded-2.5xl flex flex-col justify-between border border-white/[0.04] border-t-white/[0.1] relative group overflow-hidden"
+                whileHover={{ y: -2 }}
+                className="glass-panel p-6 rounded-xl flex flex-col justify-between border border-[#1F1F1F] relative group overflow-hidden"
               >
-                <div className="absolute top-0 right-0 w-24 h-24 bg-brand-emerald/5 rounded-full blur-2xl opacity-50 pointer-events-none" />
                 <div className="flex justify-between items-start mb-6">
                   <div className="space-y-0.5">
                     <span className="text-[8px] uppercase font-mono text-zinc-500 tracking-wider font-semibold">Risk Prevention</span>
                     <h4 className="text-xs font-bold text-white/90">Avoidance Rate</h4>
                   </div>
-                  <div className="p-2 rounded-xl bg-brand-emerald/10 border border-brand-emerald/20 text-brand-emerald">
-                    <ShieldCheck size={14} />
+                  <div className="p-2 rounded bg-[#0A0A0A] border border-[#1F1F1F] text-white">
+                    <ShieldCheck size={12} />
                   </div>
                 </div>
                 <div>
-                  <div className="text-4xl font-extrabold text-white font-mono tracking-tight glow-text-emerald">
+                  <div className="text-3xl font-bold text-white font-mono tracking-tight">
                     <AnimatedCounter value={data.metrics.campaignSuccessRate} suffix="%" />
                   </div>
                   <p className="text-[9px] text-zinc-400 font-mono mt-3">
-                    Phishing simulation bypass compliance
+                    Drill bypass compliance rate
                   </p>
                 </div>
               </motion.div>
@@ -559,25 +553,24 @@ export default function AnalyticsDashboard() {
               {/* Card 3: Training Completion */}
               <motion.div 
                 variants={itemVariants}
-                whileHover={{ y: -4, borderColor: 'rgba(139,92,246,0.25)', boxShadow: '0 12px 30px rgba(139,92,246,0.06)' }}
-                className="glass-panel p-6 rounded-2.5xl flex flex-col justify-between border border-white/[0.04] border-t-white/[0.1] relative group overflow-hidden"
+                whileHover={{ y: -2 }}
+                className="glass-panel p-6 rounded-xl flex flex-col justify-between border border-[#1F1F1F] relative group overflow-hidden"
               >
-                <div className="absolute top-0 right-0 w-24 h-24 bg-brand-purple/5 rounded-full blur-2xl opacity-50 pointer-events-none" />
                 <div className="flex justify-between items-start mb-6">
                   <div className="space-y-0.5">
                     <span className="text-[8px] uppercase font-mono text-zinc-500 tracking-wider font-semibold">Education progress</span>
                     <h4 className="text-xs font-bold text-white/90">Training Completion</h4>
                   </div>
-                  <div className="p-2 rounded-xl bg-brand-purple/10 border border-brand-purple/20 text-brand-purple">
-                    <Zap size={14} />
+                  <div className="p-2 rounded bg-[#0A0A0A] border border-[#1F1F1F] text-white">
+                    <Zap size={12} />
                   </div>
                 </div>
                 <div>
-                  <div className="text-4xl font-extrabold text-white font-mono tracking-tight glow-text-purple">
+                  <div className="text-3xl font-bold text-white font-mono tracking-tight">
                     <AnimatedCounter value={data.metrics.trainingCompletionRate} suffix="%" />
                   </div>
-                  <div className="w-full h-1 bg-white/[0.04] rounded-full overflow-hidden mt-3.5">
-                    <div className="h-full bg-brand-purple" style={{ width: `${data.metrics.trainingCompletionRate}%` }} />
+                  <div className="w-full h-1 bg-[#050505] rounded-full overflow-hidden mt-3.5 border border-[#1F1F1F]">
+                    <div className="h-full bg-white" style={{ width: `${data.metrics.trainingCompletionRate}%` }} />
                   </div>
                 </div>
               </motion.div>
@@ -585,65 +578,62 @@ export default function AnalyticsDashboard() {
               {/* Card 4: Total Roster monitored */}
               <motion.div 
                 variants={itemVariants}
-                whileHover={{ y: -4, borderColor: 'rgba(255,255,255,0.1)', boxShadow: '0 12px 30px rgba(255,255,255,0.02)' }}
-                className="glass-panel p-6 rounded-2.5xl flex flex-col justify-between border border-white/[0.04] border-t-white/[0.1] relative group overflow-hidden"
+                whileHover={{ y: -2 }}
+                className="glass-panel p-6 rounded-xl flex flex-col justify-between border border-[#1F1F1F] relative group overflow-hidden"
               >
-                <div className="absolute top-0 right-0 w-24 h-24 bg-white/5 rounded-full blur-2xl opacity-30 pointer-events-none" />
                 <div className="flex justify-between items-start mb-6">
                   <div className="space-y-0.5">
                     <span className="text-[8px] uppercase font-mono text-zinc-500 tracking-wider font-semibold">Roster Monitor</span>
                     <h4 className="text-xs font-bold text-white/90">Target Registry</h4>
                   </div>
-                  <div className="p-2 rounded-xl bg-white/5 border border-white/10 text-white">
-                    <Users size={14} />
+                  <div className="p-2 rounded bg-[#0A0A0A] border border-[#1F1F1F] text-white">
+                    <Users size={12} />
                   </div>
                 </div>
                 <div>
-                  <div className="text-4xl font-extrabold text-white font-mono tracking-tight">
+                  <div className="text-3xl font-bold text-white font-mono tracking-tight">
                     <AnimatedCounter value={data.metrics.totalEmployees} />
                   </div>
                   <p className="text-[9px] text-zinc-500 font-mono mt-3">
-                    Active directory monitored accounts
+                    Active monitored accounts
                   </p>
                 </div>
               </motion.div>
             </div>
 
-            {/* Sub-KPIs Grid (Remaining 8 KPIs: Campaigns, Interaction rates, and Risk counts) */}
-            <div className="grid grid-cols-2 lg:grid-cols-8 gap-4">
-              <div className="glass-panel p-4 rounded-2xl border border-white/[0.03] space-y-1.5">
-                <span className="text-[8px] uppercase font-mono text-zinc-500 block font-bold">Active Campaigns</span>
-                <div className="text-xl font-bold font-mono text-white tracking-tight">{data.metrics.activeCampaigns}</div>
+            {/* Sub-KPIs Grid */}
+            <div className="grid grid-cols-2 lg:grid-cols-8 gap-4 font-mono text-[9px]">
+              <div className="p-4 rounded-xl bg-[#121212] border border-[#1F1F1F] space-y-1">
+                <span className="text-zinc-500 block font-bold uppercase tracking-widest">Active Drills</span>
+                <div className="text-base font-bold text-white tracking-tight">{data.metrics.activeCampaigns}</div>
               </div>
-              <div className="glass-panel p-4 rounded-2xl border border-white/[0.03] space-y-1.5">
-                <span className="text-[8px] uppercase font-mono text-zinc-500 block font-bold">Delivery Rate</span>
-                <div className="text-xl font-bold font-mono text-white tracking-tight">{data.metrics.emailDeliveryRate}%</div>
+              <div className="p-4 rounded-xl bg-[#121212] border border-[#1F1F1F] space-y-1">
+                <span className="text-zinc-500 block font-bold uppercase tracking-widest">Delivery Rate</span>
+                <div className="text-base font-bold text-white tracking-tight">{data.metrics.emailDeliveryRate}%</div>
               </div>
-              <div className="glass-panel p-4 rounded-2xl border border-white/[0.03] space-y-1.5">
-                <span className="text-[8px] uppercase font-mono text-zinc-500 block font-bold">Open Rate</span>
-                <div className="text-xl font-bold font-mono text-white tracking-tight">{data.metrics.emailOpenRate}%</div>
+              <div className="p-4 rounded-xl bg-[#121212] border border-[#1F1F1F] space-y-1">
+                <span className="text-zinc-500 block font-bold uppercase tracking-widest">Open Rate</span>
+                <div className="text-base font-bold text-white tracking-tight">{data.metrics.emailOpenRate}%</div>
               </div>
-              <div className="glass-panel p-4 rounded-2xl border border-white/[0.03] space-y-1.5">
-                <span className="text-[8px] uppercase font-mono text-zinc-500 block font-bold">Link Click Rate</span>
-                <div className="text-xl font-bold font-mono text-zinc-700 tracking-tight glow-text-rose-muted">
-                  <span className="text-brand-rose">{data.metrics.linkClickRate}%</span>
-                </div>
+              <div className="p-4 rounded-xl bg-[#121212] border border-[#1F1F1F] space-y-1">
+                <span className="text-zinc-500 block font-bold uppercase tracking-widest">Click Rate</span>
+                <div className="text-base font-bold text-white tracking-tight">{data.metrics.linkClickRate}%</div>
               </div>
-              <div className="glass-panel p-4 rounded-2xl border border-white/[0.03] space-y-1.5">
-                <span className="text-[8px] uppercase font-mono text-zinc-500 block font-bold">Form Submission</span>
-                <div className="text-xl font-bold font-mono text-brand-rose tracking-tight">{data.metrics.formInteractionRate}%</div>
+              <div className="p-4 rounded-xl bg-[#121212] border border-[#1F1F1F] space-y-1">
+                <span className="text-zinc-500 block font-bold uppercase tracking-widest">Submission</span>
+                <div className="text-base font-bold text-white tracking-tight">{data.metrics.formInteractionRate}%</div>
               </div>
-              <div className="glass-panel p-4 rounded-2xl border border-white/[0.03] border-l-brand-rose/30 space-y-1.5">
-                <span className="text-[8px] uppercase font-mono text-zinc-500 block font-bold">High Risk Count</span>
-                <div className="text-xl font-bold font-mono text-brand-rose tracking-tight">{data.metrics.highRiskEmployees}</div>
+              <div className="p-4 rounded-xl bg-[#121212] border border-[#1F1F1F] space-y-1">
+                <span className="text-zinc-500 block font-bold uppercase tracking-widest">High Risk</span>
+                <div className="text-base font-bold text-white tracking-tight">{data.metrics.highRiskEmployees}</div>
               </div>
-              <div className="glass-panel p-4 rounded-2xl border border-white/[0.03] border-l-brand-amber/30 space-y-1.5">
-                <span className="text-[8px] uppercase font-mono text-zinc-500 block font-bold">Medium Risk Count</span>
-                <div className="text-xl font-bold font-mono text-brand-amber tracking-tight">{data.metrics.mediumRiskEmployees}</div>
+              <div className="p-4 rounded-xl bg-[#121212] border border-[#1F1F1F] space-y-1">
+                <span className="text-zinc-500 block font-bold uppercase tracking-widest">Medium Risk</span>
+                <div className="text-base font-bold text-white tracking-tight">{data.metrics.mediumRiskEmployees}</div>
               </div>
-              <div className="glass-panel p-4 rounded-2xl border border-white/[0.03] border-l-brand-emerald/30 space-y-1.5">
-                <span className="text-[8px] uppercase font-mono text-zinc-500 block font-bold">Low Risk Count</span>
-                <div className="text-xl font-bold font-mono text-brand-emerald tracking-tight">{data.metrics.lowRiskEmployees}</div>
+              <div className="p-4 rounded-xl bg-[#121212] border border-[#1F1F1F] space-y-1">
+                <span className="text-zinc-500 block font-bold uppercase tracking-widest">Low Risk</span>
+                <div className="text-base font-bold text-white tracking-tight">{data.metrics.lowRiskEmployees}</div>
               </div>
             </div>
           </div>

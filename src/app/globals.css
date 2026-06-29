@@ -2,8 +2,8 @@
 
 @theme {
   --color-cyber-dark: #050505;
-  --color-cyber-card: #141414;
-  --color-cyber-border: #232323;
+  --color-cyber-card: #121212;
+  --color-cyber-border: #1F1F1F;
   --color-cyber-border-hover: #00FF88;
   
   --color-brand-cyan: #00FF88;
@@ -26,125 +26,82 @@ body {
   background-color: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans);
-  background-image: 
-    radial-gradient(at 0% 0%, rgba(0, 255, 136, 0.03) 0px, transparent 50%),
-    radial-gradient(at 100% 0%, rgba(0, 210, 106, 0.02) 0px, transparent 50%),
-    radial-gradient(at 50% 50%, rgba(46, 204, 113, 0.01) 0px, transparent 60%);
   background-attachment: fixed;
   overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 4px;
+  height: 4px;
 }
 ::-webkit-scrollbar-track {
   background: #050505;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.04);
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #00FF88;
+  background: rgba(255, 255, 255, 0.15);
 }
 
-/* Cyber Grid Background */
-.cyber-grid {
-  background-image: 
-    linear-gradient(rgba(255, 255, 255, 0.01) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.01) 1px, transparent 1px);
-  background-size: 40px 40px;
-  background-position: center center;
-}
-
-/* Glassmorphism panel styling */
+/* Premium Panel Styling (Linear/Vercel inspired) */
 .glass-panel {
-  background: rgba(20, 20, 20, 0.75);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid #232323;
-  box-shadow: 0 10px 40px 0 rgba(0, 0, 0, 0.6);
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  background: #121212;
+  border: 1px solid #1F1F1F;
+  box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.4);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .glass-panel:hover {
-  border-color: rgba(0, 255, 136, 0.25);
-  box-shadow: 0 10px 40px 0 rgba(0, 255, 136, 0.03);
+  border-color: #2D2D2D;
 }
 
+/* Tactile inputs with crisp borders */
 .glass-input {
-  background: #141414;
-  border: 1px solid #232323;
+  background: #0A0A0A;
+  border: 1px solid #1F1F1F;
   color: white;
-  transition: all 0.3s ease;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .glass-input:focus {
   outline: none;
   border-color: #00FF88;
-  box-shadow: 0 0 15px rgba(0, 255, 136, 0.15);
-  background: #181818;
+  background: #0D0D0D;
 }
 
-/* Neon Glow utilities */
-.glow-text-cyan {
-  text-shadow: 0 0 10px rgba(0, 255, 136, 0.4);
-}
-
-.glow-text-blue {
-  text-shadow: 0 0 10px rgba(0, 255, 136, 0.4);
-}
-
-.glow-text-red {
-  text-shadow: 0 0 10px rgba(0, 255, 136, 0.4);
-}
-
+/* Matte focus and glow utility overrides to prevent AI look */
+.glow-text-cyan,
+.glow-text-blue,
+.glow-text-red,
 .text-glow-red {
-  text-shadow: 0 0 10px rgba(0, 255, 136, 0.4);
+  text-shadow: none !important;
 }
 
-.glow-border-blue {
-  box-shadow: 0 0 20px rgba(0, 255, 136, 0.15);
-}
-
+.glow-border-blue,
 .glow-border-cyan {
-  box-shadow: 0 0 20px rgba(0, 255, 136, 0.15);
+  box-shadow: none !important;
 }
 
-/* 3D-inspired visual depth utilities */
 .perspective-container {
-  perspective: 1000px;
+  perspective: none !important;
 }
 
 .perspective-card {
-  transform: rotateX(12deg) rotateY(-4deg) rotateZ(1deg);
-  transform-style: preserve-3d;
-  box-shadow: 
-    -20px 20px 50px rgba(0, 0, 0, 0.8),
-    0 0 2px rgba(255, 255, 255, 0.1) inset;
+  transform: none !important;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5) !important;
 }
 
-/* Keyframe animations */
-@keyframes grid-drift {
-  0% { background-position: 0 0; }
-  100% { background-position: 40px 40px; }
-}
-
-.animate-grid {
-  animation: grid-drift 20s linear infinite;
-}
-
-/* Swing animation for active notification bells */
-@keyframes swing {
-  0%, 100% { transform: rotate(0deg); }
-  20% { transform: rotate(15deg); }
-  40% { transform: rotate(-10deg); }
-  60% { transform: rotate(5deg); }
-  80% { transform: rotate(-5deg); }
-}
-
-.animate-swing {
-  animation: swing 1s ease infinite;
+/* Monospace utility labels */
+.mono-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: #888888;
+  font-weight: 600;
 }

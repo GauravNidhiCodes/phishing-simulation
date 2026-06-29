@@ -182,16 +182,16 @@ export default function AIAssistant() {
       content = content.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
       content = content.replace(/\*(.*?)\*/g, '<em>$1</em>');
       // Code tags
-      content = content.replace(/`(.*?)`/g, '<code class="bg-[#1c1c1c] text-[#00FF88] px-1.5 py-0.5 rounded font-mono text-[11px] border border-[#2d2d2d]">$1</code>');
+      content = content.replace(/`(.*?)`/g, '<code class="bg-[#0A0A0A] text-white px-1.5 py-0.5 rounded font-mono text-[11px] border border-[#1F1F1F]">$1</code>');
       
       if (line.startsWith('# ')) {
-        return <h1 key={idx} className="text-base font-bold text-white mt-3 mb-2 uppercase tracking-wide text-glow-cyan" dangerouslySetInnerHTML={{ __html: content.substring(2) }} />;
+        return <h1 key={idx} className="text-base font-bold text-white mt-3 mb-2 uppercase tracking-wide" dangerouslySetInnerHTML={{ __html: content.substring(2) }} />;
       }
       if (line.startsWith('## ')) {
         return <h2 key={idx} className="text-sm font-bold text-white mt-3 mb-1.5 tracking-wide" dangerouslySetInnerHTML={{ __html: content.substring(3) }} />;
       }
       if (line.startsWith('### ')) {
-        return <h3 key={idx} className="text-xs font-bold text-[#00FF88] mt-2.5 mb-1 tracking-wide font-mono uppercase" dangerouslySetInnerHTML={{ __html: content.substring(4) }} />;
+        return <h3 key={idx} className="text-xs font-bold text-white mt-2.5 mb-1 tracking-wide font-mono uppercase" dangerouslySetInnerHTML={{ __html: content.substring(4) }} />;
       }
       if (line.startsWith('- ') || line.startsWith('* ')) {
         return <li key={idx} className="ml-4 list-disc text-xs leading-relaxed text-gray-300 my-1" dangerouslySetInnerHTML={{ __html: content.substring(2) }} />;
@@ -307,14 +307,14 @@ export default function AIAssistant() {
       <div className="fixed bottom-6 right-6 z-50">
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="relative flex items-center justify-center w-14 h-14 rounded-full bg-[#00FF88] hover:bg-[#00D26A] text-black shadow-[0_0_20px_rgba(0,255,136,0.4)] border border-[#00FF88]/30 hover:scale-105 active:scale-95 transition-all duration-300 animate-pulse"
+          className="relative flex items-center justify-center w-12 h-12 rounded-full bg-[#050505] hover:bg-[#121212] text-white border border-[#1F1F1F] hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer"
         >
           {isOpen ? (
-            <X size={22} className="rotate-90 transition-transform duration-300" />
+            <X size={20} className="rotate-90 transition-transform duration-200" />
           ) : (
             <>
-              <Bot size={22} />
-              <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-white border-2 border-[#00FF88] text-[8px] font-bold text-black flex items-center justify-center">AI</span>
+              <Bot size={20} />
+              <span className="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-[#00D26A] text-[7px] font-bold text-black flex items-center justify-center">AI</span>
             </>
           )}
         </button>
@@ -327,20 +327,20 @@ export default function AIAssistant() {
             initial={{ opacity: 0, y: 50, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 50, scale: 0.95 }}
-            transition={{ duration: 0.25 }}
-            className={`fixed bottom-24 right-6 z-40 bg-[#0E0E0E]/95 border border-[#232323] rounded-2xl shadow-2xl backdrop-blur-xl flex flex-col overflow-hidden transition-all duration-300 ${
+            transition={{ duration: 0.2 }}
+            className={`fixed bottom-20 right-6 z-40 bg-[#050505] border border-[#1F1F1F] rounded-xl shadow-2xl flex flex-col overflow-hidden transition-all duration-200 ${
               isMaximized ? 'w-[85vw] h-[80vh] md:w-[60vw]' : 'w-[92vw] h-[70vh] sm:w-[420px] sm:h-[600px]'
             }`}
           >
             {/* Header */}
-            <div className="px-5 py-4 border-b border-[#232323] bg-[#141414] flex items-center justify-between">
+            <div className="px-5 py-4 border-b border-[#1F1F1F] bg-[#121212] flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-lg bg-green-950/40 border border-[#00FF88]/30 flex items-center justify-center text-[#00FF88] shadow-[0_0_10px_rgba(0,255,136,0.15)]">
-                  <Sparkles size={16} />
+                <div className="w-8 h-8 rounded bg-[#0A0A0A] border border-[#1F1F1F] flex items-center justify-center text-white">
+                  <Sparkles size={14} />
                 </div>
                 <div>
                   <h3 className="text-xs font-bold text-white tracking-wider font-mono">PINKMAN SECURE AI</h3>
-                  <span className="text-[9px] text-gray-500 font-mono tracking-widest uppercase block">SecOps Node Active</span>
+                  <span className="text-[9px] text-zinc-500 font-mono tracking-widest uppercase block">SecOps Node Active</span>
                 </div>
               </div>
 
@@ -348,13 +348,13 @@ export default function AIAssistant() {
                 <button
                   onClick={() => setIsMaximized(!isMaximized)}
                   title={isMaximized ? "Minimize View" : "Maximize View"}
-                  className="p-1.5 rounded-lg border border-[#232323] hover:bg-white/5 text-gray-400 hover:text-white transition"
+                  className="p-1.5 rounded border border-[#1F1F1F] hover:bg-white/5 text-zinc-400 hover:text-white transition"
                 >
                   {isMaximized ? <Minimize2 size={12} /> : <Maximize2 size={12} />}
                 </button>
                 <button
                   onClick={() => setIsOpen(false)}
-                  className="p-1.5 rounded-lg border border-[#232323] hover:bg-white/5 text-gray-400 hover:text-[#00FF88] transition"
+                  className="p-1.5 rounded border border-[#1F1F1F] hover:bg-white/5 text-zinc-400 hover:text-white transition"
                 >
                   <X size={12} />
                 </button>
@@ -362,13 +362,13 @@ export default function AIAssistant() {
             </div>
 
             {/* Sub-Navigation Tabs */}
-            <div className="flex border-b border-[#232323] bg-[#0A0A0A] text-xs font-mono">
+            <div className="flex border-b border-[#1F1F1F] bg-[#0A0A0A] text-xs font-mono">
               <button
                 onClick={() => { setActiveTab('chat'); setSelectedKbTopic(null); }}
                 className={`flex-1 py-2.5 text-center transition ${
                   activeTab === 'chat' 
-                    ? 'border-b-2 border-[#00FF88] text-white font-semibold bg-white/2' 
-                    : 'text-gray-500 hover:text-white'
+                    ? 'border-b-2 border-white text-white font-semibold' 
+                    : 'text-zinc-500 hover:text-white'
                 }`}
               >
                 AI CHAT PANEL
@@ -377,8 +377,8 @@ export default function AIAssistant() {
                 onClick={() => setActiveTab('knowledge_base')}
                 className={`flex-1 py-2.5 text-center transition ${
                   activeTab === 'knowledge_base' 
-                    ? 'border-b-2 border-[#00FF88] text-white font-semibold bg-white/2' 
-                    : 'text-gray-500 hover:text-white'
+                    ? 'border-b-2 border-white text-white font-semibold' 
+                    : 'text-zinc-500 hover:text-white'
                 }`}
               >
                 SECURITY KB
@@ -386,37 +386,37 @@ export default function AIAssistant() {
             </div>
 
             {/* Quick Actions Panel */}
-            <div className="bg-[#121212]/50 border-b border-[#232323] p-3 overflow-x-auto scrollbar-none">
+            <div className="bg-[#121212] border-b border-[#1F1F1F] p-3 overflow-x-auto scrollbar-none">
               <div className="flex gap-2 whitespace-nowrap text-[10px] font-mono">
                 {isAdmin ? (
                   <>
                     <button 
                       onClick={() => executeQuickAction('/admin/campaigns')} 
-                      className="px-2.5 py-1 rounded-lg border border-[#232323] bg-green-950/10 text-[#00FF88] hover:border-[#00FF88]/40 hover:bg-green-950/20 transition flex items-center gap-1"
+                      className="px-2.5 py-1 rounded border border-[#1F1F1F] bg-[#0A0A0A] text-zinc-300 hover:border-zinc-700 hover:bg-[#1C1C1C] transition flex items-center gap-1 cursor-pointer"
                     >
                       <Plus size={10} /> Create Campaign
                     </button>
                     <button 
                       onClick={() => executeQuickAction('/admin/reports')} 
-                      className="px-2.5 py-1 rounded-lg border border-[#232323] hover:border-[#00FF88]/40 hover:bg-white/3 text-gray-300 transition flex items-center gap-1"
+                      className="px-2.5 py-1 rounded border border-[#1F1F1F] bg-[#0A0A0A] text-zinc-300 hover:border-zinc-700 hover:bg-[#1C1C1C] transition flex items-center gap-1 cursor-pointer"
                     >
                       <FileText size={10} /> Generate Report
                     </button>
                     <button 
                       onClick={() => executeQuickAction('/admin/settings')} 
-                      className="px-2.5 py-1 rounded-lg border border-[#232323] hover:border-[#00FF88]/40 hover:bg-white/3 text-gray-300 transition flex items-center gap-1"
+                      className="px-2.5 py-1 rounded border border-[#1F1F1F] bg-[#0A0A0A] text-zinc-300 hover:border-zinc-700 hover:bg-[#1C1C1C] transition flex items-center gap-1 cursor-pointer"
                     >
                       <Settings size={10} /> Assign Training
                     </button>
                     <button 
                       onClick={() => executeQuickAction('/admin/employees')} 
-                      className="px-2.5 py-1 rounded-lg border border-[#232323] hover:border-[#00FF88]/40 hover:bg-white/3 text-gray-300 transition flex items-center gap-1"
+                      className="px-2.5 py-1 rounded border border-[#1F1F1F] bg-[#0A0A0A] text-zinc-300 hover:border-zinc-700 hover:bg-[#1C1C1C] transition flex items-center gap-1 cursor-pointer"
                     >
                       <Users size={10} /> High Risk Emps
                     </button>
                     <button 
                       onClick={() => executeQuickAction('/admin/analytics')} 
-                      className="px-2.5 py-1 rounded-lg border border-[#232323] hover:border-[#00FF88]/40 hover:bg-white/3 text-gray-300 transition flex items-center gap-1"
+                      className="px-2.5 py-1 rounded border border-[#1F1F1F] bg-[#0A0A0A] text-zinc-300 hover:border-zinc-700 hover:bg-[#1C1C1C] transition flex items-center gap-1 cursor-pointer"
                     >
                       <BarChart3 size={10} /> Open Analytics
                     </button>
@@ -425,19 +425,19 @@ export default function AIAssistant() {
                   <>
                     <button 
                       onClick={() => executeQuickAction('/learning')} 
-                      className="px-2.5 py-1 rounded-lg border border-[#232323] bg-green-950/10 text-[#00FF88] hover:border-[#00FF88]/40 hover:bg-green-950/20 transition flex items-center gap-1"
+                      className="px-2.5 py-1 rounded border border-[#1F1F1F] bg-[#0A0A0A] text-zinc-300 hover:border-zinc-700 hover:bg-[#1C1C1C] transition flex items-center gap-1 cursor-pointer"
                     >
                       <GraduationCap size={10} /> Open Learning Center
                     </button>
                     <button 
                       onClick={() => handleSend('Email safety tips')} 
-                      className="px-2.5 py-1 rounded-lg border border-[#232323] hover:border-[#00FF88]/40 hover:bg-white/3 text-gray-300 transition"
+                      className="px-2.5 py-1 rounded border border-[#1F1F1F] bg-[#0A0A0A] text-zinc-350 hover:border-zinc-700 hover:bg-[#1C1C1C] transition cursor-pointer"
                     >
                       ✉️ Email Safety Tips
                     </button>
                     <button 
                       onClick={() => handleSend('Password best practices')} 
-                      className="px-2.5 py-1 rounded-lg border border-[#232323] hover:border-[#00FF88]/40 hover:bg-white/3 text-gray-300 transition"
+                      className="px-2.5 py-1 rounded border border-[#1F1F1F] bg-[#0A0A0A] text-zinc-350 hover:border-zinc-700 hover:bg-[#1C1C1C] transition cursor-pointer"
                     >
                       🔒 Password Security
                     </button>
@@ -460,8 +460,8 @@ export default function AIAssistant() {
                     >
                       <div className={`max-w-[85%] rounded-2xl px-4 py-3 text-xs ${
                         msg.sender === 'user'
-                          ? 'bg-[#00FF88] text-black rounded-br-none shadow-[0_0_15px_rgba(0,255,136,0.1)] font-semibold'
-                          : 'bg-[#141414] border border-[#232323] text-gray-200 rounded-bl-none'
+                          ? 'bg-white text-black rounded-br-none font-medium'
+                          : 'bg-[#121212] border border-[#1F1F1F] text-zinc-200 rounded-bl-none'
                       }`}>
                         {msg.sender === 'assistant' ? (
                           parseMessageText(msg.text)
@@ -475,10 +475,10 @@ export default function AIAssistant() {
                   {/* Typing Indicator */}
                   {isTyping && (
                     <div className="flex justify-start">
-                      <div className="bg-[#141414] border border-[#232323] rounded-2xl rounded-bl-none px-4 py-3 flex items-center gap-1.5">
-                        <span className="w-1.5 h-1.5 rounded-full bg-[#00FF88] animate-bounce" style={{ animationDelay: '0ms' }} />
-                        <span className="w-1.5 h-1.5 rounded-full bg-[#00FF88] animate-bounce" style={{ animationDelay: '150ms' }} />
-                        <span className="w-1.5 h-1.5 rounded-full bg-[#00FF88] animate-bounce" style={{ animationDelay: '300ms' }} />
+                      <div className="bg-[#121212] border border-[#1F1F1F] rounded-2xl rounded-bl-none px-4 py-3 flex items-center gap-1.5">
+                        <span className="w-1.5 h-1.5 rounded-full bg-zinc-550 animate-bounce" style={{ animationDelay: '0ms' }} />
+                        <span className="w-1.5 h-1.5 rounded-full bg-zinc-550 animate-bounce" style={{ animationDelay: '150ms' }} />
+                        <span className="w-1.5 h-1.5 rounded-full bg-zinc-550 animate-bounce" style={{ animationDelay: '300ms' }} />
                       </div>
                     </div>
                   )}
@@ -487,12 +487,12 @@ export default function AIAssistant() {
                 </div>
 
                 {/* Suggested Questions & Clear History */}
-                <div className="px-4 py-2 border-t border-[#232323] bg-[#0A0A0A] space-y-2">
-                  <div className="flex items-center justify-between text-[10px] font-mono text-gray-500 uppercase">
+                <div className="px-4 py-2 border-t border-[#1F1F1F] bg-[#0A0A0A] space-y-2">
+                  <div className="flex items-center justify-between text-[10px] font-mono text-zinc-500 uppercase">
                     <span>Suggested Prompts</span>
                     <button 
                       onClick={clearHistory} 
-                      className="hover:text-[#00FF88] transition text-[9px] underline decoration-dotted"
+                      className="hover:text-white transition text-[9px] underline decoration-dotted cursor-pointer"
                     >
                       Clear Log
                     </button>
@@ -502,7 +502,7 @@ export default function AIAssistant() {
                       <button
                         key={idx}
                         onClick={() => handleSend(q)}
-                        className="text-[10px] text-gray-400 hover:text-white px-2.5 py-1.5 rounded-lg border border-[#232323] bg-[#121212] hover:border-[#00FF88]/40 transition-all font-mono"
+                        className="text-[10px] text-zinc-400 hover:text-white px-2.5 py-1.5 rounded border border-[#1F1F1F] bg-[#0A0A0A] hover:border-zinc-700 transition font-mono cursor-pointer"
                       >
                         {q}
                       </button>
@@ -513,18 +513,18 @@ export default function AIAssistant() {
                 {/* Chat Input */}
                 <form 
                   onSubmit={(e) => { e.preventDefault(); handleSend(input); }}
-                  className="p-3 border-t border-[#232323] bg-[#141414] flex gap-2"
+                  className="p-3 border-t border-[#1F1F1F] bg-[#121212] flex gap-2"
                 >
                   <input
                     type="text"
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
                     placeholder="Ask security assistant..."
-                    className="flex-1 px-4 py-2.5 rounded-xl border border-[#232323] bg-[#0C0C0C] text-white focus:outline-none focus:ring-1 focus:ring-[#00FF88] focus:border-transparent text-xs text-glow-cyan font-mono"
+                    className="flex-1 px-4 py-2.5 rounded-lg border border-[#1F1F1F] bg-[#0A0A0A] text-white focus:outline-none focus:border-zinc-700 text-xs font-mono"
                   />
                   <button
                     type="submit"
-                    className="p-2.5 rounded-xl bg-[#00FF88] text-black transition-all shadow-[0_0_10px_rgba(0,255,136,0.3)] shrink-0 hover:bg-[#00D26A]"
+                    className="p-2.5 rounded-lg bg-white text-black hover:bg-zinc-200 transition-colors cursor-pointer"
                   >
                     <Send size={14} />
                   </button>
@@ -540,20 +540,20 @@ export default function AIAssistant() {
                   <div className="flex-1 overflow-y-auto p-5 space-y-4 scrollbar-thin">
                     <button
                       onClick={() => setSelectedKbTopic(null)}
-                      className="text-[10px] font-mono text-[#00FF88] hover:underline flex items-center gap-1.5 uppercase"
+                      className="text-[10px] font-mono text-white hover:underline flex items-center gap-1.5 uppercase cursor-pointer"
                     >
                       ← Back to Catalog
                     </button>
                     <div>
                       <h2 className="text-base font-bold text-white font-mono uppercase tracking-wider">{selectedKbTopic.title}</h2>
-                      <p className="text-[10px] text-gray-500 mt-1 font-mono uppercase">Vulnerability Profile</p>
+                      <p className="text-[10px] text-zinc-500 mt-1 font-mono uppercase">Vulnerability Profile</p>
                     </div>
                     
-                    <div className="p-4 rounded-xl border border-[#232323] bg-[#121212] text-xs leading-relaxed text-gray-300 space-y-3 font-mono">
+                    <div className="p-4 rounded-lg border border-[#1F1F1F] bg-[#121212] text-xs leading-relaxed text-zinc-300 space-y-3 font-mono">
                       {selectedKbTopic.content.split('\n').map((para, i) => {
                         let content = para;
-                        content = content.replace(/\*\*(.*?)\*\*/g, '<strong class="text-[#00FF88]">$1</strong>');
-                        content = content.replace(/-\s\*\*(.*?)\*\*/g, '• <strong class="text-[#00FF88]">$1</strong>');
+                        content = content.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+                        content = content.replace(/-\s\*\*(.*?)\*\*/g, '• <strong>$1</strong>');
                         return <p key={i} dangerouslySetInnerHTML={{ __html: content }} />;
                       })}
                     </div>
@@ -563,7 +563,7 @@ export default function AIAssistant() {
                         handleSend(`Tell me more about ${selectedKbTopic.title}`);
                         setActiveTab('chat');
                       }}
-                      className="w-full py-2.5 rounded-lg border border-[#00FF88]/30 hover:border-[#00FF88]/60 bg-green-950/10 text-[#00FF88] font-mono text-xs font-semibold hover:bg-green-950/20 transition flex items-center justify-center gap-1.5"
+                      className="w-full py-2.5 rounded-lg border border-[#1F1F1F] hover:border-zinc-700 bg-[#121212] text-white font-mono text-xs font-semibold transition flex items-center justify-center gap-1.5 cursor-pointer"
                     >
                       Ask AI about {selectedKbTopic.title} <ArrowRight size={12} />
                     </button>
@@ -572,8 +572,8 @@ export default function AIAssistant() {
                   /* Topic Catalog List */
                   <div className="flex-1 flex flex-col overflow-hidden">
                     {/* Search Field */}
-                    <div className="p-3 border-b border-[#232323] bg-[#0E0E0E] flex items-center gap-2">
-                      <Search size={14} className="text-gray-500 shrink-0" />
+                    <div className="p-3 border-b border-[#1F1F1F] bg-[#121212] flex items-center gap-2">
+                      <Search size={14} className="text-zinc-500 shrink-0" />
                       <input
                         type="text"
                         value={kbSearch}
@@ -582,7 +582,7 @@ export default function AIAssistant() {
                         className="flex-1 bg-transparent text-white focus:outline-none text-xs font-mono"
                       />
                       {kbSearch && (
-                        <button onClick={() => setKbSearch('')} className="text-gray-500 hover:text-white">
+                        <button onClick={() => setKbSearch('')} className="text-zinc-500 hover:text-white cursor-pointer">
                           <X size={12} />
                         </button>
                       )}
@@ -591,8 +591,8 @@ export default function AIAssistant() {
                     {/* Catalog List Scroll */}
                     <div className="flex-1 overflow-y-auto p-3 space-y-2 scrollbar-thin">
                       {filteredTopics.length === 0 ? (
-                        <div className="text-center py-10 text-gray-500 text-xs font-mono">
-                          <AlertTriangle size={24} className="mx-auto text-[#00FF88]/50 mb-2" />
+                        <div className="text-center py-10 text-zinc-500 text-xs font-mono">
+                          <AlertTriangle size={24} className="mx-auto text-zinc-650 mb-2" />
                           No threat profiles matched search query.
                         </div>
                       ) : (
@@ -600,13 +600,13 @@ export default function AIAssistant() {
                           <div
                             key={idx}
                             onClick={() => setSelectedKbTopic(topic)}
-                            className="p-3 rounded-xl border border-[#232323] bg-[#121212]/50 hover:border-[#00FF88]/40 hover:bg-[#121212] transition cursor-pointer flex items-center justify-between group"
+                            className="p-3 rounded-lg border border-[#1F1F1F] bg-[#121212]/50 hover:border-zinc-700 hover:bg-[#121212] transition cursor-pointer flex items-center justify-between group"
                           >
                             <div className="space-y-1 pr-4">
-                              <h4 className="text-xs font-bold text-white group-hover:text-[#00FF88] transition font-mono uppercase">{topic.title}</h4>
-                              <p className="text-[10px] text-gray-400 line-clamp-1 font-mono leading-relaxed">{topic.summary}</p>
+                              <h4 className="text-xs font-bold text-white group-hover:text-white transition font-mono uppercase">{topic.title}</h4>
+                              <p className="text-[10px] text-zinc-500 line-clamp-1 font-mono leading-relaxed">{topic.summary}</p>
                             </div>
-                            <ChevronRight size={14} className="text-gray-500 group-hover:text-white transition shrink-0" />
+                            <ChevronRight size={14} className="text-zinc-500 group-hover:text-white transition shrink-0" />
                           </div>
                         ))
                       )}

@@ -395,19 +395,19 @@ export default function NotificationCenter() {
                         onClick={() => !notif.isRead && handleMarkRead(notif.id)}
                         className={`p-3.5 rounded-xl border transition duration-200 cursor-pointer relative group ${
                           notif.isRead 
-                            ? 'bg-[#121212]/45 border-[#232323] hover:border-white/10' 
-                            : 'bg-[#141414] border-[#00FF88]/30 hover:border-[#00FF88]/50 shadow-[0_0_10px_rgba(0,255,136,0.03)]'
+                            ? 'bg-[#121212]/45 border-[#1F1F1F] hover:border-white/10' 
+                            : 'bg-[#141414] border-[#1F1F1F] hover:border-zinc-700 shadow-none'
                         }`}
                       >
-                        {/* Green glow dot for unread */}
+                        {/* Compliance dot for unread */}
                         {!notif.isRead && (
-                          <span className="absolute top-3.5 right-3.5 w-1.5 h-1.5 rounded-full bg-[#00FF88] shadow-[0_0_8px_#00FF88]" />
+                          <span className="absolute top-3.5 right-3.5 w-1 h-1 rounded-full bg-[#00D26A]" />
                         )}
 
                         <div className="flex items-start gap-3">
                           {/* Icon wrapper */}
                           <div className={`p-2 rounded-lg shrink-0 mt-0.5 border ${
-                            notif.isRead ? 'bg-[#181818] border-[#2d2d2d]' : 'bg-green-950/15 border-[#00FF88]/20'
+                            notif.isRead ? 'bg-[#181818] border-[#2d2d2d]' : 'bg-[#121212] border-[#1F1F1F]'
                           }`}>
                             {getCategoryIcon(notif.category)}
                           </div>
@@ -422,7 +422,7 @@ export default function NotificationCenter() {
                             </div>
                             
                             <h4 className={`text-xs font-bold font-mono tracking-wide ${notif.isRead ? 'text-gray-300' : 'text-white'}`}>
-                              {notif.title}
+                               {notif.title}
                             </h4>
                             <p className="text-[10px] text-gray-400 leading-relaxed font-sans">{notif.message}</p>
                           </div>
@@ -433,7 +433,7 @@ export default function NotificationCenter() {
                           {!notif.isRead && (
                             <button
                               onClick={(e) => { e.stopPropagation(); handleMarkRead(notif.id); }}
-                              className="p-1 rounded bg-[#1c1c1c] border border-[#2d2d2d] text-gray-500 hover:text-[#00FF88] transition"
+                              className="p-1 rounded bg-[#1c1c1c] border border-[#2d2d2d] text-gray-500 hover:text-white transition"
                               title="Mark read"
                             >
                               <Check size={10} />

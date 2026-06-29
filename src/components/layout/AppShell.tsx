@@ -8,7 +8,6 @@ import PPLogo from './PPLogo';
 import AIAssistant from '../ai/AIAssistant';
 import NotificationCenter from '../notifications/NotificationCenter';
 import { 
-  ShieldAlert, 
   LayoutDashboard, 
   Activity,
   Send, 
@@ -19,11 +18,8 @@ import {
   Menu, 
   X, 
   Eye, 
-  CheckCircle2, 
   ChevronLeft,
   ChevronRight,
-  User,
-  LogOut,
   Building,
   Settings,
   ClipboardList
@@ -40,24 +36,24 @@ interface SidebarItemProps {
 const SidebarItem: React.FC<SidebarItemProps> = ({ href, label, icon, active, isCollapsed }) => {
   return (
     <Link href={href} className="block group relative">
-      <div className={`flex items-center rounded-xl transition-all duration-200 ${
-        isCollapsed ? 'justify-center p-3' : 'px-4 py-3'
+      <div className={`flex items-center rounded-lg transition-all duration-150 ${
+        isCollapsed ? 'justify-center p-2.5' : 'px-3 py-2.5'
       } ${
         active 
-          ? 'bg-gradient-to-r from-brand-blue/20 to-brand-cyan/10 border-l-2 border-brand-blue text-white font-medium shadow-[0_0_15px_rgba(0,255,136,0.05)]' 
-          : 'text-gray-400 hover:text-white hover:bg-white/5 border-l-2 border-transparent'
+          ? 'bg-white/[0.04] text-white font-medium border-l-2 border-[#00D26A]' 
+          : 'text-zinc-400 hover:text-white hover:bg-white/[0.02] border-l-2 border-transparent'
       }`}>
-        <div className={`transition-colors shrink-0 ${active ? 'text-brand-cyan' : 'text-gray-400 group-hover:text-brand-cyan'}`}>
+        <div className={`transition-colors shrink-0 ${active ? 'text-white' : 'text-zinc-400 group-hover:text-white'}`}>
           {icon}
         </div>
         
         <AnimatePresence mode="wait">
           {!isCollapsed && (
             <motion.span 
-              initial={{ opacity: 0, x: -10 }}
+              initial={{ opacity: 0, x: -5 }}
               animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -10 }}
-              className="text-xs ml-3 truncate"
+              exit={{ opacity: 0, x: -5 }}
+              className="text-xs ml-3 font-sans"
             >
               {label}
             </motion.span>
@@ -66,15 +62,15 @@ const SidebarItem: React.FC<SidebarItemProps> = ({ href, label, icon, active, is
 
         {/* Hover Tooltip when Collapsed */}
         {isCollapsed && (
-          <div className="absolute left-16 top-1/2 -translate-y-1/2 ml-2 px-2.5 py-1.5 rounded-lg bg-slate-950 border border-cyber-border text-white text-[10px] uppercase font-mono tracking-wider opacity-0 group-hover:opacity-100 pointer-events-none transition duration-150 z-50 whitespace-nowrap shadow-xl">
+          <div className="absolute left-14 top-1/2 -translate-y-1/2 ml-2 px-2 py-1 rounded bg-[#121212] border border-[#1F1F1F] text-white text-[10px] font-mono tracking-wider opacity-0 group-hover:opacity-100 pointer-events-none transition duration-100 z-50 whitespace-nowrap shadow-xl">
             {label}
           </div>
         )}
 
         {active && !isCollapsed && (
           <motion.div 
-            layoutId="sidebarActiveGlow"
-            className="absolute right-4 w-1.5 h-1.5 rounded-full bg-brand-cyan shadow-[0_0_8px_#00FF88]"
+            layoutId="sidebarActiveIndicator"
+            className="absolute right-4 w-1.5 h-1.5 rounded-full bg-[#00D26A]"
             transition={{ type: 'spring', stiffness: 380, damping: 30 }}
           />
         )}
@@ -171,44 +167,44 @@ export const AppShell: React.FC<{ children: React.ReactNode }> = ({ children }) 
   // If auth page, render centered full-screen content without standard sidebar wrap
   if (isAuthPage) {
     return (
-      <main className="flex-1 w-full min-h-screen bg-cyber-dark text-foreground flex flex-col justify-center">
+      <main className="flex-1 w-full min-h-screen bg-[#050505] text-white flex flex-col justify-center">
         {children}
       </main>
     );
   }
 
   if (isSimulationPage) {
-    return <main className="flex-1 w-full min-h-screen bg-white text-gray-900">{children}</main>;
+    return <main className="flex-1 w-full min-h-screen bg-[#050505] text-white">{children}</main>;
   }
 
   if (isMobile && !bypassMobileGate) {
     return (
-      <div className="min-h-screen bg-[#050505] text-[#B5B5B5] flex flex-col items-center justify-center p-6 text-center font-sans">
-        <div className="w-16 h-16 rounded-xl border border-[#00FF88] bg-[#050505] shadow-[0_0_15px_rgba(0,255,136,0.3)] flex items-center justify-center text-white text-2xl font-bold mb-4">
+      <div className="min-h-screen bg-[#050505] text-[#A8A8A8] flex flex-col items-center justify-center p-6 text-center font-sans">
+        <div className="w-12 h-12 rounded-lg border border-white/10 bg-[#121212] flex items-center justify-center text-white text-base font-bold mb-3">
           PP
         </div>
-        <h1 className="font-extrabold text-white text-xs tracking-wider uppercase font-mono mb-8">PINKMAN PROTECTS</h1>
+        <h1 className="font-extrabold text-white text-[10px] tracking-widest uppercase font-mono mb-8">PINKMAN PROTECTS</h1>
         
         {/* Laptop Illustration */}
-        <div className="w-40 h-28 relative mx-auto mb-8 text-[#00FF88]">
-          <svg viewBox="0 0 100 60" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
-            <rect x="15" y="5" width="70" height="42" rx="3" fill="#141414" stroke="#232323" strokeWidth="2"/>
-            <line x1="25" y1="15" x2="75" y2="15" stroke="#777777" strokeWidth="2" strokeLinecap="round" />
-            <line x1="25" y1="22" x2="55" y2="22" stroke="#00FF88" strokeWidth="2" strokeLinecap="round" />
-            <line x1="25" y1="29" x2="65" y2="29" stroke="#777777" strokeWidth="2" strokeLinecap="round" />
-            <path d="M5 47H95C95 50.3137 92.3137 53 89 53H11C7.68629 53 5 50.3137 5 47Z" fill="#232323"/>
-            <rect x="42" y="49" width="16" height="3" rx="1" fill="#777777"/>
+        <div className="w-36 h-24 relative mx-auto mb-8 text-[#A8A8A8]">
+          <svg viewBox="0 0 100 60" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full opacity-40">
+            <rect x="15" y="5" width="70" height="42" rx="2" fill="#121212" stroke="#1F1F1F" strokeWidth="1.5"/>
+            <line x1="25" y1="15" x2="75" y2="15" stroke="#333333" strokeWidth="1.5" strokeLinecap="round" />
+            <line x1="25" y1="22" x2="55" y2="22" stroke="#444444" strokeWidth="1.5" strokeLinecap="round" />
+            <line x1="25" y1="29" x2="65" y2="29" stroke="#333333" strokeWidth="1.5" strokeLinecap="round" />
+            <path d="M5 47H95C95 49 93 51 90 51H10C7 51 5 49 5 47Z" fill="#1F1F1F"/>
+            <rect x="44" y="48" width="12" height="1.5" rx="0.5" fill="#444444"/>
           </svg>
         </div>
 
-        <h2 className="text-xl font-black text-white tracking-tight uppercase font-mono mb-2">LAPTOP RECOMMENDED</h2>
-        <p className="text-xs text-[#B5B5B5] max-w-xs mx-auto leading-relaxed mb-8">
-          For the best experience, please access Pinkman Protects on a laptop or desktop device.
+        <h2 className="text-sm font-bold text-white tracking-tight uppercase font-mono mb-2">LAPTOP RECOMMENDED</h2>
+        <p className="text-xs text-[#A8A8A8] max-w-xs mx-auto leading-relaxed mb-8">
+          For the best experience, please use Pinkman Protects on a laptop or desktop.
         </p>
 
         <button
           onClick={handleBypass}
-          className="px-6 py-2.5 rounded-xl bg-[#00FF88] text-black font-bold text-xs uppercase font-mono tracking-wider shadow-[0_0_15px_rgba(0,255,136,0.3)] hover:scale-105 active:scale-95 transition-all duration-200"
+          className="px-5 py-2 rounded-lg bg-white hover:bg-zinc-200 text-black font-bold text-xs uppercase font-mono tracking-wider transition"
         >
           Continue Anyway
         </button>
@@ -217,19 +213,19 @@ export const AppShell: React.FC<{ children: React.ReactNode }> = ({ children }) 
   }
 
   const adminMenu = [
-    { href: '/admin/dashboard', label: 'Dashboard', icon: <LayoutDashboard size={16} /> },
-    { href: '/admin/soc', label: 'SOC Command', icon: <Activity size={16} /> },
-    { href: '/admin/campaigns', label: 'Campaigns', icon: <Send size={16} /> },
-    { href: '/admin/templates', label: 'Template Library', icon: <FileText size={16} /> },
-    { href: '/admin/analytics', label: 'Analytics & Logs', icon: <BarChart3 size={16} /> },
-    { href: '/admin/employees', label: 'Employee Registry', icon: <Users size={16} /> },
-    { href: '/admin/reports', label: 'Reports & Compliance', icon: <FileText size={16} /> },
-    { href: '/admin/audit', label: 'Audit Logs', icon: <ClipboardList size={16} /> },
-    { href: '/admin/settings', label: 'Settings', icon: <Settings size={16} /> },
+    { href: '/admin/dashboard', label: 'Dashboard', icon: <LayoutDashboard size={14} /> },
+    { href: '/admin/soc', label: 'SOC Command', icon: <Activity size={14} /> },
+    { href: '/admin/campaigns', label: 'Campaigns', icon: <Send size={14} /> },
+    { href: '/admin/templates', label: 'Template Library', icon: <FileText size={14} /> },
+    { href: '/admin/analytics', label: 'Analytics & Logs', icon: <BarChart3 size={14} /> },
+    { href: '/admin/employees', label: 'Employee Registry', icon: <Users size={14} /> },
+    { href: '/admin/reports', label: 'Reports & Compliance', icon: <FileText size={14} /> },
+    { href: '/admin/audit', label: 'Audit Logs', icon: <ClipboardList size={14} /> },
+    { href: '/admin/settings', label: 'Settings', icon: <Settings size={14} /> },
   ];
 
   const employeeMenu = [
-    { href: '/learning', label: 'Learning Center', icon: <GraduationCap size={16} /> },
+    { href: '/learning', label: 'Learning Center', icon: <GraduationCap size={14} /> },
   ];
 
   // Role-based menu filtering
@@ -253,28 +249,27 @@ export const AppShell: React.FC<{ children: React.ReactNode }> = ({ children }) 
   };
 
   return (
-    <div className="flex min-h-screen w-full relative bg-cyber-dark">
+    <div className="flex min-h-screen w-full relative bg-[#050505]">
       
       {/* Desktop Collapsible Sidebar */}
       <motion.aside 
-        animate={{ width: isCollapsed ? 76 : 240 }}
+        animate={{ width: isCollapsed ? 70 : 220 }}
         transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-        className="hidden md:flex flex-col fixed inset-y-0 left-0 glass-panel border-r border-cyber-border m-4 rounded-3xl z-40 overflow-hidden"
+        className="hidden md:flex flex-col fixed inset-y-0 left-0 bg-[#0B0B0B] border-r border-[#1F1F1F] z-40 overflow-hidden"
       >
         {/* Brand Logo & Collapse Toggle */}
-        <div className="flex items-center justify-between px-4 py-6 border-b border-cyber-border/40 relative">
+        <div className="flex items-center justify-between px-4 py-5 border-b border-[#1F1F1F]/40 relative">
           <Link href="/" className="flex items-center overflow-hidden">
-            <PPLogo size={22} className="animate-pulse" />
+            <PPLogo size={20} />
             <AnimatePresence>
               {!isCollapsed && (
                 <motion.div
-                  initial={{ opacity: 0, x: -10 }}
+                  initial={{ opacity: 0, x: -5 }}
                   animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -10 }}
-                  className="ml-3 shrink-0"
+                  exit={{ opacity: 0, x: -5 }}
+                  className="ml-2.5 shrink-0"
                 >
-                  <h1 className="font-extrabold text-white text-xs tracking-wider">PINKMAN PROTECTS</h1>
-                  <span className="text-[8px] text-gray-500 uppercase tracking-widest font-mono block">Consent Check</span>
+                  <h1 className="font-extrabold text-white text-[10px] tracking-wider font-mono">PINKMAN PROTECTS</h1>
                 </motion.div>
               )}
             </AnimatePresence>
@@ -283,21 +278,21 @@ export const AppShell: React.FC<{ children: React.ReactNode }> = ({ children }) 
           {/* Collapse Button */}
           <button
             onClick={() => setIsCollapsed(!isCollapsed)}
-            className="absolute top-1/2 -translate-y-1/2 right-2 p-1.5 rounded-lg border border-cyber-border bg-black/40 text-gray-500 hover:text-white transition"
+            className="absolute top-1/2 -translate-y-1/2 right-2 p-1 rounded border border-[#1F1F1F] bg-[#121212] text-zinc-500 hover:text-white transition"
           >
-            {isCollapsed ? <ChevronRight size={12} /> : <ChevronLeft size={12} />}
+            {isCollapsed ? <ChevronRight size={10} /> : <ChevronLeft size={10} />}
           </button>
         </div>
 
         {/* Navigation items */}
-        <div className="flex-1 overflow-y-auto px-3 py-6 space-y-7 scrollbar-thin">
+        <div className="flex-1 overflow-y-auto px-2 py-4 space-y-6 scrollbar-thin">
           {/* Render Admin Menu if not employee */}
           {userRole !== 'EMPLOYEE' && visibleAdminMenu.length > 0 && (
             <div>
               {!isCollapsed && (
-                <span className="px-3 text-[9px] uppercase font-mono font-bold tracking-widest text-gray-500 block mb-2">Operations</span>
+                <span className="px-3 text-[9px] uppercase font-mono font-bold tracking-widest text-zinc-600 block mb-2">Operations</span>
               )}
-              <div className="space-y-1">
+              <div className="space-y-0.5">
                 {visibleAdminMenu.map((item) => (
                   <SidebarItem 
                     key={item.href}
@@ -315,9 +310,9 @@ export const AppShell: React.FC<{ children: React.ReactNode }> = ({ children }) 
           {/* Render Employee Menu */}
           <div>
             {!isCollapsed && (
-              <span className="px-3 text-[9px] uppercase font-mono font-bold tracking-widest text-gray-500 block mb-2">Awareness</span>
+              <span className="px-3 text-[9px] uppercase font-mono font-bold tracking-widest text-zinc-600 block mb-2">Awareness</span>
             )}
-            <div className="space-y-1">
+            <div className="space-y-0.5">
               {employeeMenu.map((item) => (
                 <SidebarItem 
                   key={item.href}
@@ -332,10 +327,10 @@ export const AppShell: React.FC<{ children: React.ReactNode }> = ({ children }) 
           </div>
         </div>
 
-        {/* Footer client card / Link to Profile page */}
-        <div className="p-3 border-t border-cyber-border/40">
-          <Link href="/auth/logout" className="bg-white/3 rounded-xl p-2 flex items-center gap-2.5 overflow-hidden hover:bg-white/5 border border-transparent hover:border-white/5 transition block">
-            <div className="w-8 h-8 rounded-lg bg-brand-cyan/25 border border-brand-cyan/30 flex items-center justify-center text-brand-cyan text-[10px] font-bold font-mono shrink-0">
+        {/* Footer profile log out */}
+        <div className="p-2 border-t border-[#1F1F1F]/40">
+          <Link href="/auth/logout" className="bg-[#121212] rounded-lg p-2 flex items-center gap-2 hover:bg-[#1C1C1C] border border-[#1F1F1F] transition block">
+            <div className="w-7 h-7 rounded bg-[#1F1F1F] border border-white/5 flex items-center justify-center text-white text-[9px] font-bold font-mono shrink-0">
               {sessionUser ? getInitials(sessionUser.name) : 'US'}
             </div>
             {!isCollapsed && (
@@ -347,7 +342,7 @@ export const AppShell: React.FC<{ children: React.ReactNode }> = ({ children }) 
                 <p className="text-[10px] font-bold text-white truncate leading-tight">
                   {sessionUser ? sessionUser.name : 'SecOps Node'}
                 </p>
-                <span className="text-[8px] text-gray-400 font-mono flex items-center gap-1 mt-0.5">
+                <span className="text-[8px] text-zinc-500 font-mono flex items-center gap-1 mt-0.5">
                   <Building size={8} /> {sessionUser ? sessionUser.orgName.split(' ')[0] : 'Enterprise'}
                 </span>
               </motion.div>
@@ -358,62 +353,60 @@ export const AppShell: React.FC<{ children: React.ReactNode }> = ({ children }) 
 
       {/* Main viewport area */}
       <motion.div 
-        animate={{ paddingLeft: isCollapsed ? 92 : 256 }}
+        animate={{ paddingLeft: isCollapsed ? 78 : 228 }}
         transition={{ type: 'spring', damping: 25, stiffness: 200 }}
         className="flex-1 flex flex-col min-h-screen"
       >
         {/* Main top header */}
-        <header className="h-16 flex items-center justify-between px-6 border-b border-cyber-border/20 backdrop-blur-md sticky top-0 z-30 bg-cyber-dark/40">
+        <header className="h-14 flex items-center justify-between px-6 border-b border-[#1F1F1F]/20 backdrop-blur-md sticky top-0 z-30 bg-[#050505]/80">
           <div className="flex items-center gap-4">
             <button 
               onClick={() => setMobileMenuOpen(true)}
-              className="md:hidden text-gray-400 hover:text-white p-1 rounded-lg hover:bg-white/5 border border-cyber-border bg-black/40"
+              className="md:hidden text-zinc-400 hover:text-white p-1 rounded-lg hover:bg-white/5 border border-[#1F1F1F] bg-[#0A0A0A]"
             >
-              <Menu size={16} />
+              <Menu size={14} />
             </button>
 
             {/* Path indicator */}
-            <div className="hidden sm:flex items-center gap-1.5 text-[10px] font-mono text-gray-400 uppercase tracking-wider">
-              <span className="text-gray-500">PINKMAN_SYS</span>
+            <div className="hidden sm:flex items-center gap-1 text-[9px] font-mono text-zinc-500 uppercase tracking-widest">
+              <span>PINKMAN_SYS</span>
               <span>::</span>
-              <span className="text-brand-blue font-bold">
+              <span className="text-[#00D26A] font-bold">
                 {pathname?.split('/').filter(Boolean).join('_') || 'ROOT'}
               </span>
             </div>
           </div>
 
-          <div className="flex items-center gap-4">
-            {/* Status indices */}
-            <div className="hidden lg:flex items-center gap-4 border border-cyber-border rounded-xl px-4 py-1.5 bg-black/50 text-[10px] font-mono">
+          <div className="flex items-center gap-3">
+            {/* Status indicators */}
+            <div className="hidden lg:flex items-center gap-3.5 border border-[#1F1F1F] rounded-lg px-3 py-1 bg-[#0B0B0B] text-[9px] font-mono text-zinc-500">
               <div className="flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                <span className="text-gray-500">Simulation Monitor:</span>
-                <span className="text-white font-bold">ON</span>
+                <span className="w-1.5 h-1.5 rounded-full bg-[#00D26A]" />
+                <span>Simulation Monitor:</span>
+                <span className="text-white font-bold">ACTIVE</span>
               </div>
-              <div className="h-3 w-px bg-cyber-border" />
+              <div className="h-3 w-px bg-[#1F1F1F]" />
               <div className="flex items-center gap-1.5">
-                <span className="text-gray-500">Risk Matrix:</span>
-                <span className={`text-[10px] font-bold ${userRole === 'SUPERADMIN' ? 'text-brand-cyan' : 'text-brand-purple'}`}>
-                  {userRole}
-                </span>
+                <span>Role:</span>
+                <span className="text-white font-bold">{userRole}</span>
               </div>
             </div>
 
-            {/* Notification Bell & Drawer */}
+            {/* Notification Bell */}
             <NotificationCenter />
 
             {/* Simulation tester link */}
             <Link 
               href="/simulation/landing/test"
-              className="text-[10px] font-mono flex items-center gap-1 bg-white/5 border border-cyber-border hover:border-brand-blue/30 text-gray-300 hover:text-white px-3 py-1.5 rounded-xl transition"
+              className="text-[9px] font-mono flex items-center gap-1 bg-[#121212] border border-[#1F1F1F] hover:border-zinc-700 text-zinc-400 hover:text-white px-2.5 py-1 rounded-lg transition"
             >
-              <Eye size={10} /> Test Intercept Page
+              <Eye size={10} /> Test Page
             </Link>
           </div>
         </header>
 
         {/* Content canvas */}
-        <main className="flex-1 p-6 md:p-8 max-w-7xl w-full mx-auto relative z-10">
+        <main className="flex-1 p-6 md:p-8 max-w-6xl w-full mx-auto relative z-10">
           {children}
         </main>
       </motion.div>
@@ -435,28 +428,28 @@ export const AppShell: React.FC<{ children: React.ReactNode }> = ({ children }) 
               animate={{ x: 0 }}
               exit={{ x: '-100%' }}
               transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              className="fixed inset-y-0 left-0 w-64 bg-cyber-dark border-r border-cyber-border p-6 z-50 md:hidden flex flex-col justify-between"
+              className="fixed inset-y-0 left-0 w-60 bg-[#0B0B0B] border-r border-[#1F1F1F] p-5 z-50 md:hidden flex flex-col justify-between"
             >
-              <div className="space-y-8">
+              <div className="space-y-6">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <PPLogo size={20} className="mr-1" />
-                    <h1 className="font-extrabold text-white text-sm tracking-wider">PINKMAN PROTECTS</h1>
+                    <PPLogo size={18} />
+                    <h1 className="font-extrabold text-white text-xs tracking-wider font-mono">PINKMAN PROTECTS</h1>
                   </div>
                   <button 
                     onClick={() => setMobileMenuOpen(false)}
-                    className="text-gray-400 hover:text-white p-1"
+                    className="text-zinc-400 hover:text-white p-1"
                   >
-                    <X size={16} />
+                    <X size={14} />
                   </button>
                 </div>
 
-                <div className="space-y-6">
+                <div className="space-y-4">
                   {/* Admin visible menu */}
                   {userRole !== 'EMPLOYEE' && visibleAdminMenu.length > 0 && (
                     <div>
-                      <span className="text-[9px] uppercase font-mono font-bold tracking-widest text-gray-500 block mb-2">Operations</span>
-                      <div className="space-y-1">
+                      <span className="text-[9px] uppercase font-mono font-bold tracking-widest text-zinc-600 block mb-1">Operations</span>
+                      <div className="space-y-0.5">
                         {visibleAdminMenu.map((item) => (
                           <div key={item.href} onClick={() => setMobileMenuOpen(false)}>
                             <SidebarItem 
@@ -474,8 +467,8 @@ export const AppShell: React.FC<{ children: React.ReactNode }> = ({ children }) 
 
                   {/* Employee Menu */}
                   <div>
-                    <span className="text-[9px] uppercase font-mono font-bold tracking-widest text-gray-500 block mb-2">Awareness</span>
-                    <div className="space-y-1">
+                    <span className="text-[9px] uppercase font-mono font-bold tracking-widest text-zinc-600 block mb-1">Awareness</span>
+                    <div className="space-y-0.5">
                       {employeeMenu.map((item) => (
                         <div key={item.href} onClick={() => setMobileMenuOpen(false)}>
                           <SidebarItem 
@@ -493,20 +486,20 @@ export const AppShell: React.FC<{ children: React.ReactNode }> = ({ children }) 
               </div>
 
               {/* Mobile bottom profile card */}
-              <div className="pt-4 border-t border-cyber-border/40">
+              <div className="pt-4 border-t border-[#1F1F1F]/40">
                 <Link 
                   href="/auth/logout" 
                   onClick={() => setMobileMenuOpen(false)}
-                  className="bg-white/3 rounded-xl p-2.5 flex items-center gap-3 hover:bg-white/5 border border-white/5 transition block"
+                  className="bg-[#121212] rounded-lg p-2 flex items-center gap-2.5 hover:bg-[#1C1C1C] border border-[#1F1F1F] transition block"
                 >
-                  <div className="w-8 h-8 rounded-full bg-brand-cyan/20 flex items-center justify-center text-brand-cyan text-xs font-bold font-mono">
+                  <div className="w-7 h-7 rounded bg-[#1F1F1F] flex items-center justify-center text-white text-[9px] font-bold font-mono">
                     {sessionUser ? getInitials(sessionUser.name) : 'US'}
                   </div>
                   <div>
-                    <p className="text-xs font-semibold text-white">
+                    <p className="text-[10px] font-semibold text-white">
                       {sessionUser ? sessionUser.name : 'SecOps Node'}
                     </p>
-                    <span className="text-[10px] text-brand-cyan font-mono">
+                    <span className="text-[8px] text-[#00D26A] font-mono">
                       {sessionUser ? sessionUser.orgName : 'Pinkman Protects'}
                     </span>
                   </div>
@@ -520,4 +513,5 @@ export const AppShell: React.FC<{ children: React.ReactNode }> = ({ children }) 
     </div>
   );
 };
+
 export default AppShell;

@@ -385,7 +385,21 @@ export default function CampaignsPage() {
     } catch (err) {
       console.error(err);
     }
-  };
+  };  if (loading) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-6">
+        <div className="relative w-12 h-12 flex items-center justify-center">
+          <div className="absolute inset-0 border border-white/10 rounded-full" />
+          <div className="absolute inset-0 border-t border-white border-r border-transparent rounded-full animate-spin" />
+          <Plus className="text-white" size={16} />
+        </div>
+        <div className="text-center space-y-1">
+          <span className="text-[10px] font-mono tracking-widest text-white uppercase animate-pulse">Initializing Campaigns...</span>
+          <p className="text-[9px] font-mono text-zinc-500">Querying active drill registers and employee progress streams...</p>
+        </div>
+      </div>
+    );
+  }
 
   const drafts = campaigns.filter(c => c.status === 'DRAFT');
   const scheduled = campaigns.filter(c => c.status === 'SCHEDULED');
@@ -394,16 +408,14 @@ export default function CampaignsPage() {
 
   return (
     <div className="space-y-10 relative">
-      <div className="absolute top-[-10%] left-[5%] w-[400px] h-[400px] bg-brand-cyan/2 rounded-full blur-[130px] pointer-events-none" />
-
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 border-b border-white/[0.04] pb-6">
-        <div className="space-y-1.5">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 border-b border-[#1F1F1F] pb-5">
+        <div className="space-y-1">
           <div className="flex items-center gap-2">
-            <span className="h-1.5 w-1.5 rounded-full bg-brand-cyan shadow-[0_0_8px_#06b6d4]" />
-            <span className="text-[10px] font-mono uppercase tracking-widest text-brand-cyan font-bold">Indian Compliance Suite</span>
+            <span className="h-1.5 w-1.5 rounded-full bg-[#00D26A]" />
+            <span className="text-[9px] font-mono uppercase tracking-widest text-zinc-500 font-bold">Indian Compliance Suite</span>
           </div>
-          <h1 className="text-3xl font-extrabold tracking-tight leading-none bg-gradient-to-r from-white via-zinc-100 to-zinc-500 bg-clip-text text-transparent">
+          <h1 className="text-xl font-bold tracking-tight uppercase font-mono text-white">
             Campaign Operations
           </h1>
           <p className="text-xs text-zinc-400 font-mono">Configure, dispatch, and terminate authorized cybersecurity awareness simulation exercises in Indian branches.</p>
@@ -411,7 +423,7 @@ export default function CampaignsPage() {
 
         <button
           onClick={openWizard}
-          className="flex items-center justify-center gap-2 bg-gradient-to-r from-brand-cyan via-brand-blue to-brand-purple hover:brightness-110 active:scale-[0.98] text-white font-bold px-5 py-3 rounded-xl transition-all duration-300 shadow-[0_4px_25px_rgba(6,182,212,0.22)] text-xs font-mono uppercase tracking-wider shrink-0 border border-white/10 cursor-pointer animate-pulse"
+          className="flex items-center justify-center gap-2 bg-white hover:bg-zinc-200 text-black px-4 py-2 rounded-lg transition text-xs font-mono uppercase tracking-wider shrink-0 border border-white/10 cursor-pointer"
         >
           <Plus size={14} className="stroke-[3]" /> Launch India Drill
         </button>
@@ -422,12 +434,12 @@ export default function CampaignsPage() {
         
         {/* Lane 1: Active */}
         <div className="space-y-5">
-          <div className="flex items-center justify-between px-2 py-1 bg-white/[0.01] border border-white/[0.03] rounded-xl">
+          <div className="flex items-center justify-between px-2 py-1 bg-white/[0.01] border border-[#1F1F1F] rounded-lg">
             <div className="flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-brand-cyan shadow-[0_0_8px_#06b6d4] animate-pulse" />
+              <span className="w-1.5 h-1.5 rounded-full bg-white" />
               <h3 className="text-[10px] font-bold font-mono text-zinc-300 uppercase tracking-widest">Active</h3>
             </div>
-            <span className="text-[10px] font-mono text-brand-cyan px-2 py-0.5 bg-brand-cyan/10 rounded-full border border-brand-cyan/20">{active.length}</span>
+            <span className="text-[10px] font-mono text-white px-2 py-0.5 bg-[#121212] rounded border border-[#1F1F1F]">{active.length}</span>
           </div>
           <div className="space-y-4 min-h-[250px] relative">
             <AnimatePresence mode="popLayout">
@@ -441,12 +453,12 @@ export default function CampaignsPage() {
 
         {/* Lane 2: Scheduled */}
         <div className="space-y-5">
-          <div className="flex items-center justify-between px-2 py-1 bg-white/[0.01] border border-white/[0.03] rounded-xl">
+          <div className="flex items-center justify-between px-2 py-1 bg-white/[0.01] border border-[#1F1F1F] rounded-lg">
             <div className="flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-brand-purple shadow-[0_0_8px_#8b5cf6]" />
+              <span className="w-1.5 h-1.5 rounded-full bg-zinc-500" />
               <h3 className="text-[10px] font-bold font-mono text-zinc-300 uppercase tracking-widest">Scheduled</h3>
             </div>
-            <span className="text-[10px] font-mono text-brand-purple px-2 py-0.5 bg-brand-purple/10 rounded-full border border-brand-purple/20">{scheduled.length}</span>
+            <span className="text-[10px] font-mono text-zinc-400 px-2 py-0.5 bg-[#121212] rounded border border-[#1F1F1F]">{scheduled.length}</span>
           </div>
           <div className="space-y-4 min-h-[250px] relative">
             <AnimatePresence mode="popLayout">
@@ -460,12 +472,12 @@ export default function CampaignsPage() {
 
         {/* Lane 3: Drafts */}
         <div className="space-y-5">
-          <div className="flex items-center justify-between px-2 py-1 bg-white/[0.01] border border-white/[0.03] rounded-xl">
+          <div className="flex items-center justify-between px-2 py-1 bg-white/[0.01] border border-[#1F1F1F] rounded-lg">
             <div className="flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-zinc-500" />
+              <span className="w-1.5 h-1.5 rounded-full bg-zinc-700" />
               <h3 className="text-[10px] font-bold font-mono text-zinc-300 uppercase tracking-widest">Drafts</h3>
             </div>
-            <span className="text-[10px] font-mono text-zinc-400 px-2 py-0.5 bg-white/5 rounded-full border border-white/5">{drafts.length}</span>
+            <span className="text-[10px] font-mono text-zinc-500 px-2 py-0.5 bg-[#121212] rounded border border-[#1F1F1F]">{drafts.length}</span>
           </div>
           <div className="space-y-4 min-h-[250px] relative">
             <AnimatePresence mode="popLayout">
@@ -479,12 +491,12 @@ export default function CampaignsPage() {
 
         {/* Lane 4: Completed */}
         <div className="space-y-5">
-          <div className="flex items-center justify-between px-2 py-1 bg-white/[0.01] border border-white/[0.03] rounded-xl">
+          <div className="flex items-center justify-between px-2 py-1 bg-white/[0.01] border border-[#1F1F1F] rounded-lg">
             <div className="flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-brand-emerald shadow-[0_0_8px_#10b981]" />
+              <span className="w-1.5 h-1.5 rounded-full bg-[#00D26A]" />
               <h3 className="text-[10px] font-bold font-mono text-zinc-300 uppercase tracking-widest">Completed</h3>
             </div>
-            <span className="text-[10px] font-mono text-brand-emerald px-2 py-0.5 bg-brand-emerald/10 rounded-full border border-brand-emerald/20">{completed.length}</span>
+            <span className="text-[10px] font-mono text-[#00D26A] px-2 py-0.5 bg-emerald-500/5 border border-emerald-500/10 rounded">{completed.length}</span>
           </div>
           <div className="space-y-4 min-h-[250px] relative">
             <AnimatePresence mode="popLayout">
@@ -514,16 +526,13 @@ export default function CampaignsPage() {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
               transition={{ type: 'spring', damping: 28, stiffness: 220 }}
-              className="glass-panel p-6 sm:p-8 rounded-[28px] max-w-4xl w-full relative z-10 border border-white/[0.06] overflow-hidden bg-zinc-950/95 shadow-[0_30px_70px_rgba(0,0,0,0.9)] flex flex-col max-h-[90vh]"
+              className="p-6 sm:p-8 rounded-xl max-w-4xl w-full relative z-10 border border-[#1F1F1F] overflow-hidden bg-zinc-950 shadow-2xl flex flex-col max-h-[90vh]"
             >
-              <div className="absolute top-0 right-0 w-80 h-80 bg-brand-cyan/3 rounded-full blur-[100px] pointer-events-none" />
-              <div className="absolute bottom-0 left-0 w-80 h-80 bg-brand-purple/2 rounded-full blur-[100px] pointer-events-none" />
-              
               {/* Wizard Header */}
               <div className="flex justify-between items-start mb-6 shrink-0">
                 <div className="flex items-center gap-3">
-                  <div className="p-2.5 rounded-xl bg-brand-cyan/10 border border-brand-cyan/20 text-brand-cyan">
-                    <Sparkles size={18} className="animate-pulse" />
+                  <div className="p-2 rounded bg-[#0A0A0A] border border-[#1F1F1F] text-white">
+                    <Sparkles size={14} />
                   </div>
                   <div>
                     <h2 className="text-xl font-extrabold text-white tracking-tight">Deploy Awareness Drill</h2>
@@ -539,7 +548,7 @@ export default function CampaignsPage() {
               </div>
 
               {/* Steps Progress Tracker */}
-              <div className="grid grid-cols-5 gap-2 pb-5 border-b border-white/[0.04] mb-6 shrink-0 font-mono text-[9px]">
+              <div className="grid grid-cols-5 gap-2 pb-5 border-b border-[#1F1F1F] mb-6 shrink-0 font-mono text-[9px]">
                 {[
                   { num: 1, label: 'Identity' },
                   { num: 2, label: 'Audience' },
@@ -553,15 +562,15 @@ export default function CampaignsPage() {
                     <div key={s.num} className="space-y-2">
                       <div className="flex items-center gap-1.5">
                         <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[9px] font-black transition-all ${
-                          isActive ? 'bg-brand-cyan text-black font-extrabold shadow-[0_0_10px_#06b6d4]' :
-                          isCompleted ? 'bg-brand-emerald/20 text-brand-emerald border border-brand-emerald/30' :
+                          isActive ? 'bg-white text-black font-bold' :
+                          isCompleted ? 'bg-[#121212] text-[#00D26A] border border-[#1F1F1F]' :
                           'bg-white/5 text-zinc-500 border border-white/5'
                         }`}>
                           {isCompleted ? <Check size={10} className="stroke-[3]" /> : s.num}
                         </span>
                         <span className={`hidden sm:inline font-bold uppercase tracking-wider ${
-                          isActive ? 'text-brand-cyan' :
-                          isCompleted ? 'text-brand-emerald' :
+                          isActive ? 'text-white' :
+                          isCompleted ? 'text-[#00D26A]' :
                           'text-zinc-500'
                         }`}>
                           {s.label}
@@ -569,7 +578,7 @@ export default function CampaignsPage() {
                       </div>
                       <div className="h-0.5 rounded-full w-full bg-white/[0.03] overflow-hidden">
                         <motion.div 
-                          className={`h-full ${isCompleted ? 'bg-brand-emerald' : isActive ? 'bg-brand-cyan' : 'bg-transparent'}`}
+                          className={`h-full ${isCompleted ? 'bg-[#00D26A]' : isActive ? 'bg-white' : 'bg-transparent'}`}
                           initial={{ width: 0 }}
                           animate={{ width: isActive || isCompleted ? '100%' : '0%' }}
                           transition={{ duration: 0.3 }}

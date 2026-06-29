@@ -153,13 +153,13 @@ export default function NotificationsPage() {
   const getPriorityBadgeClass = (priority: string) => {
     switch (priority) {
       case 'CRITICAL':
-        return 'bg-green-950/40 border border-[#00FF88]/50 text-[#00FF88] font-bold shadow-[0_0_10px_rgba(0,255,136,0.2)] animate-pulse';
+        return 'bg-zinc-800 border border-[#1F1F1F] text-white font-bold';
       case 'HIGH':
-        return 'bg-green-950/20 border border-[#00FF88]/30 text-[#00FF88] font-semibold';
+        return 'bg-zinc-900 border border-[#1F1F1F] text-zinc-300 font-semibold';
       case 'MEDIUM':
-        return 'bg-amber-950/20 border border-amber-500/30 text-amber-500';
+        return 'bg-zinc-950 border border-[#1F1F1F] text-zinc-400';
       default:
-        return 'bg-[#181818] border border-[#232323] text-gray-400';
+        return 'bg-[#181818] border border-[#2d2d2d] text-zinc-500';
     }
   };
 
@@ -184,23 +184,23 @@ export default function NotificationsPage() {
     <div className="space-y-8">
       
       {/* Title Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-[#232323] pb-6">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-[#1F1F1F] pb-5">
         <div>
-          <h1 className="text-2xl font-extrabold text-white tracking-tight uppercase font-mono text-glow-cyan">
+          <h1 className="text-xl font-bold tracking-tight uppercase font-mono text-white">
             Notification Center
           </h1>
-          <p className="text-xs text-gray-400 mt-1.5 leading-relaxed">
+          <p className="text-xs text-zinc-500 mt-1">
             Monitor simulation outcomes, AI security insights, and training compliance reminders.
           </p>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2">
           <button
             onClick={handleMarkAllRead}
             disabled={unreadCount === 0}
-            className="px-4 py-2.5 rounded-xl border border-[#232323] bg-black/40 hover:bg-[#181818] hover:border-[#00FF88]/40 text-gray-400 hover:text-white disabled:opacity-40 disabled:hover:bg-transparent disabled:hover:border-[#232323] transition duration-200 text-xs font-mono flex items-center gap-2"
+            className="px-4 py-2 rounded-lg border border-[#1F1F1F] bg-[#121212] hover:border-zinc-700 text-zinc-300 hover:text-white disabled:opacity-40 disabled:hover:bg-transparent transition text-xs font-mono flex items-center gap-2"
           >
-            <CheckSquare size={14} /> Mark All as Read
+            <CheckSquare size={12} /> Mark All as Read
           </button>
         </div>
       </div>
@@ -212,12 +212,12 @@ export default function NotificationsPage() {
         <div className="lg:col-span-2 space-y-6">
           
           {/* Filtering Controls Card */}
-          <div className="p-4 border border-[#232323] bg-[#141414] rounded-2xl space-y-4 shadow-lg">
+          <div className="p-4 border border-[#1F1F1F] bg-[#121212] rounded-xl space-y-4">
             
             {/* Search and priority selects */}
             <div className="grid sm:grid-cols-3 gap-3">
-              <div className="sm:col-span-2 flex items-center gap-2 px-3 py-2 rounded-xl border border-[#232323] bg-[#0A0A0A] text-xs font-mono">
-                <Search size={14} className="text-gray-500" />
+              <div className="sm:col-span-2 flex items-center gap-2 px-3 py-2 rounded-lg border border-[#1F1F1F] bg-[#0A0A0A] text-xs font-mono">
+                <Search size={14} className="text-zinc-500" />
                 <input
                   type="text"
                   value={searchQuery}
@@ -227,8 +227,8 @@ export default function NotificationsPage() {
                 />
               </div>
 
-              <div className="flex items-center gap-2 px-3 py-2 rounded-xl border border-[#232323] bg-[#0A0A0A] text-xs font-mono text-gray-400">
-                <Filter size={12} className="text-gray-500" />
+              <div className="flex items-center gap-2 px-3 py-2 rounded-lg border border-[#1F1F1F] bg-[#0A0A0A] text-xs font-mono text-gray-400">
+                <Filter size={12} className="text-zinc-500" />
                 <select
                   value={activePriority}
                   onChange={(e) => { setActivePriority(e.target.value); setPage(1); }}
@@ -247,10 +247,10 @@ export default function NotificationsPage() {
                 <button
                   key={cat.id}
                   onClick={() => { setActiveCategory(cat.id); setPage(1); }}
-                  className={`px-3 py-2 rounded-xl border text-[10px] font-mono uppercase tracking-wider transition shrink-0 ${
+                  className={`px-3 py-1.5 rounded-lg border text-[10px] font-mono uppercase tracking-wider transition shrink-0 ${
                     activeCategory === cat.id
-                      ? 'border-[#00FF88] bg-green-950/15 text-white font-bold'
-                      : 'border-[#232323] bg-[#0A0A0A] text-gray-500 hover:text-white'
+                      ? 'border-white bg-white/[0.05] text-white font-bold'
+                      : 'border-[#1F1F1F] bg-[#0A0A0A] text-zinc-500 hover:text-white'
                   }`}
                 >
                   {cat.label}
@@ -264,19 +264,19 @@ export default function NotificationsPage() {
           <div className="space-y-4">
             
             {loading ? (
-              <div className="p-20 border border-[#232323] bg-[#141414] rounded-2xl flex flex-col items-center justify-center space-y-4 shadow-lg">
-                <div className="w-8 h-8 border-2 border-[#00FF88] border-t-transparent rounded-full animate-spin" />
-                <span className="text-xs font-mono text-gray-500 uppercase tracking-widest">Querying Notifications database...</span>
+              <div className="p-20 border border-[#1F1F1F] bg-[#121212] rounded-xl flex flex-col items-center justify-center space-y-4">
+                <div className="w-6 h-6 border border-white border-t-transparent rounded-full animate-spin" />
+                <span className="text-xs font-mono text-zinc-500 uppercase tracking-widest">Querying Notifications database...</span>
               </div>
             ) : notifications.length === 0 ? (
               /* Empty state */
-              <div className="p-20 border border-[#232323] bg-[#141414] rounded-2xl text-center space-y-4 shadow-lg">
-                <div className="w-14 h-14 rounded-full border border-[#232323] bg-[#181818] flex items-center justify-center mx-auto text-gray-600 shadow-inner">
-                  <Bell size={20} />
+              <div className="p-20 border border-[#1F1F1F] bg-[#121212] rounded-xl text-center space-y-4">
+                <div className="w-12 h-12 rounded-full border border-[#1F1F1F] bg-[#0A0A0A] flex items-center justify-center mx-auto text-zinc-650">
+                  <Bell size={18} />
                 </div>
                 <div className="space-y-1">
-                  <p className="text-sm font-bold text-white font-mono uppercase tracking-wider">No Security Incidents</p>
-                  <p className="text-xs text-gray-400 leading-relaxed max-w-[280px] mx-auto">No notifications matched the selected filter metrics or search criteria.</p>
+                  <p className="text-xs font-bold text-white font-mono uppercase tracking-wider">No Security Incidents</p>
+                  <p className="text-xs text-zinc-500 leading-relaxed max-w-[280px] mx-auto">No notifications matched the selected filter metrics or search criteria.</p>
                 </div>
               </div>
             ) : (
@@ -288,15 +288,15 @@ export default function NotificationsPage() {
                       initial={{ opacity: 0, y: 15 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, x: -20 }}
-                      className={`p-4 border rounded-2xl transition duration-200 relative group shadow-md flex items-start gap-4 ${
+                      className={`p-4 border rounded-xl transition duration-200 relative group flex items-start gap-4 ${
                         notif.isRead 
-                          ? 'bg-[#141414]/50 border-[#232323] hover:border-white/5' 
-                          : 'bg-[#141414] border-[#00FF88]/30 hover:border-[#00FF88]/40 shadow-[0_0_12px_rgba(0,255,136,0.03)]'
+                          ? 'bg-[#121212]/50 border-[#1F1F1F] hover:border-white/5' 
+                          : 'bg-[#121212] border-white/20 hover:border-zinc-700'
                       }`}
                     >
                       {/* Left icon */}
-                      <div className={`p-2.5 rounded-xl border shrink-0 mt-0.5 ${
-                        notif.isRead ? 'bg-[#1c1c1c] border-[#2d2d2d]' : 'bg-green-950/15 border-[#00FF88]/25'
+                      <div className={`p-2.5 rounded-lg border shrink-0 mt-0.5 ${
+                        notif.isRead ? 'bg-[#1c1c1c] border-[#2d2d2d]' : 'bg-[#0A0A0A] border-[#1F1F1F]'
                       }`}>
                         {getCategoryIcon(notif.category)}
                       </div>
@@ -307,15 +307,15 @@ export default function NotificationsPage() {
                           <span className={`text-[8px] font-mono px-2 py-0.5 rounded uppercase tracking-wider font-semibold ${getPriorityBadgeClass(notif.priority)}`}>
                             {notif.priority}
                           </span>
-                          <span className="text-[9px] font-mono text-gray-500">ID: {notif.id}</span>
-                          <span className="text-[9px] font-mono text-gray-500">•</span>
-                          <span className="text-[9px] font-mono text-gray-500">{formatFullDate(notif.timestamp)}</span>
+                          <span className="text-[9px] font-mono text-zinc-500">ID: {notif.id}</span>
+                          <span className="text-[9px] font-mono text-zinc-500">•</span>
+                          <span className="text-[9px] font-mono text-zinc-500">{formatFullDate(notif.timestamp)}</span>
                         </div>
 
-                        <h3 className={`text-xs font-bold font-mono tracking-wide mt-1.5 ${notif.isRead ? 'text-gray-300' : 'text-white'}`}>
+                        <h3 className={`text-xs font-bold font-mono tracking-wide mt-1.5 ${notif.isRead ? 'text-zinc-400' : 'text-white'}`}>
                           {notif.title}
                         </h3>
-                        <p className="text-xs text-gray-400 leading-relaxed font-sans">{notif.message}</p>
+                        <p className="text-xs text-zinc-500 leading-relaxed font-sans">{notif.message}</p>
                       </div>
 
                       {/* Right hover actions */}
@@ -323,7 +323,7 @@ export default function NotificationsPage() {
                         {!notif.isRead && (
                           <button
                             onClick={() => handleMarkRead(notif.id)}
-                            className="p-1.5 rounded-lg bg-[#1c1c1c] border border-[#2d2d2d] text-gray-500 hover:text-white hover:border-[#00FF88]/40 transition"
+                            className="p-1.5 rounded-lg bg-[#1c1c1c] border border-[#2d2d2d] text-gray-500 hover:text-white hover:border-white transition"
                             title="Mark as read"
                           >
                             <Check size={12} />
@@ -331,7 +331,7 @@ export default function NotificationsPage() {
                         )}
                         <button
                           onClick={() => handleDelete(notif.id)}
-                          className="p-1.5 rounded-lg bg-[#1c1c1c] border border-[#2d2d2d] text-gray-500 hover:text-[#00FF88] transition"
+                          className="p-1.5 rounded-lg bg-[#1c1c1c] border border-[#2d2d2d] text-gray-500 hover:text-white transition"
                           title="Delete alert"
                         >
                           <Trash2 size={12} />
@@ -344,11 +344,11 @@ export default function NotificationsPage() {
 
                 {/* Pagination bar */}
                 {totalPages > 1 && (
-                  <div className="pt-4 flex items-center justify-between border-t border-[#232323] text-xs font-mono text-gray-500">
+                  <div className="pt-4 flex items-center justify-between border-t border-[#1F1F1F] text-xs font-mono text-zinc-500">
                     <button
                       disabled={page === 1}
                       onClick={() => setPage(p => Math.max(1, p - 1))}
-                      className="px-3.5 py-2 rounded-xl bg-[#141414] border border-[#232323] hover:border-[#00FF88]/40 disabled:opacity-40 disabled:hover:border-[#232323] text-white transition duration-200"
+                      className="px-3.5 py-2 rounded-lg bg-[#121212] border border-[#1F1F1F] hover:border-zinc-700 disabled:opacity-40 disabled:hover:border-[#1F1F1F] text-white transition"
                     >
                       ← Previous Page
                     </button>
@@ -356,7 +356,7 @@ export default function NotificationsPage() {
                     <button
                       disabled={page === totalPages}
                       onClick={() => setPage(p => Math.min(totalPages, p + 1))}
-                      className="px-3.5 py-2 rounded-xl bg-[#141414] border border-[#232323] hover:border-[#00FF88]/40 disabled:opacity-40 disabled:hover:border-[#232323] text-white transition duration-200"
+                      className="px-3.5 py-2 rounded-lg bg-[#121212] border border-[#1F1F1F] hover:border-zinc-700 disabled:opacity-40 disabled:hover:border-[#1F1F1F] text-white transition"
                     >
                       Next Page →
                     </button>
@@ -375,13 +375,13 @@ export default function NotificationsPage() {
           <PreferencesPanel />
           
           {/* Extra system alerts tip card */}
-          <div className="p-5 border border-[#232323] bg-[#141414] rounded-2xl space-y-3">
-            <div className="flex items-center gap-2 text-[#00FF88]">
-              <AlertTriangle size={16} className="animate-pulse" />
+          <div className="p-5 border border-[#1F1F1F] bg-[#121212] rounded-xl space-y-3">
+            <div className="flex items-center gap-2 text-white">
+              <AlertTriangle size={14} />
               <h4 className="text-xs font-bold font-mono uppercase tracking-wider">SecOps Notice</h4>
             </div>
-            <p className="text-[10px] text-gray-400 leading-relaxed font-sans">
-              System alerts are aggregated in real-time. Critical incidents (e.g. simulation failures and severe department score regressions) bypass preferences and are immediately routed via SMS or top-bar dashboard notices.
+            <p className="text-[10px] text-zinc-500 leading-relaxed">
+              System alerts are aggregated in real-time. Critical incidents (e.g. simulation failures and severe department score regressions) bypass preferences and are routed via top-bar dashboard notices.
             </p>
           </div>
         </div>

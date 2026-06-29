@@ -575,29 +575,27 @@ export default function ReportsPage() {
 
                 </div>
 
-                {/* AI Insights glow card */}
+                {/* AI Insights Card */}
                 {aiInsights && (
-                  <div className="p-6 rounded-3xl bg-brand-blue/5 border border-brand-blue/15 space-y-4 glow-border-blue relative overflow-hidden print:bg-white print:border-black/20 print:shadow-none">
-                    <div className="absolute top-0 right-0 w-32 h-32 bg-brand-cyan/5 rounded-full blur-3xl pointer-events-none" />
-                    
+                  <div className="p-5 rounded-xl bg-[#121212] border border-[#1F1F1F] space-y-4 relative overflow-hidden print:bg-white print:border-black/20 print:shadow-none">
                     <div className="flex items-center gap-2">
-                      <Sparkles className="text-brand-cyan animate-pulse" size={16} />
-                      <h3 className="text-sm font-bold font-mono uppercase tracking-wider text-white print:text-black">
+                      <Sparkles className="text-white" size={14} />
+                      <h3 className="text-xs font-bold font-mono uppercase tracking-wider text-white print:text-black">
                         Pinkman AI Intelligence Insights
                       </h3>
                     </div>
 
                     <div className="grid md:grid-cols-2 gap-4 text-xs font-mono">
-                      <div className="space-y-1.5 p-3 rounded-xl bg-white/2 border border-white/5 print:bg-gray-150 print:border-black/15 print:text-black">
-                        <div className="text-gray-500">Highest Risk Branch:</div>
+                      <div className="space-y-1.5 p-3 rounded-lg bg-[#0A0A0A] border border-[#1F1F1F] print:bg-gray-100 print:border-black/15 print:text-black">
+                        <div className="text-zinc-500">Highest Risk Branch:</div>
                         <div className="text-white font-extrabold flex items-center gap-1.5 print:text-black">
-                          <MapPin size={12} className="text-brand-rose" /> {aiInsights.highestRiskBranch} Office
+                          <MapPin size={12} className="text-white" /> {aiInsights.highestRiskBranch} Office
                         </div>
                       </div>
-                      <div className="space-y-1.5 p-3 rounded-xl bg-white/2 border border-white/5 print:bg-gray-150 print:border-black/15 print:text-black">
-                        <div className="text-gray-500">Leading Training Compliance:</div>
+                      <div className="space-y-1.5 p-3 rounded-lg bg-[#0A0A0A] border border-[#1F1F1F] print:bg-gray-100 print:border-black/15 print:text-black">
+                        <div className="text-zinc-500">Leading Training Compliance:</div>
                         <div className="text-white font-extrabold flex items-center gap-1.5 print:text-black">
-                          <CheckCircle2 size={12} className="text-brand-emerald" /> {aiInsights.mostImprovedDept} Department
+                          <CheckCircle2 size={12} className="text-[#00D26A]" /> {aiInsights.mostImprovedDept} Department
                         </div>
                       </div>
                     </div>
