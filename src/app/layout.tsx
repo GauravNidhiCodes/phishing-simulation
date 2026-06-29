@@ -14,9 +14,29 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Pinkman Protects — Security awareness, handled",
+  metadataBase: new URL("https://app.pinkmanprotects.com"),
+  title: {
+    default: "Pinkman Protects — Phishing tests and awareness training",
+    template: "%s · Pinkman Protects",
+  },
   description:
-    "Run ethical phishing simulations, train your people, and measure human risk across the organization.",
+    "Safe phishing tests, short lessons the moment someone slips, and clear reporting on where the risk is.",
+  applicationName: "Pinkman Protects",
+  openGraph: {
+    title: "Pinkman Protects — Phishing tests and awareness training",
+    description:
+      "Safe phishing tests and in-the-moment lessons. See where human risk is, and watch it improve.",
+    url: "/",
+    siteName: "Pinkman Protects",
+    images: [{ url: "/og.png", width: 1200, height: 630, alt: "Pinkman Protects" }],
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Pinkman Protects — Phishing tests and awareness training",
+    description: "Safe phishing tests and human-risk reporting.",
+    images: ["/og.png"],
+  },
 };
 
 export default function RootLayout({

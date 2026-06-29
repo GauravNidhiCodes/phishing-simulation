@@ -1,5 +1,37 @@
 [
   {
+    "id": "AUDIT-3685",
+    "timestamp": "2026-06-29T16:19:24.537Z",
+    "eventType": "LOGOUT",
+    "email": "superadmin@company.in",
+    "ipAddress": "192.168.1.1",
+    "details": "User logged out successfully."
+  },
+  {
+    "id": "AUDIT-7817",
+    "timestamp": "2026-06-29T11:21:43.138Z",
+    "eventType": "LOGIN_SUCCESS",
+    "email": "superadmin@company.in",
+    "ipAddress": "192.168.1.1",
+    "details": "SUPERADMIN logged in successfully."
+  },
+  {
+    "id": "AUDIT-8242",
+    "timestamp": "2026-06-29T10:56:31.359Z",
+    "eventType": "LOGIN_SUCCESS",
+    "email": "superadmin@company.in",
+    "ipAddress": "192.168.1.1",
+    "details": "SUPERADMIN logged in successfully."
+  },
+  {
+    "id": "AUDIT-5455",
+    "timestamp": "2026-06-29T10:56:21.926Z",
+    "eventType": "LOGIN_FAILURE",
+    "email": "abc@gmail.com",
+    "ipAddress": "192.168.1.1",
+    "details": "Failed login attempt 2/5. "
+  },
+  {
     "id": "AUDIT-3164",
     "timestamp": "2026-06-29T07:40:32.536Z",
     "eventType": "LOGIN_FAILURE",

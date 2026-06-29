@@ -1,11 +1,209 @@
 [
   {
+    "id": "NTF-1153",
+    "category": "ANNOUNCEMENT",
+    "title": "Security Policy Modification",
+    "message": "Administrator updated company authentication policy: Session timeouts enforced to 15 mins.",
+    "priority": "MEDIUM",
+    "isRead": false,
+    "timestamp": "2026-06-29T11:36:05.333Z"
+  },
+  {
+    "id": "NTF-6064",
+    "category": "SECURITY_ALERT",
+    "title": "High-Risk Employee Detected",
+    "message": "An operations manager in Hyderabad was flagged in the HIGH risk index after 2 click failures.",
+    "priority": "CRITICAL",
+    "isRead": false,
+    "timestamp": "2026-06-29T11:35:20.336Z"
+  },
+  {
+    "id": "NTF-3317",
+    "category": "LEARNING",
+    "title": "Employee Training Milestone",
+    "message": "Rohan Sharma from Mumbai branch successfully completed the compliance quiz with a 100% score.",
+    "priority": "LOW",
+    "isRead": false,
+    "timestamp": "2026-06-29T11:34:35.334Z"
+  },
+  {
+    "id": "NTF-5004",
+    "category": "SECURITY_ALERT",
+    "title": "High-Risk Employee Detected",
+    "message": "An operations manager in Hyderabad was flagged in the HIGH risk index after 2 click failures.",
+    "priority": "CRITICAL",
+    "isRead": false,
+    "timestamp": "2026-06-29T11:33:50.346Z"
+  },
+  {
+    "id": "NTF-7686",
+    "category": "LEARNING",
+    "title": "Employee Training Milestone",
+    "message": "Rohan Sharma from Mumbai branch successfully completed the compliance quiz with a 100% score.",
+    "priority": "LOW",
+    "isRead": false,
+    "timestamp": "2026-06-29T11:33:05.386Z"
+  },
+  {
+    "id": "NTF-4787",
+    "category": "SECURITY_ALERT",
+    "title": "High-Risk Employee Detected",
+    "message": "An operations manager in Hyderabad was flagged in the HIGH risk index after 2 click failures.",
+    "priority": "CRITICAL",
+    "isRead": false,
+    "timestamp": "2026-06-29T11:32:20.341Z"
+  },
+  {
+    "id": "NTF-1776",
+    "category": "AI_RECOMMENDATION",
+    "title": "AI Advisory Update",
+    "message": "Awareness dropped in Sales department. AI recommends executing a credential harvesting simulation.",
+    "priority": "HIGH",
+    "isRead": false,
+    "timestamp": "2026-06-29T11:31:11.348Z"
+  },
+  {
+    "id": "NTF-3211",
+    "category": "CAMPAIGN",
+    "title": "Campaign Completed",
+    "message": "Phishing Campaign \"Festival Bonus Announcement\" completed with 8% overall click rate.",
+    "priority": "MEDIUM",
+    "isRead": false,
+    "timestamp": "2026-06-29T11:30:11.349Z"
+  },
+  {
+    "id": "NTF-3048",
+    "category": "AI_RECOMMENDATION",
+    "title": "AI Advisory Update",
+    "message": "Awareness dropped in Sales department. AI recommends executing a credential harvesting simulation.",
+    "priority": "HIGH",
+    "isRead": false,
+    "timestamp": "2026-06-29T11:29:11.338Z"
+  },
+  {
+    "id": "NTF-5523",
+    "category": "CAMPAIGN",
+    "title": "Campaign Completed",
+    "message": "Phishing Campaign \"Festival Bonus Announcement\" completed with 8% overall click rate.",
+    "priority": "MEDIUM",
+    "isRead": false,
+    "timestamp": "2026-06-29T11:28:11.340Z"
+  },
+  {
+    "id": "NTF-6573",
+    "category": "SECURITY_ALERT",
+    "title": "High-Risk Employee Detected",
+    "message": "An operations manager in Hyderabad was flagged in the HIGH risk index after 2 click failures.",
+    "priority": "CRITICAL",
+    "isRead": false,
+    "timestamp": "2026-06-29T11:27:11.344Z"
+  },
+  {
+    "id": "NTF-8237",
+    "category": "AI_RECOMMENDATION",
+    "title": "AI Advisory Update",
+    "message": "Awareness dropped in Sales department. AI recommends executing a credential harvesting simulation.",
+    "priority": "HIGH",
+    "isRead": false,
+    "timestamp": "2026-06-29T11:26:14.336Z"
+  },
+  {
+    "id": "NTF-4806",
+    "category": "ANNOUNCEMENT",
+    "title": "Security Policy Modification",
+    "message": "Administrator updated company authentication policy: Session timeouts enforced to 15 mins.",
+    "priority": "MEDIUM",
+    "isRead": false,
+    "timestamp": "2026-06-29T11:25:29.335Z"
+  },
+  {
+    "id": "NTF-4908",
+    "category": "ANNOUNCEMENT",
+    "title": "Security Policy Modification",
+    "message": "Administrator updated company authentication policy: Session timeouts enforced to 15 mins.",
+    "priority": "MEDIUM",
+    "isRead": false,
+    "timestamp": "2026-06-29T11:24:44.336Z"
+  },
+  {
+    "id": "NTF-8143",
+    "category": "AI_RECOMMENDATION",
+    "title": "AI Advisory Update",
+    "message": "Awareness dropped in Sales department. AI recommends executing a credential harvesting simulation.",
+    "priority": "HIGH",
+    "isRead": false,
+    "timestamp": "2026-06-29T11:23:59.349Z"
+  },
+  {
+    "id": "NTF-6694",
+    "category": "AI_RECOMMENDATION",
+    "title": "AI Advisory Update",
+    "message": "Awareness dropped in Sales department. AI recommends executing a credential harvesting simulation.",
+    "priority": "HIGH",
+    "isRead": false,
+    "timestamp": "2026-06-29T11:23:14.339Z"
+  },
+  {
+    "id": "NTF-4549",
+    "category": "ANNOUNCEMENT",
+    "title": "Security Policy Modification",
+    "message": "Administrator updated company authentication policy: Session timeouts enforced to 15 mins.",
+    "priority": "MEDIUM",
+    "isRead": false,
+    "timestamp": "2026-06-29T11:22:29.355Z"
+  },
+  {
+    "id": "NTF-5500",
+    "category": "ANNOUNCEMENT",
+    "title": "Security Policy Modification",
+    "message": "Administrator updated company authentication policy: Session timeouts enforced to 15 mins.",
+    "priority": "MEDIUM",
+    "isRead": false,
+    "timestamp": "2026-06-29T11:00:18.388Z"
+  },
+  {
+    "id": "NTF-8750",
+    "category": "AI_RECOMMENDATION",
+    "title": "AI Advisory Update",
+    "message": "Awareness dropped in Sales department. AI recommends executing a credential harvesting simulation.",
+    "priority": "HIGH",
+    "isRead": false,
+    "timestamp": "2026-06-29T10:59:33.375Z"
+  },
+  {
+    "id": "NTF-1730",
+    "category": "CAMPAIGN",
+    "title": "Campaign Completed",
+    "message": "Phishing Campaign \"Festival Bonus Announcement\" completed with 8% overall click rate.",
+    "priority": "MEDIUM",
+    "isRead": false,
+    "timestamp": "2026-06-29T10:58:47.426Z"
+  },
+  {
+    "id": "NTF-5725",
+    "category": "LEARNING",
+    "title": "Employee Training Milestone",
+    "message": "Rohan Sharma from Mumbai branch successfully completed the compliance quiz with a 100% score.",
+    "priority": "LOW",
+    "isRead": false,
+    "timestamp": "2026-06-29T10:58:02.421Z"
+  },
+  {
+    "id": "NTF-5033",
+    "category": "CAMPAIGN",
+    "title": "Campaign Completed",
+    "message": "Phishing Campaign \"Festival Bonus Announcement\" completed with 8% overall click rate.",
+    "priority": "MEDIUM",
+    "isRead": false,
+    "timestamp": "2026-06-29T10:57:17.430Z"
+  },
+  {
     "id": "NTF-001",
     "category": "SECURITY_ALERT",
     "title": "Vulnerability Detected",
     "message": "Finance department awareness score dropped by 7% below corporate security threshold.",
     "priority": "HIGH",
-    "isRead": false,
+    "isRead": true,
     "timestamp": "2026-06-28T16:00:00.000Z"
   },
   {
@@ -14,7 +212,7 @@
     "title": "Emergency Remediation Action",
     "message": "AI Engine recommends assigning 'MFA Enforcements' training module to 12 high-risk employees.",
     "priority": "CRITICAL",
-    "isRead": false,
+    "isRead": true,
     "timestamp": "2026-06-28T14:15:00.000Z"
   },
   {
@@ -23,7 +221,7 @@
     "title": "Simulation Launched",
     "message": "Phishing Simulation campaign 'EPFO Aadhaar Link Verification' has been launched for all branches.",
     "priority": "MEDIUM",
-    "isRead": false,
+    "isRead": true,
     "timestamp": "2026-06-28T11:30:00.000Z"
   },
   {
@@ -50,7 +248,7 @@
     "title": "Security Milestone",
     "message": "Congratulations! Bengaluru branch completed 90 continuous days with zero phishing click failures.",
     "priority": "MEDIUM",
-    "isRead": false,
+    "isRead": true,
     "timestamp": "2026-06-26T15:20:00.000Z"
   },
   {

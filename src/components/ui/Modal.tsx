@@ -54,7 +54,7 @@ export function Modal({
             exit={{ opacity: 0, scale: 0.98, y: 8 }}
             transition={{ type: "spring", stiffness: 280, damping: 28 }}
             className={cn(
-              "relative z-10 flex max-h-[90vh] w-full flex-col overflow-hidden rounded-[16px] border border-line bg-card shadow-[0_40px_120px_-30px_rgba(0,0,0,0.9)]",
+              "relative z-10 flex max-h-[90vh] w-full flex-col overflow-hidden rounded-[16px] border border-line bg-card shadow-pop",
               widths[size],
               className
             )}

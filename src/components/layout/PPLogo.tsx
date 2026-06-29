@@ -4,13 +4,20 @@ import { cn } from "@/lib/utils";
 interface PPLogoProps {
   size?: number;
   className?: string;
+  /** Render only the white monogram with no tile (for bare contexts). */
+  bare?: boolean;
 }
 
 /**
- * Pinkman Protects mark — a quiet shield with an inset notch.
- * Monochrome by default; the notch carries the single accent.
+ * Pinkman Protects — the PP monogram.
+ * Two upright P's fused through a ligature (the first bowl meets the second
+ * stem) into one balanced, geometric mark with a single consistent weight.
  */
-export const PPLogo: React.FC<PPLogoProps> = ({ size = 24, className = "" }) => {
+export const PPLogo: React.FC<PPLogoProps> = ({
+  size = 24,
+  className = "",
+  bare = false,
+}) => {
   return (
     <span
       className={cn("inline-flex shrink-0 select-none", className)}
@@ -20,22 +27,33 @@ export const PPLogo: React.FC<PPLogoProps> = ({ size = 24, className = "" }) => 
       <svg
         width={size}
         height={size}
-        viewBox="0 0 32 32"
+        viewBox="0 0 256 256"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
       >
+        {!bare && (
+          <>
+            <rect width="256" height="256" rx="56" fill="#070708" />
+            <rect
+              x="0.75"
+              y="0.75"
+              width="254.5"
+              height="254.5"
+              rx="55.25"
+              fill="none"
+              stroke="#ffffff"
+              strokeOpacity="0.07"
+              strokeWidth="1.5"
+            />
+          </>
+        )}
         <path
-          d="M16 2.5 27 6.4v8.1c0 7.1-4.6 12.4-11 15-6.4-2.6-11-7.9-11-15V6.4L16 2.5Z"
-          fill="#161618"
-          stroke="#2b2b30"
-          strokeWidth="1.25"
-        />
-        <path
-          d="M10.8 16.4l3.5 3.5 7-7.4"
-          stroke="#3ecf8e"
-          strokeWidth="2.1"
+          d="M72 52 L72 200 M72 52 A44 44 0 0 1 72 140 M138 52 L138 200 M138 52 A44 44 0 0 1 138 140"
+          stroke="#ffffff"
+          strokeWidth="26"
           strokeLinecap="round"
           strokeLinejoin="round"
+          fill="none"
         />
       </svg>
     </span>

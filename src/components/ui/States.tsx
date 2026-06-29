@@ -16,20 +16,24 @@ export function LoadingState({
   className?: string;
 }) {
   return (
-    <div
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
       className={cn(
         "flex min-h-[55vh] flex-col items-center justify-center gap-4 text-center",
         className
       )}
     >
-      <span className="text-accent">
+      <span className="relative flex h-11 w-11 items-center justify-center text-accent">
+        <span className="absolute inset-0 rounded-full bg-accent/10 blur-md" />
         <Spinner size={22} />
       </span>
       <div className="space-y-1">
         <p className="text-sm font-medium text-ink">{label}</p>
         {sublabel && <p className="text-[13px] text-ink-faint">{sublabel}</p>}
       </div>
-    </div>
+    </motion.div>
   );
 }
 
@@ -57,7 +61,7 @@ export function EmptyState({
       )}
     >
       {icon && (
-        <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-full border border-line bg-inset text-ink-soft">
+        <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full border border-line bg-inset text-ink-soft shadow-card">
           {icon}
         </div>
       )}
@@ -84,8 +88,8 @@ export function ErrorState({
   action?: React.ReactNode;
 }) {
   return (
-    <div className="mx-auto flex max-w-md flex-col items-center justify-center rounded-[14px] border border-line bg-card px-8 py-14 text-center">
-      <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-full border border-[#492626] bg-[#1a1111] text-danger">
+    <div className="mx-auto flex max-w-md flex-col items-center justify-center rounded-[14px] border border-line bg-card px-8 py-14 text-center shadow-card">
+      <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full border border-[#492626] bg-[#1a1111] text-danger shadow-card">
         {icon}
       </div>
       <h3 className="text-[15px] font-semibold text-ink">{title}</h3>

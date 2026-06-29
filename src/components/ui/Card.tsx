@@ -24,10 +24,10 @@ export const Card = React.forwardRef<HTMLDivElement, CardProps>(
       <motion.div
         ref={ref}
         className={cn(
-          "rounded-[14px] border border-line bg-card",
+          "rounded-[14px] border border-line bg-card shadow-card",
           padMap[pad],
           interactive &&
-            "transition-[border-color,background-color,transform] duration-200 hover:border-line-strong hover:bg-card-hover",
+            "transition-[border-color,background-color,box-shadow,transform] duration-200 ease-out-soft will-change-transform hover:-translate-y-0.5 hover:border-line-strong hover:bg-card-hover hover:shadow-float",
           className
         )}
         {...props}

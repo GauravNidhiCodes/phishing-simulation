@@ -71,7 +71,7 @@ export function StatCard({
         show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] } },
       }}
       className={cn(
-        "group relative flex flex-col justify-between gap-6 rounded-[14px] border border-line bg-card p-5 transition-colors duration-200 hover:border-line-strong",
+        "group relative flex flex-col justify-between gap-6 rounded-[14px] border border-line bg-card p-5 shadow-card transition-[border-color,box-shadow,transform] duration-200 ease-out-soft hover:-translate-y-0.5 hover:border-line-strong hover:shadow-float",
         className
       )}
     >
