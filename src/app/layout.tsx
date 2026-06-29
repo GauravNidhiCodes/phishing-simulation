@@ -14,8 +14,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Pinkman Protects | Ethical Phishing Simulation & Security Awareness Training Platform",
-  description: "Authorize consent-based security awareness simulations and cybersecurity learning metrics.",
+  title: "Pinkman Protects — Security awareness, handled",
+  description:
+    "Run ethical phishing simulations, train your people, and measure human risk across the organization.",
 };
 
 export default function RootLayout({
@@ -27,12 +28,10 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased dark`}
-      style={{ colorScheme: 'dark' }}
+      style={{ colorScheme: "dark" }}
     >
-      <body className="min-h-full flex flex-col bg-cyber-dark text-foreground">
-        <AppShell>
-          {children}
-        </AppShell>
+      <body className="bg-canvas text-ink min-h-full">
+        <AppShell>{children}</AppShell>
       </body>
     </html>
   );

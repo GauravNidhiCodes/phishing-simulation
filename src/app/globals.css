@@ -1,107 +1,184 @@
 @import "tailwindcss";
 
+/* ============================================================
+   Pinkman Protects — Design System
+   A calm, editorial, enterprise-grade dark surface.
+   Near-black canvas, neutral grays, a single restrained green.
+   ============================================================ */
+
 @theme {
-  --color-cyber-dark: #050505;
-  --color-cyber-card: #121212;
-  --color-cyber-border: #1F1F1F;
-  --color-cyber-border-hover: #00FF88;
-  
-  --color-brand-cyan: #00FF88;
-  --color-brand-blue: #00D26A;
-  --color-brand-purple: #2ECC71;
-  --color-brand-emerald: #00FF88;
-  --color-brand-rose: #2ECC71;
-  --color-brand-amber: #00D26A;
-  
-  --font-sans: var(--font-geist-sans), system-ui, sans-serif;
-  --font-mono: var(--font-geist-mono), monospace;
+  /* Surfaces ------------------------------------------------ */
+  --color-canvas: #0a0a0a;        /* page background, almost black */
+  --color-surface: #0c0c0d;       /* sidebar / chrome */
+  --color-card: #131314;          /* default card */
+  --color-card-hover: #18181a;    /* card on hover */
+  --color-elevated: #1c1c1f;      /* popovers, menus, tooltips */
+  --color-inset: #0e0e0f;         /* inputs, wells */
+
+  /* Lines -------------------------------------------------- */
+  --color-line: #1f1f22;          /* hairline borders */
+  --color-line-strong: #2b2b30;   /* hover / emphasised borders */
+
+  /* Ink ---------------------------------------------------- */
+  --color-ink: #f4f4f5;           /* primary text */
+  --color-ink-soft: #a1a1aa;      /* secondary text */
+  --color-ink-faint: #6b6b73;     /* tertiary / labels */
+
+  /* Accent — used sparingly -------------------------------- */
+  --color-accent: #3ecf8e;
+  --color-accent-strong: #2fb87c;
+  --color-accent-faint: #16291f;
+
+  /* Functional (quiet, not neon) --------------------------- */
+  --color-danger: #f06b6b;
+  --color-danger-faint: #2a1717;
+  --color-warn: #e0b341;
+  --color-warn-faint: #2a2414;
+  --color-info: #6b9bf0;
+
+  /* Type --------------------------------------------------- */
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, "SF Mono", Menlo, monospace;
+
+  /* Radius ------------------------------------------------- */
+  --radius-xs: 6px;
+  --radius-sm: 8px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 18px;
+
+  /* Easing ------------------------------------------------- */
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 :root {
-  --background: #050505;
-  --foreground: #ffffff;
+  --background: #0a0a0a;
+  --foreground: #f4f4f5;
+}
+
+* {
+  border-color: var(--color-line);
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-rendering: optimizeLegibility;
 }
 
 body {
   background-color: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans);
-  background-attachment: fixed;
-  overflow-x: hidden;
+  font-feature-settings: "cv01", "cv02", "ss01";
+  letter-spacing: -0.011em;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
 }
 
-/* Custom Scrollbar */
+/* Selection ------------------------------------------------ */
+::selection {
+  background: rgba(62, 207, 142, 0.22);
+  color: #ffffff;
+}
+
+/* Scrollbar ------------------------------------------------ */
 ::-webkit-scrollbar {
-  width: 4px;
-  height: 4px;
+  width: 10px;
+  height: 10px;
 }
 ::-webkit-scrollbar-track {
-  background: #050505;
+  background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.04);
+  background: #232327;
+  border: 3px solid var(--color-canvas);
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.15);
+  background: #34343a;
+}
+.scrollbar-thin::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  border-width: 1px;
 }
 
-/* Premium Panel Styling (Linear/Vercel inspired) */
-.glass-panel {
-  background: #121212;
-  border: 1px solid #1F1F1F;
-  box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.4);
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.glass-panel:hover {
-  border-color: #2D2D2D;
-}
-
-/* Tactile inputs with crisp borders */
-.glass-input {
-  background: #0A0A0A;
-  border: 1px solid #1F1F1F;
-  color: white;
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.glass-input:focus {
+/* Focus ring ----------------------------------------------- */
+.focus-ring:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible,
+button:focus-visible,
+a:focus-visible {
   outline: none;
-  border-color: #00FF88;
-  background: #0D0D0D;
+}
+.focus-ring:focus-visible {
+  box-shadow: 0 0 0 1.5px var(--color-canvas), 0 0 0 3px rgba(62, 207, 142, 0.5);
 }
 
-/* Matte focus and glow utility overrides to prevent AI look */
-.glow-text-cyan,
-.glow-text-blue,
-.glow-text-red,
-.text-glow-red {
-  text-shadow: none !important;
-}
-
-.glow-border-blue,
-.glow-border-cyan {
-  box-shadow: none !important;
-}
-
-.perspective-container {
-  perspective: none !important;
-}
-
-.perspective-card {
-  transform: none !important;
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5) !important;
-}
-
-/* Monospace utility labels */
-.mono-label {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  text-transform: uppercase;
-  letter-spacing: 0.15em;
-  color: #888888;
+/* Eyebrow label (replaces the old all-mono shouting) ------- */
+.eyebrow {
+  font-size: 11px;
   font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-ink-faint);
+}
+
+/* Numeric / tabular figures -------------------------------- */
+.tnum {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+/* Hairline grid background for hero / empty canvases ------- */
+.bg-grid {
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+  background-size: 64px 64px;
+}
+.bg-dots {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+
+/* Radial fade mask helper ---------------------------------- */
+.mask-fade-b {
+  -webkit-mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+  mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+}
+
+/* Skeleton shimmer ----------------------------------------- */
+@keyframes pp-shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.skeleton {
+  background: linear-gradient(90deg, #131314 25%, #1c1c1f 37%, #131314 63%);
+  background-size: 200% 100%;
+  animation: pp-shimmer 1.6s ease-in-out infinite;
+}
+
+/* Subtle entrance for non-Framer content ------------------- */
+@keyframes pp-rise {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-rise {
+  animation: pp-rise 0.5s var(--ease-out-soft) both;
+}
+
+/* Respect reduced motion ----------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
 }

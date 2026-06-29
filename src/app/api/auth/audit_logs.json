@@ -1,5 +1,13 @@
 [
   {
+    "id": "AUDIT-3164",
+    "timestamp": "2026-06-29T07:40:32.536Z",
+    "eventType": "LOGIN_FAILURE",
+    "email": "abc@gmail.com",
+    "ipAddress": "192.168.1.1",
+    "details": "Failed login attempt 1/5. "
+  },
+  {
     "id": "AUDIT-101",
     "timestamp": "2026-06-25T09:00:00.000Z",
     "eventType": "LOGIN_SUCCESS",

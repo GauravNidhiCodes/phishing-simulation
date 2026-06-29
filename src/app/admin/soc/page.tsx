@@ -1,22 +1,29 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  Activity, 
-  ShieldCheck, 
-  Terminal, 
-  Globe, 
-  Search, 
-  Filter, 
-  AlertTriangle, 
-  ArrowUpRight, 
+import React, { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  ShieldCheck,
+  Activity,
+  AlertTriangle,
+  GraduationCap,
+  Search,
   RefreshCw,
-  Clock,
-  AlertCircle,
   Sparkles,
-  GraduationCap
-} from 'lucide-react';
+  ArrowUpRight,
+  MousePointerClick,
+  MailOpen,
+  KeyRound,
+  Megaphone,
+  Globe,
+} from "lucide-react";
+import { cn } from "@/lib/utils";
+import { PageHeader } from "@/components/ui/PageHeader";
+import { Card, CardHeader } from "@/components/ui/Card";
+import { Badge } from "@/components/ui/Badge";
+import { Input, Select } from "@/components/ui/Input";
+import { Button } from "@/components/ui/Button";
+import { LoadingState } from "@/components/ui/States";
 
 interface Posture {
   healthScore: number;
@@ -27,7 +34,6 @@ interface Posture {
   maturityLevel: string;
   riskIndex: string;
 }
-
 interface BranchStat {
   name: string;
   employees: number;
@@ -36,7 +42,6 @@ interface BranchStat {
   trainingPercent: number;
   campaignStatus: string;
 }
-
 interface ThreatIntel {
   mostClickedSimulation: string;
   mostVulnerableDept: string;
@@ -44,7 +49,6 @@ interface ThreatIntel {
   topAIRecommendation: string;
   mostEffectiveEmailTemplate: string;
 }
-
 interface TimelineEvent {
   id: string;
   eventType: string;
@@ -52,11 +56,19 @@ interface TimelineEvent {
   description: string;
   timestamp: string;
 }
-
 interface MockFeed {
   type: string;
   title: string;
   message: string;
+}
+
+function feedIcon(type: string) {
+  if (type.includes("CLICK")) return <MousePointerClick size={14} className="text-warn" />;
+  if (type.includes("SUBMIT")) return <KeyRound size={14} className="text-danger" />;
+  if (type.includes("OPEN")) return <MailOpen size={14} className="text-ink-soft" />;
+  if (type.includes("REPORT") || type.includes("TRAIN") || type.includes("COMPLETED")) return <ShieldCheck size={14} className="text-accent" />;
+  if (type.includes("AI")) return <Sparkles size={14} className="text-accent" />;
+  return <Megaphone size={14} className="text-ink-soft" />;
 }
 
 export default function SocDashboard() {
@@ -67,17 +79,15 @@ export default function SocDashboard() {
   const [timeline, setTimeline] = useState<TimelineEvent[]>([]);
   const [mockFeeds, setMockFeeds] = useState<MockFeed[]>([]);
   const [liveLogs, setLiveLogs] = useState<{ id: string; time: string; title: string; message: string; type: string }[]>([]);
-  
-  // Filtering States
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedBranch, setSelectedBranch] = useState('ALL');
-  const [selectedRisk, setSelectedRisk] = useState('ALL');
-  const [istTime, setIstTime] = useState('');
 
-  // Fetch SOC data
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedBranch, setSelectedBranch] = useState("ALL");
+  const [selectedRisk, setSelectedRisk] = useState("ALL");
+  const [istTime, setIstTime] = useState("");
+
   const fetchSocData = async () => {
     try {
-      const res = await fetch('/api/admin/soc');
+      const res = await fetch("/api/admin/soc");
       const data = await res.json();
       if (data && !data.error) {
         setPosture(data.posture);
@@ -85,360 +95,233 @@ export default function SocDashboard() {
         setThreatIntel(data.threatIntel);
         setTimeline(data.timelineEvents);
         setMockFeeds(data.mockLiveFeeds);
-        
-        // Populate initial live logs
         if (data.mockLiveFeeds.length > 0 && liveLogs.length === 0) {
           const initial = data.mockLiveFeeds.slice(0, 4).map((feed: MockFeed, idx: number) => ({
             id: `LOG-INIT-${idx}`,
-            time: new Date(Date.now() - idx * 2 * 60000).toLocaleTimeString('en-IN', { hour12: false }),
+            time: new Date(Date.now() - idx * 2 * 60000).toLocaleTimeString("en-IN", { hour12: false }),
             title: feed.title,
             message: feed.message,
-            type: feed.type
+            type: feed.type,
           }));
           setLiveLogs(initial);
         }
       }
     } catch (e) {
-      console.error("Error loading SOC metrics:", e);
+      console.error(e);
     }
     setLoading(false);
   };
 
-  // Clock tick & Initial fetch
   useEffect(() => {
     fetchSocData();
-
-    const clockInterval = setInterval(() => {
-      const time = new Date().toLocaleTimeString('en-IN', {
-        timeZone: 'Asia/Kolkata',
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit',
-        hour12: false
-      });
-      setIstTime(time + ' IST');
+    const clock = setInterval(() => {
+      setIstTime(
+        new Date().toLocaleTimeString("en-IN", {
+          timeZone: "Asia/Kolkata",
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+          hour12: false,
+        }) + " IST"
+      );
     }, 1000);
-
-    return () => clearInterval(clockInterval);
+    return () => clearInterval(clock);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Live Console updates ticker simulation
   useEffect(() => {
     if (mockFeeds.length === 0) return;
-
-    const tickerInterval = setInterval(() => {
-      // Pick random feed item
+    const ticker = setInterval(() => {
       const feed = mockFeeds[Math.floor(Math.random() * mockFeeds.length)];
-      const newLog = {
-        id: `LOG-${Date.now()}`,
-        time: new Date().toLocaleTimeString('en-IN', { hour12: false }),
-        title: feed.title,
-        message: feed.message,
-        type: feed.type
-      };
-
-      setLiveLogs(prev => [newLog, ...prev.slice(0, 11)]); // keep max 12 logs in viewport
+      setLiveLogs((prev) => [
+        { id: `LOG-${Date.now()}`, time: new Date().toLocaleTimeString("en-IN", { hour12: false }), title: feed.title, message: feed.message, type: feed.type },
+        ...prev.slice(0, 11),
+      ]);
     }, 9000);
-
-    return () => clearInterval(tickerInterval);
+    return () => clearInterval(ticker);
   }, [mockFeeds]);
 
-  // Filtering Logic
-  const filteredBranches = branches.filter(b => {
+  const filteredBranches = branches.filter((b) => {
     const matchesSearch = b.name.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesBranch = selectedBranch === 'ALL' || b.name === selectedBranch;
-    
+    const matchesBranch = selectedBranch === "ALL" || b.name === selectedBranch;
     let matchesRisk = true;
-    if (selectedRisk !== 'ALL') {
-      if (selectedRisk === 'HIGH') matchesRisk = b.riskScore >= 20;
-      else if (selectedRisk === 'MEDIUM') matchesRisk = b.riskScore >= 10 && b.riskScore < 20;
-      else matchesRisk = b.riskScore < 10;
-    }
-
+    if (selectedRisk === "HIGH") matchesRisk = b.riskScore >= 20;
+    else if (selectedRisk === "MEDIUM") matchesRisk = b.riskScore >= 10 && b.riskScore < 20;
+    else if (selectedRisk === "LOW") matchesRisk = b.riskScore < 10;
     return matchesSearch && matchesBranch && matchesRisk;
   });
 
-  const getPriorityColor = (type: string) => {
-    if (type.includes('ALERT') || type.includes('CLICKED') || type.includes('RISK_UPDATED')) return 'text-zinc-300 border-[#1F1F1F] bg-[#121212]';
-    if (type.includes('COMPLETED') || type.includes('REPORTED') || type.includes('TRAINING')) return 'text-[#00D26A] border-[#00D26A]/20 bg-[#050505]';
-    return 'text-zinc-400 border-[#1F1F1F] bg-[#121212]';
-  };
-
-  const getTimelineEventBadge = (type: string) => {
-    switch (type) {
-      case 'SUBMITTED':
-        return 'bg-white text-black border border-white/10';
-      case 'CLICKED':
-        return 'bg-[#121212] text-zinc-300 border border-[#1F1F1F]';
-      case 'OPENED':
-        return 'bg-[#0B0B0B] text-zinc-400 border border-[#1F1F1F]';
-      default:
-        return 'bg-[#121212] text-zinc-500 border border-[#1F1F1F]';
-    }
-  };
-
-  if (loading) {
-    return (
-      <div className="min-h-[60vh] flex flex-col items-center justify-center space-y-4">
-        <div className="w-8 h-8 border border-white/20 border-t-transparent rounded-full animate-spin" />
-        <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest animate-pulse">Initializing Control Room Console...</span>
-      </div>
-    );
-  }
+  if (loading) return <LoadingState label="Connecting to live operations" sublabel="Streaming the latest activity." />;
 
   return (
-    <div className="space-y-8 text-zinc-300 font-sans">
-      
-      {/* CONTROL ROOM HEADER */}
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-[#1F1F1F] pb-5">
-        <div>
+    <div>
+      <PageHeader
+        eyebrow="Operations"
+        title="Live operations"
+        description="A real-time view of campaigns in flight, branch posture, and what your people are doing right now."
+        actions={
           <div className="flex items-center gap-2.5">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#00D26A]" />
-            <h1 className="text-xl font-bold text-white tracking-tight uppercase font-mono">
-              SOC Command Console
-            </h1>
+            <span className="hidden items-center gap-2 rounded-[10px] border border-line bg-card px-3 py-2 font-mono text-[12.5px] text-ink-soft sm:inline-flex tnum">
+              {istTime || "—"}
+            </span>
+            <Button variant="secondary" size="sm" icon={<RefreshCw size={14} />} onClick={fetchSocData}>
+              Refresh
+            </Button>
           </div>
-          <p className="text-[10px] text-zinc-500 mt-1 leading-relaxed font-mono uppercase tracking-widest">
-            Control Node :: postured compliance monitoring & alert simulation intelligence
-          </p>
-        </div>
+        }
+      />
 
-        <div className="flex items-center gap-3 text-[10px] font-mono">
-          <div className="px-3 py-1.5 rounded border border-[#1F1F1F] bg-[#0A0A0A] text-zinc-400 flex items-center gap-2">
-            <Clock size={11} className="text-zinc-500" />
-            <span>IST SYSTEM TIME:</span>
-            <span className="text-white font-bold">{istTime || 'LOADING...'}</span>
-          </div>
-
-          <button 
-            onClick={fetchSocData}
-            className="p-2 rounded border border-[#1F1F1F] bg-[#121212] hover:bg-[#1C1C1C] text-zinc-400 hover:text-white transition"
-            title="Refresh metrics feed"
-          >
-            <RefreshCw size={11} />
-          </button>
-        </div>
-      </div>
-
-      {/* SOC POSTURE OVERVIEW METRICS */}
+      {/* Posture */}
       {posture && (
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
-          {/* Health Score */}
-          <div className="p-4 border border-[#1F1F1F] bg-[#121212] rounded-xl relative overflow-hidden">
-            <div className="flex justify-between items-start">
-              <span className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest font-bold">Posture Health</span>
-              <ShieldCheck size={14} className="text-white" />
+        <div className="mb-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <Card pad="md" className="flex flex-col justify-between gap-5">
+            <div className="flex items-center justify-between">
+              <span className="text-[13px] font-medium text-ink-soft">Posture health</span>
+              <ShieldCheck size={16} className="text-ink-faint" />
             </div>
-            <div className="mt-4 flex items-baseline gap-2">
-              <span className="text-3xl font-bold text-white tracking-tight font-mono">
-                {posture.healthScore}%
-              </span>
-              <span className="text-[9px] text-[#00D26A] font-mono font-bold tracking-widest">STABLE</span>
-            </div>
-            {/* Visual health bar */}
-            <div className="w-full bg-[#050505] h-1 rounded-full overflow-hidden mt-3.5 border border-[#1F1F1F]">
-              <div 
-                className="bg-white h-full rounded-full"
-                style={{ width: `${posture.healthScore}%` }}
-              />
-            </div>
-          </div>
-
-          {/* Maturity Level */}
-          <div className="p-4 border border-[#1F1F1F] bg-[#121212] rounded-xl relative overflow-hidden">
-            <div className="flex justify-between items-start">
-              <span className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest font-bold">Posture Maturity</span>
-              <Activity size={14} className="text-zinc-400" />
-            </div>
-            <div className="mt-4">
-              <span className="text-base font-bold text-white tracking-wide font-mono block">
-                {posture.maturityLevel}
-              </span>
-              <span className="text-[8px] text-zinc-500 uppercase tracking-widest font-mono mt-1 block">Level Tier Indices</span>
-            </div>
-          </div>
-
-          {/* Org Risk Index */}
-          <div className="p-4 border border-[#1F1F1F] bg-[#121212] rounded-xl relative overflow-hidden">
-            <div className="flex justify-between items-start">
-              <span className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest font-bold">Threat Posture</span>
-              <AlertTriangle size={14} className="text-white" />
-            </div>
-            <div className="mt-4 flex items-baseline gap-2">
-              <span className="text-xl font-bold text-white tracking-tight font-mono uppercase">
-                {posture.riskIndex}
-              </span>
-            </div>
-            <p className="text-[8.5px] text-zinc-500 mt-3 font-mono leading-relaxed uppercase tracking-wider">
-              Based on active failures & weights
-            </p>
-          </div>
-
-          {/* Active Campaigns & Training */}
-          <div className="p-4 border border-[#1F1F1F] bg-[#121212] rounded-xl relative overflow-hidden">
-            <div className="flex justify-between items-start">
-              <span className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest font-bold">Compliance</span>
-              <GraduationCap size={14} className="text-zinc-400" />
-            </div>
-            <div className="mt-4 flex items-baseline justify-between">
-              <div className="space-y-0.5">
-                <span className="text-xl font-bold text-white font-mono block">{posture.trainingCompletion}%</span>
-                <span className="text-[7.5px] text-zinc-500 uppercase font-mono tracking-widest">Complete</span>
+            <div>
+              <div className="flex items-baseline gap-2">
+                <span className="tnum text-[30px] font-semibold tracking-[-0.03em] text-ink">{posture.healthScore}%</span>
+                <Badge tone="accent" dot>Stable</Badge>
               </div>
-              <div className="h-6 w-px bg-[#1F1F1F]" />
-              <div className="space-y-0.5 text-right">
-                <span className="text-xl font-bold text-white font-mono block">{posture.activeCampaigns}</span>
-                <span className="text-[7.5px] text-zinc-500 uppercase font-mono tracking-widest">Drills</span>
+              <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-inset">
+                <motion.div initial={{ width: 0 }} animate={{ width: `${posture.healthScore}%` }} transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }} className="h-full bg-accent" />
               </div>
             </div>
-          </div>
+          </Card>
+          <Card pad="md" className="flex flex-col justify-between gap-5">
+            <div className="flex items-center justify-between">
+              <span className="text-[13px] font-medium text-ink-soft">Maturity</span>
+              <Activity size={16} className="text-ink-faint" />
+            </div>
+            <div>
+              <p className="text-[18px] font-semibold text-ink">{posture.maturityLevel}</p>
+              <p className="mt-1 text-[12px] text-ink-faint">Program maturity tier</p>
+            </div>
+          </Card>
+          <Card pad="md" className="flex flex-col justify-between gap-5">
+            <div className="flex items-center justify-between">
+              <span className="text-[13px] font-medium text-ink-soft">Risk index</span>
+              <AlertTriangle size={16} className="text-ink-faint" />
+            </div>
+            <div>
+              <p className="text-[22px] font-semibold tracking-[-0.02em] text-ink">{posture.riskIndex}</p>
+              <p className="mt-1 text-[12px] text-ink-faint">Weighted by active failures</p>
+            </div>
+          </Card>
+          <Card pad="md" className="flex flex-col justify-between gap-5">
+            <div className="flex items-center justify-between">
+              <span className="text-[13px] font-medium text-ink-soft">Training & drills</span>
+              <GraduationCap size={16} className="text-ink-faint" />
+            </div>
+            <div className="flex items-end justify-between">
+              <div>
+                <p className="tnum text-[22px] font-semibold text-ink">{posture.trainingCompletion}%</p>
+                <p className="text-[12px] text-ink-faint">complete</p>
+              </div>
+              <div className="text-right">
+                <p className="tnum text-[22px] font-semibold text-ink">{posture.activeCampaigns}</p>
+                <p className="text-[12px] text-ink-faint">active</p>
+              </div>
+            </div>
+          </Card>
         </div>
       )}
 
-      {/* CORE MIDDLE SECTION: LIVE CONSOLE TERMINAL & SECURITY TIMELINE */}
-      <div className="grid lg:grid-cols-3 gap-6">
-        
-        {/* Live Ticker Feed Terminal Console (2/3 width) */}
-        <div className="lg:col-span-2 border border-[#1F1F1F] bg-[#0A0A0A] rounded-xl overflow-hidden shadow-xl flex flex-col h-[400px]">
-          {/* Console Header */}
-          <div className="px-4 py-3 border-b border-[#1F1F1F] bg-[#121212] flex items-center justify-between">
+      {/* Live feed + timeline */}
+      <div className="mb-6 grid gap-6 lg:grid-cols-3">
+        <Card pad="none" className="flex h-[420px] flex-col lg:col-span-2">
+          <div className="flex items-center justify-between border-b border-line px-5 py-4">
             <div className="flex items-center gap-2">
-              <Terminal size={12} className="text-white shrink-0" />
-              <span className="text-[9px] font-mono text-white font-bold uppercase tracking-widest">Live Operations Console Feed</span>
+              <span className="relative flex h-2 w-2">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-60" />
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-accent" />
+              </span>
+              <h3 className="text-[15px] font-semibold text-ink">Live activity</h3>
             </div>
-            <span className="flex items-center gap-1.5 text-[8px] font-mono text-white bg-white/[0.04] px-2 py-0.5 rounded border border-white/5 uppercase tracking-widest">
-              Sync Active
-            </span>
+            <span className="text-[12px] text-ink-faint">Streaming</span>
           </div>
-
-          {/* Console Terminal Logs Stream */}
-          <div className="flex-1 overflow-y-auto p-4 font-mono text-[10px] leading-relaxed space-y-2 scrollbar-thin">
+          <div className="scrollbar-thin flex-1 space-y-1 overflow-y-auto p-3">
             <AnimatePresence initial={false}>
               {liveLogs.map((log) => (
                 <motion.div
                   key={log.id}
-                  initial={{ opacity: 0, x: -5 }}
-                  animate={{ opacity: 1, x: 0 }}
+                  initial={{ opacity: 0, y: -6 }}
+                  animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0 }}
-                  transition={{ duration: 0.15 }}
-                  className="flex items-start gap-3 border-b border-[#1F1F1F]/20 pb-2 hover:bg-white/[0.01] p-1 rounded transition"
+                  transition={{ duration: 0.2 }}
+                  className="flex items-start gap-3 rounded-[10px] px-3 py-2.5 transition-colors hover:bg-white/[0.02]"
                 >
-                  <span className="text-zinc-500 shrink-0">[{log.time}]</span>
-                  <span className={`text-[8px] font-mono border px-1.5 py-0.5 rounded shrink-0 uppercase tracking-widest ${getPriorityColor(log.type)}`}>
-                    {log.type.substring(0, 12)}
-                  </span>
-                  <div className="space-y-0.5 flex-1 pr-2">
-                    <strong className="text-white font-normal">{log.title}</strong>
-                    <span className="text-zinc-500 block">{log.message}</span>
+                  <span className="mt-0.5 shrink-0">{feedIcon(log.type)}</span>
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center justify-between gap-2">
+                      <p className="text-[13px] font-medium text-ink">{log.title}</p>
+                      <span className="shrink-0 font-mono text-[11px] text-ink-faint tnum">{log.time}</span>
+                    </div>
+                    <p className="truncate text-[12.5px] text-ink-soft">{log.message}</p>
                   </div>
                 </motion.div>
               ))}
             </AnimatePresence>
           </div>
-        </div>
+        </Card>
 
-        {/* Security Timeline (1/3 width) */}
-        <div className="border border-[#1F1F1F] bg-[#121212] rounded-xl p-5 flex flex-col h-[400px] shadow-xl">
-          <div className="border-b border-[#1F1F1F] pb-3 mb-4">
-            <h3 className="text-[10px] font-bold text-white font-mono uppercase tracking-widest">Campaign Threat Loop</h3>
-            <span className="text-[8px] text-zinc-500 font-mono block">Delivery and Remediation Tracks</span>
+        <Card pad="none" className="flex h-[420px] flex-col">
+          <div className="border-b border-line px-5 py-4">
+            <h3 className="text-[15px] font-semibold text-ink">Campaign timeline</h3>
+            <p className="text-[12px] text-ink-faint">Delivery to remediation</p>
           </div>
-
-          <div className="flex-1 overflow-y-auto pr-1 space-y-4 scrollbar-thin">
+          <div className="scrollbar-thin flex-1 overflow-y-auto p-5">
             {timeline.length === 0 ? (
-              <div className="text-center py-20 text-zinc-600 text-xs font-mono">
-                No active threat trails.
-              </div>
+              <p className="py-16 text-center text-[13px] text-ink-faint">No recent events.</p>
             ) : (
-              timeline.slice(0, 5).map((evt, idx) => (
-                <div key={evt.id} className="relative flex gap-3 pb-2 last:pb-0">
-                  {/* Vertical connector line */}
-                  {idx < 4 && (
-                    <span className="absolute left-3 top-6 bottom-0 w-px bg-[#1F1F1F]" />
-                  )}
-
-                  {/* Indicator Dot */}
-                  <div className={`w-6 h-6 rounded flex items-center justify-center shrink-0 text-[9px] font-mono font-bold ${getTimelineEventBadge(evt.eventType)}`}>
-                    {idx + 1}
-                  </div>
-
-                  {/* Event details */}
-                  <div className="space-y-0.5">
-                    <span className="text-[8px] font-mono text-zinc-500 uppercase block">
-                      {new Date(evt.timestamp).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true })}
+              <div className="space-y-5">
+                {timeline.slice(0, 6).map((evt, idx, arr) => (
+                  <div key={evt.id} className="relative flex gap-3">
+                    {idx < arr.length - 1 && <span className="absolute left-[11px] top-7 bottom-[-20px] w-px bg-line" />}
+                    <span className="relative z-10 mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-line bg-inset">
+                      {feedIcon(evt.eventType)}
                     </span>
-                    <h4 className="text-[10px] font-bold text-white font-mono leading-tight">{evt.title}</h4>
-                    <p className="text-[9.5px] text-zinc-400 leading-normal font-sans pr-1">{evt.description}</p>
+                    <div className="min-w-0">
+                      <p className="text-[11px] text-ink-faint">
+                        {new Date(evt.timestamp).toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit", hour12: true })}
+                      </p>
+                      <p className="text-[13px] font-medium text-ink">{evt.title}</p>
+                      <p className="text-[12.5px] leading-relaxed text-ink-soft">{evt.description}</p>
+                    </div>
                   </div>
-                </div>
-              ))
+                ))}
+              </div>
             )}
           </div>
-        </div>
-
+        </Card>
       </div>
 
-      {/* GLOBAL OPERATIONS VIEW: BRANCH STANDINGS */}
-      <div className="border border-[#1F1F1F] bg-[#121212] rounded-2xl p-5 shadow-xl space-y-6">
-        
-        {/* Filtering & Title Grid */}
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-[#1F1F1F] pb-4">
+      {/* Branch matrix */}
+      <Card pad="lg" className="mb-6">
+        <div className="flex flex-col gap-4 border-b border-line pb-5 lg:flex-row lg:items-center lg:justify-between">
           <div className="flex items-center gap-2.5">
-            <Globe size={14} className="text-white" />
+            <Globe size={17} className="text-ink-faint" />
             <div>
-              <h3 className="text-[10px] font-bold text-white font-mono uppercase tracking-widest">Global Operations Matrix</h3>
-              <p className="text-[9px] text-zinc-500 leading-relaxed font-mono uppercase">Telemetry of active Indian branches.</p>
+              <h3 className="text-[15px] font-semibold text-ink">Branch posture</h3>
+              <p className="text-[13px] text-ink-soft">How each office is tracking.</p>
             </div>
           </div>
-
-          {/* Inline filters */}
-          <div className="flex flex-wrap items-center gap-2 text-[10px] font-mono">
-            {/* Search Input */}
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded border border-[#1F1F1F] bg-[#0A0A0A]">
-              <Search size={11} className="text-zinc-500" />
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search branches..."
-                className="bg-transparent focus:outline-none text-[10px] text-white w-28"
-              />
-            </div>
-
-            {/* Select Branch */}
-            <div className="flex items-center gap-1 px-2.5 py-1.5 rounded border border-[#1F1F1F] bg-[#0A0A0A] text-zinc-400">
-              <Filter size={10} className="text-zinc-500" />
-              <select
-                value={selectedBranch}
-                onChange={(e) => setSelectedBranch(e.target.value)}
-                className="bg-transparent focus:outline-none text-[10px] text-white cursor-pointer"
-              >
-                <option value="ALL" className="bg-[#121212]">All Branches</option>
-                {branches.map(b => (
-                  <option key={b.name} value={b.name} className="bg-[#121212]">{b.name}</option>
-                ))}
-              </select>
-            </div>
-
-            {/* Select Risk Index */}
-            <div className="flex items-center gap-1 px-2.5 py-1.5 rounded border border-[#1F1F1F] bg-[#0A0A0A] text-zinc-400">
-              <AlertCircle size={10} className="text-zinc-500" />
-              <select
-                value={selectedRisk}
-                onChange={(e) => setSelectedRisk(e.target.value)}
-                className="bg-transparent focus:outline-none text-[10px] text-white cursor-pointer"
-              >
-                <option value="ALL" className="bg-[#121212]">All Risks</option>
-                <option value="HIGH" className="bg-[#121212]">High Risk</option>
-                <option value="MEDIUM" className="bg-[#121212]">Medium Risk</option>
-                <option value="LOW" className="bg-[#121212]">Low Risk</option>
-              </select>
-            </div>
+          <div className="flex flex-wrap items-center gap-2.5">
+            <Input icon={<Search size={15} />} placeholder="Search branches" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} className="w-44" />
+            <Select value={selectedBranch} onChange={(e) => setSelectedBranch(e.target.value)} className="w-auto">
+              <option value="ALL">All branches</option>
+              {branches.map((b) => <option key={b.name} value={b.name}>{b.name}</option>)}
+            </Select>
+            <Select value={selectedRisk} onChange={(e) => setSelectedRisk(e.target.value)} className="w-auto">
+              <option value="ALL">All risk</option>
+              <option value="HIGH">High</option>
+              <option value="MEDIUM">Medium</option>
+              <option value="LOW">Low</option>
+            </Select>
           </div>
         </div>
-
-        {/* Branch standings grid */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <AnimatePresence mode="popLayout">
             {filteredBranches.map((br) => (
               <motion.div
@@ -447,119 +330,71 @@ export default function SocDashboard() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="p-4 rounded-xl border border-[#1F1F1F] bg-[#0A0A0A] relative transition duration-150 hover:border-zinc-700"
+                className="relative rounded-[12px] border border-line bg-inset p-4 transition-colors hover:border-line-strong"
               >
-                {/* Active alert indicator dot */}
-                {br.campaignStatus === 'ACTIVE' && (
-                  <span className="absolute top-4 right-4 w-1.5 h-1.5 rounded-full bg-[#00D26A]" />
-                )}
-
-                <h4 className="text-xs font-bold text-white font-mono uppercase tracking-wider">{br.name} Office</h4>
-                
-                <div className="mt-4 space-y-2 text-[9.5px] font-mono">
-                  <div className="flex justify-between items-center text-zinc-500">
-                    <span>Active Employees</span>
-                    <span className="text-white font-medium">{br.employees}</span>
-                  </div>
-
-                  <div className="flex justify-between items-center text-zinc-500">
-                    <span>Awareness rating</span>
-                    <span className={`font-bold ${br.awarenessScore >= 75 ? 'text-[#00D26A]' : br.awarenessScore >= 60 ? 'text-amber-500' : 'text-zinc-300'}`}>
-                      {br.awarenessScore}/100
-                    </span>
-                  </div>
-
-                  <div className="flex justify-between items-center text-zinc-500">
-                    <span>Risk Profile Ratio</span>
-                    <span className={`font-bold ${br.riskScore >= 20 ? 'text-zinc-300 font-bold' : 'text-zinc-500'}`}>
-                      {br.riskScore}% HR
-                    </span>
-                  </div>
-
-                  <div className="flex justify-between items-center text-zinc-500">
-                    <span>Training compliance</span>
-                    <span className="text-white font-medium">{br.trainingPercent}%</span>
-                  </div>
-
-                  <div className="flex justify-between items-center text-zinc-500 pt-2 border-t border-[#1F1F1F]/40">
-                    <span>Status</span>
-                    <span className={`text-[8px] font-bold px-1.5 py-0.5 rounded ${
-                      br.campaignStatus === 'ACTIVE' 
-                        ? 'bg-zinc-800 border border-[#1F1F1F] text-white' 
-                        : 'bg-[#121212] border border-[#1F1F1F] text-zinc-500'
-                    }`}>
-                      {br.campaignStatus}
-                    </span>
+                <div className="flex items-center justify-between">
+                  <h4 className="text-[14px] font-semibold text-ink">{br.name}</h4>
+                  {br.campaignStatus === "ACTIVE" && <span className="h-1.5 w-1.5 rounded-full bg-accent" />}
+                </div>
+                <div className="mt-3.5 space-y-2 text-[12.5px]">
+                  <Row label="People" value={String(br.employees)} />
+                  <Row label="Awareness" value={`${br.awarenessScore}/100`} valueClass={br.awarenessScore >= 75 ? "text-accent" : br.awarenessScore >= 60 ? "text-warn" : "text-ink"} />
+                  <Row label="High risk" value={`${br.riskScore}%`} />
+                  <Row label="Training" value={`${br.trainingPercent}%`} />
+                  <div className="flex items-center justify-between border-t border-line pt-2.5">
+                    <span className="text-ink-faint">Status</span>
+                    <Badge tone={br.campaignStatus === "ACTIVE" ? "accent" : "muted"}>{br.campaignStatus.toLowerCase()}</Badge>
                   </div>
                 </div>
               </motion.div>
             ))}
           </AnimatePresence>
         </div>
+      </Card>
 
-      </div>
-
-      {/* LOWER SECTION: THREAT INTELLIGENCE & RECOMMENDATIONS */}
+      {/* Threat intel + AI */}
       {threatIntel && (
-        <div className="grid lg:grid-cols-3 gap-6">
-          
-          {/* Threat Intelligence indices */}
-          <div className="lg:col-span-2 border border-[#1F1F1F] bg-[#121212] rounded-xl p-5 shadow-xl space-y-4">
-            <div className="border-b border-[#1F1F1F] pb-3">
-              <h3 className="text-[10px] font-bold text-white font-mono uppercase tracking-widest">Threat Intelligence</h3>
-              <p className="text-[9px] text-zinc-500 font-mono uppercase">Indices generated from platform simulated telemetry</p>
+        <div className="grid gap-6 lg:grid-cols-3">
+          <Card pad="lg" className="lg:col-span-2">
+            <CardHeader title="Threat intelligence" description="Patterns drawn from your simulation data." />
+            <div className="mt-5 grid gap-4 sm:grid-cols-2">
+              <IntelTile label="Most clicked scenario" value={threatIntel.mostClickedSimulation} note={<span className="flex items-center gap-1 text-warn"><ArrowUpRight size={12} /> highest failure trigger</span>} />
+              <IntelTile label="Most vulnerable team" value={threatIntel.mostVulnerableDept} note="Prioritize for training" />
+              <IntelTile label="Fastest improving branch" value={threatIntel.fastestImprovingBranch} note={<span className="text-accent">strongest growth</span>} />
+              <IntelTile label="Most effective template" value={threatIntel.mostEffectiveEmailTemplate} note="Highest reporting rate" />
             </div>
-
-            <div className="grid sm:grid-cols-2 gap-4">
-              <div className="p-3.5 rounded-lg bg-[#0A0A0A] border border-[#1F1F1F] space-y-1">
-                <span className="text-[8px] font-mono text-zinc-500 uppercase tracking-widest">Worst Phishing Vector</span>
-                <span className="text-[10.5px] font-bold text-white font-mono block truncate">{threatIntel.mostClickedSimulation}</span>
-                <span className="text-[8px] text-zinc-500 font-mono flex items-center gap-0.5">
-                  <ArrowUpRight size={10} /> Highest failure trigger
-                </span>
-              </div>
-
-              <div className="p-3.5 rounded-lg bg-[#0A0A0A] border border-[#1F1F1F] space-y-1">
-                <span className="text-[8px] font-mono text-zinc-500 uppercase tracking-widest">Vulnerable Dept</span>
-                <span className="text-[10.5px] font-bold text-white font-mono block">{threatIntel.mostVulnerableDept}</span>
-                <span className="text-[8px] text-zinc-500 font-mono block">Requires immediate compliance enrollment</span>
-              </div>
-
-              <div className="p-3.5 rounded-lg bg-[#0A0A0A] border border-[#1F1F1F] space-y-1">
-                <span className="text-[8px] font-mono text-zinc-500 uppercase tracking-widest">Improving Branch</span>
-                <span className="text-[10.5px] font-bold text-white font-mono block">{threatIntel.fastestImprovingBranch}</span>
-                <span className="text-[8px] text-[#00D26A] font-mono block">Highest score growth rate</span>
-              </div>
-
-              <div className="p-3.5 rounded-lg bg-[#0A0A0A] border border-[#1F1F1F] space-y-1">
-                <span className="text-[8px] font-mono text-zinc-500 uppercase tracking-widest">Effective Template</span>
-                <span className="text-[10.5px] font-bold text-white font-mono block truncate">{threatIntel.mostEffectiveEmailTemplate}</span>
-                <span className="text-[8px] text-zinc-500 font-mono block">Triggers high reporting rate</span>
+          </Card>
+          <Card pad="lg" className="flex flex-col justify-between">
+            <div>
+              <CardHeader title="Recommended next step" />
+              <div className="mt-4 rounded-[12px] border border-accent/30 bg-accent-faint/40 p-4">
+                <Sparkles size={16} className="mb-2 text-accent" />
+                <p className="text-[13.5px] leading-relaxed text-ink">{threatIntel.topAIRecommendation}</p>
               </div>
             </div>
-          </div>
-
-          {/* AI Recommended Remediation */}
-          <div className="border border-[#1F1F1F] bg-[#121212] rounded-xl p-5 shadow-xl flex flex-col justify-between">
-            <div className="space-y-3">
-              <div className="flex items-center gap-2 border-b border-[#1F1F1F] pb-3">
-                <Sparkles size={14} className="text-white shrink-0" />
-                <h3 className="text-[10px] font-bold text-white font-mono uppercase tracking-widest">AI Executive Advisories</h3>
-              </div>
-
-              <div className="p-4 rounded-lg border border-[#1F1F1F] bg-[#0A0A0A] text-[9.5px] leading-relaxed text-zinc-400 font-mono">
-                {threatIntel.topAIRecommendation}
-              </div>
-            </div>
-
-            <p className="text-[8px] text-zinc-500 mt-4 leading-relaxed font-mono uppercase">
-              // Telemetry updated continuously via system node checkpoints.
-            </p>
-          </div>
-
+            <p className="mt-4 text-[12px] text-ink-faint">Updated continuously from live telemetry.</p>
+          </Card>
         </div>
       )}
+    </div>
+  );
+}
 
+function Row({ label, value, valueClass }: { label: string; value: string; valueClass?: string }) {
+  return (
+    <div className="flex items-center justify-between">
+      <span className="text-ink-faint">{label}</span>
+      <span className={cn("font-medium text-ink", valueClass)}>{value}</span>
+    </div>
+  );
+}
+
+function IntelTile({ label, value, note }: { label: string; value: string; note: React.ReactNode }) {
+  return (
+    <div className="rounded-[12px] border border-line bg-inset p-4">
+      <p className="text-[12px] text-ink-faint">{label}</p>
+      <p className="mt-1 truncate text-[14px] font-semibold text-ink" title={value}>{value}</p>
+      <p className="mt-1.5 text-[12px] text-ink-soft">{note}</p>
     </div>
   );
 }

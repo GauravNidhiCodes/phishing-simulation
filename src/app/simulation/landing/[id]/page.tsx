@@ -1,212 +1,177 @@
-'use client';
+"use client";
 
-import React, { useEffect, useState, use } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  ShieldAlert, 
-  CheckCircle2, 
-  Eye, 
-  Lock,
-  CornerDownRight
-} from 'lucide-react';
+import React, { useEffect, useState, use } from "react";
+import Link from "next/link";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  ShieldCheck, CheckCircle2, Eye, Lock,
+  GraduationCap, Flag, Link2, Clock,
+} from "lucide-react";
 
-interface Indicator {
-  id: number;
-  type: string;
-  label: string;
-  text: string;
-}
+interface Indicator { id: number; icon: React.ReactNode; label: string; text: string; }
 
 export default function SimulationLandingPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
-  
-  // Phase state: 'MOCK_PORTAL' | 'EDUCATION_PANEL'
-  const [phase, setPhase] = useState<'MOCK_PORTAL' | 'EDUCATION_PANEL'>('MOCK_PORTAL');
-  
-  // Simulated form states
-  const [emailInput, setEmailInput] = useState('');
-  const [passwordInput, setPasswordInput] = useState('');
-  
-  // Template indicators
-  const [indicators] = useState<Indicator[]>([
-    { id: 1, type: "sender", label: "Mismatched Domain", text: "Sent from 'pinkman-secure-portal.com' instead of 'pinkman.com'" },
-    { id: 2, type: "urgency", label: "Artificial Urgency", text: "Contains coercive statements ('within 24 hours', 'automatic lockout') to induce panic" },
-    { id: 3, type: "link", label: "Deceptive Link Destination", text: "Link redirects to an external simulation server rather than internal SSO portal" }
-  ]);
 
-  // Log the initial click on mount
+  const [phase, setPhase] = useState<"MOCK_PORTAL" | "EDUCATION_PANEL">("MOCK_PORTAL");
+  const [emailInput, setEmailInput] = useState("");
+  const [passwordInput, setPasswordInput] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+
+  const indicators: Indicator[] = [
+    { id: 1, icon: <Link2 size={15} />, label: "Mismatched sender domain", text: "Sent from pinkman-secure-portal.com — not your real pinkman.com workspace. Always read the domain after the @, right to left." },
+    { id: 2, icon: <Clock size={15} />, label: "Manufactured urgency", text: "Phrases like “within 24 hours” and “automatic lockout” are designed to make you act before you think. Slow down." },
+    { id: 3, icon: <Eye size={15} />, label: "Deceptive link destination", text: "The button pointed to an external server, not your internal SSO. Hover any link to preview where it truly goes." },
+  ];
+
   useEffect(() => {
     if (id) {
-      fetch('/api/simulation/click', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ logId: id })
-      }).catch(err => console.error("Failed to log simulation click:", err));
+      fetch("/api/simulation/click", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ logId: id }),
+      }).catch((err) => console.error("Failed to log simulation click:", err));
     }
   }, [id]);
 
-  // Trigger submission alert without saving any passwords
   const handleMockSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    // Track submit event
+    setSubmitting(true);
     if (id) {
-      await fetch('/api/simulation/submit', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ logId: id })
-      }).catch(err => console.error("Failed to log simulation submission:", err));
+      await fetch("/api/simulation/submit", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ logId: id }),
+      }).catch((err) => console.error("Failed to log simulation submission:", err));
     }
-
-    setPhase('EDUCATION_PANEL');
+    setPhase("EDUCATION_PANEL");
   };
 
   return (
-    <div className="min-h-screen bg-[#050505] text-[#A8A8A8] flex items-center justify-center p-4 relative font-mono">
-      
+    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-canvas p-4 text-ink">
+      <div className="pointer-events-none absolute inset-0 bg-grid opacity-[0.4]" />
+      <div className="pointer-events-none absolute left-1/2 top-0 h-[420px] w-[620px] -translate-x-1/2 rounded-full bg-accent/[0.05] blur-[120px]" />
+
       <AnimatePresence mode="wait">
-        
-        {/* Phase 1: Mock Portal Interface (Simulated Phishing Landing Screen) */}
-        {phase === 'MOCK_PORTAL' ? (
+        {phase === "MOCK_PORTAL" ? (
           <motion.div
             key="mock-portal"
-            initial={{ opacity: 0, scale: 0.98 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.95 }}
-            className="w-full max-w-md bg-[#121212] text-white rounded-xl overflow-hidden border border-[#1F1F1F]"
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.97 }}
+            transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+            className="relative z-10 w-full max-w-[400px]"
           >
-            {/* Header branding */}
-            <div className="p-8 pb-4 flex flex-col items-center border-b border-[#1F1F1F] bg-[#0A0A0A]">
-              <div className="w-12 h-12 bg-white text-black rounded-lg flex items-center justify-center font-bold text-xl mb-3 border border-white">
-                PP
-              </div>
-              <h2 className="text-sm font-bold text-white tracking-tight uppercase">Pinkman Protects Access Portal</h2>
-              <p className="text-[10px] text-zinc-500 mt-1 uppercase">Authenticate to review your session credentials.</p>
-            </div>
-
-            {/* Login Form */}
-            <form onSubmit={handleMockSubmit} className="p-8 space-y-6">
-              <div className="space-y-1.5">
-                <label className="block text-[10px] font-bold text-zinc-400 uppercase tracking-widest">Email Address</label>
-                <input
-                  type="email"
-                  required
-                  placeholder="name@company.com"
-                  value={emailInput}
-                  onChange={(e) => setEmailInput(e.target.value)}
-                  className="w-full px-4 py-3 rounded-lg border border-[#1F1F1F] focus:outline-none focus:border-zinc-700 text-xs bg-black text-white font-mono"
-                />
+            <div className="overflow-hidden rounded-[18px] border border-line bg-card shadow-[0_40px_120px_-30px_rgba(0,0,0,0.8)]">
+              <div className="flex flex-col items-center border-b border-line px-8 py-8 text-center">
+                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-[12px] bg-white text-[15px] font-bold tracking-tight text-black">PP</div>
+                <h2 className="text-[15px] font-semibold tracking-[-0.01em] text-ink">Sign in to continue</h2>
+                <p className="mt-1 text-[12.5px] text-ink-soft">Verify your identity to review your session.</p>
               </div>
 
-              <div className="space-y-1.5">
-                <div className="flex justify-between items-center">
-                  <label className="block text-[10px] font-bold text-zinc-400 uppercase tracking-widest">Password</label>
-                  <span className="text-[9px] text-zinc-500 cursor-pointer hover:underline uppercase">Forgot?</span>
+              <form onSubmit={handleMockSubmit} className="space-y-4 px-8 py-7">
+                <div className="space-y-1.5">
+                  <label className="text-[12.5px] font-medium text-ink-soft">Work email</label>
+                  <input
+                    type="email" required placeholder="name@company.com" value={emailInput}
+                    onChange={(e) => setEmailInput(e.target.value)}
+                    className="focus-ring h-11 w-full rounded-[10px] border border-line bg-inset px-3.5 text-[13.5px] text-ink placeholder:text-ink-faint"
+                  />
                 </div>
-                <input
-                  type="password"
-                  required
-                  placeholder="••••••••"
-                  value={passwordInput}
-                  onChange={(e) => setPasswordInput(e.target.value)}
-                  className="w-full px-4 py-3 rounded-lg border border-[#1F1F1F] focus:outline-none focus:border-zinc-700 text-xs bg-black text-white font-mono"
-                />
-              </div>
+                <div className="space-y-1.5">
+                  <div className="flex items-center justify-between">
+                    <label className="text-[12.5px] font-medium text-ink-soft">Password</label>
+                    <span className="cursor-pointer text-[12px] text-ink-faint hover:text-ink-soft">Forgot?</span>
+                  </div>
+                  <input
+                    type="password" required placeholder="••••••••" value={passwordInput}
+                    onChange={(e) => setPasswordInput(e.target.value)}
+                    className="focus-ring h-11 w-full rounded-[10px] border border-line bg-inset px-3.5 text-[13.5px] text-ink placeholder:text-ink-faint"
+                  />
+                </div>
 
-              {/* Security info flag */}
-              <div className="flex items-start gap-2 bg-[#0A0A0A] p-3 rounded-lg border border-[#1F1F1F] text-[10px] text-zinc-500 leading-normal font-mono">
-                <Lock size={12} className="shrink-0 mt-0.5 text-white" />
-                <span>Standard single-sign-on protocol. Session will remain valid for 24 hours.</span>
-              </div>
+                <div className="flex items-start gap-2 rounded-[10px] border border-line bg-inset p-3 text-[12px] leading-relaxed text-ink-faint">
+                  <Lock size={13} className="mt-0.5 shrink-0 text-ink-soft" />
+                  <span>Single sign-on. Your session stays valid for 24 hours.</span>
+                </div>
 
-              <button
-                type="submit"
-                className="w-full py-3 rounded-lg bg-white hover:bg-zinc-200 text-black font-bold text-xs transition font-mono uppercase tracking-wider cursor-pointer"
-              >
-                Sign In
-              </button>
-            </form>
-            
-            {/* Direct jump to education feedback */}
-            <div className="p-4 border-t border-[#1F1F1F] bg-[#0A0A0A] text-center">
-              <button 
-                type="button" 
-                onClick={() => setPhase('EDUCATION_PANEL')}
-                className="text-white hover:text-zinc-300 font-bold font-mono uppercase tracking-wider text-[10px] cursor-pointer"
-              >
-                Skip simulation & view training analysis
-              </button>
+                <button
+                  type="submit" disabled={submitting}
+                  className="focus-ring flex h-11 w-full items-center justify-center gap-2 rounded-[10px] bg-white text-[13.5px] font-semibold text-black transition-opacity hover:opacity-90 disabled:opacity-60"
+                >
+                  {submitting ? "Signing in…" : "Sign in"}
+                </button>
+              </form>
+
+              <div className="border-t border-line bg-inset/50 px-8 py-4 text-center">
+                <button type="button" onClick={() => setPhase("EDUCATION_PANEL")} className="text-[12px] font-medium text-ink-faint transition-colors hover:text-ink-soft">
+                  Skip and view training analysis
+                </button>
+              </div>
             </div>
           </motion.div>
         ) : (
-          /* Phase 2: Educational Warning & Training Screen (The moment they interact) */
           <motion.div
             key="education-panel"
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="w-full max-w-4xl bg-[#121212] border border-[#1F1F1F] rounded-xl p-6 sm:p-8 md:p-10 shadow-2xl relative overflow-hidden grid md:grid-cols-5 gap-8"
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+            className="relative z-10 grid w-full max-w-4xl gap-px overflow-hidden rounded-[18px] border border-line bg-line md:grid-cols-5"
           >
-            {/* Left Side: Notice & Warning */}
-            <div className="md:col-span-2 space-y-6">
-              <div className="w-12 h-12 rounded bg-[#0A0A0A] border border-[#1F1F1F] text-white flex items-center justify-center mx-auto md:mx-0">
-                <ShieldAlert size={24} />
-              </div>
-
-              <div className="text-center md:text-left space-y-3">
-                <span className="px-3 py-1 rounded bg-[#0A0A0A] border border-[#1F1F1F] text-zinc-400 text-[9px] font-mono uppercase tracking-widest font-bold">
-                  Simulation Intercepted
+            {/* Left: the reveal */}
+            <div className="space-y-6 bg-card p-7 md:col-span-2 md:p-9">
+              <span className="flex h-12 w-12 items-center justify-center rounded-[13px] border border-accent/30 bg-accent-faint text-accent">
+                <ShieldCheck size={24} />
+              </span>
+              <div className="space-y-3">
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-line bg-inset px-2.5 py-1 text-[11px] font-medium uppercase tracking-[0.08em] text-ink-soft">
+                  <CheckCircle2 size={12} className="text-accent" /> Safe — this was a drill
                 </span>
-                <h1 className="text-xl font-bold text-white leading-tight uppercase font-mono tracking-tight">
-                  Security Training Exercise
-                </h1>
-                <p className="text-xs text-zinc-400 leading-relaxed font-sans">
-                  The email you recently interacted with was part of Pinkman Protects' authorized security awareness program. 
+                <h1 className="text-[24px] font-semibold leading-tight tracking-[-0.02em] text-ink">This was a phishing simulation</h1>
+                <p className="text-[13.5px] leading-relaxed text-ink-soft">
+                  The email you just acted on came from Pinkman Protects&apos; security awareness program. No harm done — but a real attacker could have caused damage here.
                 </p>
-                <div className="bg-[#0A0A0A] border border-[#1F1F1F] text-zinc-400 p-3 rounded-lg text-[10px] leading-relaxed text-left flex items-start gap-2">
-                  <CheckCircle2 size={14} className="shrink-0 mt-0.5 text-[#00D26A]" />
-                  <span><strong>Zero Credentials Stored:</strong> In compliance with security standards, your password was immediately intercepted and discarded before hitting any network databases.</span>
-                </div>
+              </div>
+              <div className="flex items-start gap-2.5 rounded-[12px] border border-accent/20 bg-accent-faint/40 p-3.5 text-[12.5px] leading-relaxed text-ink-soft">
+                <Lock size={14} className="mt-0.5 shrink-0 text-accent" />
+                <span><span className="font-medium text-ink">Nothing was stored.</span> Whatever you typed was discarded instantly. We never saw your password.</span>
               </div>
             </div>
 
-            {/* Right Side: Threat Indicator Analysis */}
-            <div className="md:col-span-3 space-y-6 md:border-l md:border-[#1F1F1F] md:pl-8">
+            {/* Right: cues */}
+            <div className="space-y-5 bg-card p-7 md:col-span-3 md:p-9">
               <div>
-                <h2 className="text-sm font-bold text-white flex items-center gap-2 uppercase tracking-wide">
-                  <Eye size={16} /> Phishing Cues Decoded
-                </h2>
-                <p className="text-[10px] text-zinc-500 mt-1 uppercase">Review the warning indicators that were present in this email format:</p>
+                <h2 className="flex items-center gap-2 text-[15px] font-semibold tracking-[-0.01em] text-ink"><Eye size={16} className="text-accent" /> What gave it away</h2>
+                <p className="mt-1 text-[12.5px] text-ink-soft">Three signals you can train yourself to catch every time.</p>
               </div>
 
-              {/* Indicators Timeline */}
-              <div className="space-y-4">
+              <div className="space-y-2.5">
                 {indicators.map((ind, index) => (
-                  <div key={ind.id} className="flex gap-4 items-start bg-[#0A0A0A] border border-[#1F1F1F] rounded-lg p-4 font-mono">
-                    <div className="w-5 h-5 rounded bg-[#121212] border border-[#1F1F1F] text-white text-[10px] font-bold flex items-center justify-center shrink-0 mt-0.5">
-                      {index + 1}
-                    </div>
+                  <motion.div
+                    key={ind.id}
+                    initial={{ opacity: 0, x: 10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.2 + index * 0.1, duration: 0.4 }}
+                    className="flex gap-3.5 rounded-[12px] border border-line bg-inset p-4"
+                  >
+                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-[9px] border border-line bg-card text-ink-soft">{ind.icon}</span>
                     <div className="space-y-1">
-                      <h4 className="text-[10px] font-bold text-white uppercase tracking-wider">{ind.label}</h4>
-                      <p className="text-[10px] text-zinc-400 leading-normal font-sans">{ind.text}</p>
+                      <h4 className="text-[13px] font-semibold text-ink">{ind.label}</h4>
+                      <p className="text-[12.5px] leading-relaxed text-ink-soft">{ind.text}</p>
                     </div>
-                  </div>
+                  </motion.div>
                 ))}
               </div>
 
-              {/* Next Steps / Actions */}
-              <div className="bg-[#0A0A0A] border border-[#1F1F1F] rounded-lg p-5 space-y-3 text-[10px] text-zinc-400 font-mono">
-                <span className="font-bold uppercase tracking-wider text-white text-[9px]">Actionable Protocols</span>
-                <ul className="space-y-2 leading-relaxed">
-                  <li className="flex items-start gap-1.5"><CornerDownRight size={12} className="text-white shrink-0 mt-0.5" /> Always verify domain extensions before executing link click actions.</li>
-                  <li className="flex items-start gap-1.5"><CornerDownRight size={12} className="text-white shrink-0 mt-0.5" /> Acknowledge coercive deadlines or panic warnings as high threat vectors.</li>
-                  <li className="flex items-start gap-1.5"><CornerDownRight size={12} className="text-white shrink-0 mt-0.5" /> Use Pinkman Protects' 'Report Phish' dashboard client rather than replying.</li>
-                </ul>
+              <div className="flex flex-col gap-2.5 border-t border-line pt-5 sm:flex-row">
+                <Link href="/learning" className="focus-ring flex flex-1 items-center justify-center gap-2 rounded-[10px] bg-accent px-4 py-3 text-[13.5px] font-semibold text-black transition-opacity hover:opacity-90">
+                  <GraduationCap size={16} /> Take a 2-min refresher
+                </Link>
+                <Link href="/notifications" className="focus-ring flex flex-1 items-center justify-center gap-2 rounded-[10px] border border-line bg-inset px-4 py-3 text-[13.5px] font-medium text-ink-soft transition-colors hover:text-ink">
+                  <Flag size={15} /> How to report phishing
+                </Link>
               </div>
             </div>
-
           </motion.div>
         )}
-        
       </AnimatePresence>
     </div>
   );

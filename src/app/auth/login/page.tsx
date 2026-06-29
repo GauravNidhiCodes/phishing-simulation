@@ -1,189 +1,173 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { motion } from 'framer-motion';
-import { 
-  Lock, 
-  Mail, 
-  Eye, 
-  EyeOff, 
-  ArrowRight, 
-  Info,
-  CheckCircle2
-} from 'lucide-react';
-import Link from 'next/link';
-import PPLogo from '@/components/layout/PPLogo';
+import React, { useState } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { Eye, EyeOff, ArrowRight, AlertCircle, ChevronDown } from "lucide-react";
+import { AuthLayout, AuthAlert } from "@/components/auth/AuthLayout";
+import { Button } from "@/components/ui/Button";
+import { Input, Field } from "@/components/ui/Input";
+
+const demoAccounts = [
+  { role: "Super admin", email: "superadmin@company.in", password: "Superadmin123!" },
+  { role: "Security admin", email: "admin@company.in", password: "Admin123!" },
+  { role: "HR manager", email: "hr@company.in", password: "HrManager123!" },
+  { role: "Team member", email: "rahul@company.in", password: "password123" },
+];
 
 export default function LoginPage() {
   const router = useRouter();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showDemo, setShowDemo] = useState(false);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
+    setError("");
     setLoading(true);
-
     try {
-      const res = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password, rememberMe })
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password, rememberMe }),
       });
-
       if (!res.ok) {
         const errData = await res.json();
-        setError(errData.error || 'Authentication failed');
+        setError(errData.error || "Those credentials didn't match. Try again.");
         setLoading(false);
         return;
       }
-
       const data = await res.json();
-      const user = data.user;
-
-      // Role Based Redirect: Employees go to /learning, Admins go to /admin/dashboard
-      if (user.role === 'EMPLOYEE') {
-        router.push('/learning');
-      } else {
-        router.push('/admin/dashboard');
-      }
+      router.push(data.user.role === "EMPLOYEE" ? "/learning" : "/admin/dashboard");
     } catch (err: any) {
-      setError(err.message || 'Server error occurred');
+      setError(err.message || "Something went wrong on our end.");
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex flex-col justify-center py-12 sm:px-6 lg:px-8 relative overflow-hidden bg-cyber-dark select-none">
-      {/* Decorative Radial mesh backings */}
-      <div className="absolute top-0 left-1/4 w-96 h-96 bg-brand-blue/5 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-brand-purple/3 rounded-full blur-3xl pointer-events-none" />
- 
-      <div className="sm:mx-auto sm:w-full sm:max-w-md text-center z-10 space-y-3">
-        <div className="flex justify-center">
-          <PPLogo size={44} className="animate-pulse" />
-        </div>
-        <h2 className="text-2xl font-black text-white tracking-tight uppercase">
-          Pinkman Protects
-        </h2>
-        <span className="text-[9px] font-mono text-gray-500 uppercase tracking-widest font-bold block">
-          Enterprise Security Awareness & Simulation
-        </span>
-      </div>
+    <AuthLayout
+      title="Welcome back"
+      subtitle="Sign in to your security console."
+      footer={
+        <>
+          Forgot your password?{" "}
+          <Link href="/auth/forgot-password" className="text-ink-soft underline-offset-2 hover:text-ink hover:underline">
+            Reset it
+          </Link>
+        </>
+      }
+    >
+      <form onSubmit={handleLogin} className="space-y-5">
+        {error && (
+          <AuthAlert>
+            <AlertCircle size={16} className="mt-0.5 shrink-0" />
+            <span>{error}</span>
+          </AuthAlert>
+        )}
 
-      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md z-10">
-        <motion.div 
-          initial={{ opacity: 0, scale: 0.96, y: 15 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          transition={{ duration: 0.4 }}
-          className="glass-panel py-8 px-6 sm:px-10 rounded-3xl border border-white/5 shadow-2xl relative"
-        >
-          {/* Form */}
-          <form onSubmit={handleLogin} className="space-y-6 text-xs font-mono">
-            {/* Error alerts */}
-            {error && (
-              <div className="p-3.5 rounded-2xl bg-brand-rose/5 border border-brand-rose/10 flex items-start gap-2.5 text-brand-rose">
-                <Info size={14} className="shrink-0 mt-0.5" />
-                <span>{error}</span>
-              </div>
-            )}
+        <Field label="Work email" htmlFor="email">
+          <Input
+            id="email"
+            type="email"
+            required
+            autoFocus
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="you@company.in"
+          />
+        </Field>
 
-            {/* Email Field */}
-            <div className="space-y-1.5">
-              <label className="text-gray-500 uppercase font-bold flex items-center gap-1">
-                <Mail size={12} /> Email Address
-              </label>
-              <input
-                type="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="e.g. admin@company.in"
-                className="w-full p-3 rounded-xl glass-input placeholder-gray-600 focus:outline-none"
-              />
-            </div>
-
-            {/* Password Field */}
-            <div className="space-y-1.5">
-              <div className="flex justify-between items-center">
-                <label className="text-gray-500 uppercase font-bold flex items-center gap-1">
-                  <Lock size={12} /> Password
-                </label>
-                <Link href="/auth/forgot-password" className="text-[10px] text-brand-blue hover:underline">
-                  Forgot Password?
-                </Link>
-              </div>
-              <div className="relative">
-                <input
-                  type={showPassword ? 'text' : 'password'}
-                  required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="••••••••••••"
-                  className="w-full p-3 pr-10 rounded-xl glass-input placeholder-gray-600 focus:outline-none"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500 hover:text-white transition"
-                >
-                  {showPassword ? <EyeOff size={14} /> : <Eye size={14} />}
-                </button>
-              </div>
-            </div>
-
-            {/* Remember Me checkbox */}
-            <div className="flex items-center justify-between">
-              <label className="flex items-center gap-2 text-gray-400 cursor-pointer select-none">
-                <input
-                  type="checkbox"
-                  checked={rememberMe}
-                  onChange={(e) => setRememberMe(e.target.checked)}
-                  className="rounded border-white/10 bg-black/40 text-brand-cyan focus:ring-0 focus:ring-offset-0 w-4 h-4 cursor-pointer"
-                />
-                <span>Remember this workstation</span>
-              </label>
-            </div>
-
-            {/* Login button */}
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full py-3 rounded-xl bg-brand-blue text-white font-semibold flex items-center justify-center gap-1.5 hover:brightness-110 hover:shadow-[0_0_15px_rgba(229,9,20,0.3)] shadow-lg shadow-brand-blue/10 disabled:brightness-50 transition border border-white/5 cursor-pointer"
+        <Field
+          label="Password"
+          htmlFor="password"
+          action={
+            <Link
+              href="/auth/forgot-password"
+              className="text-[12.5px] text-ink-faint transition-colors hover:text-ink-soft"
             >
-              {loading ? (
-                <div className="w-4 h-4 border-2 border-t-transparent border-white rounded-full animate-spin" />
-              ) : (
-                <>Sign In to Workspace <ArrowRight size={14} /></>
-              )}
-            </button>
-          </form>
+              Forgot?
+            </Link>
+          }
+        >
+          <Input
+            id="password"
+            type={showPassword ? "text" : "password"}
+            required
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="••••••••••••"
+            trailing={
+              <button
+                type="button"
+                onClick={() => setShowPassword((s) => !s)}
+                className="text-ink-faint transition-colors hover:text-ink"
+                tabIndex={-1}
+              >
+                {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+              </button>
+            }
+          />
+        </Field>
 
-          {/* Guidelines notes */}
-          <div className="mt-6 pt-5 border-t border-white/5 text-[10px] font-mono text-gray-500 leading-relaxed space-y-2">
-            <div className="flex items-start gap-1">
-              <Info size={12} className="shrink-0 mt-0.5 text-brand-cyan" />
-              <p>This is a protected security compliance node. Actions are logged and subject to audit.</p>
-            </div>
-            
-            {/* Quick credentials helper for testers */}
-            <div className="bg-white/2 p-2.5 rounded-xl border border-white/5 space-y-1">
-              <div className="font-bold text-white uppercase text-[8px] tracking-wider">Test Credentials (Indian Domains):</div>
-              <ul className="list-disc list-inside text-[8px] space-y-0.5 text-gray-400">
-                <li>Superadmin: <span className="text-brand-blue font-bold">superadmin@company.in</span> / <span className="text-brand-purple">Superadmin123!</span></li>
-                <li>IT Sec Admin: <span className="text-brand-blue font-bold">admin@company.in</span> / <span className="text-brand-purple">Admin123!</span></li>
-                <li>HR Manager: <span className="text-brand-blue font-bold">hr@company.in</span> / <span className="text-brand-purple">HrManager123!</span></li>
-                <li>Employee: <span className="text-brand-blue font-bold">rahul@company.in</span> / <span className="text-brand-purple">password123</span></li>
-              </ul>
-            </div>
+        <label className="flex cursor-pointer select-none items-center gap-2.5 text-[13px] text-ink-soft">
+          <input
+            type="checkbox"
+            checked={rememberMe}
+            onChange={(e) => setRememberMe(e.target.checked)}
+            className="h-4 w-4 cursor-pointer rounded border-line bg-inset accent-[#3ecf8e]"
+          />
+          Keep me signed in on this device
+        </label>
+
+        <Button
+          type="submit"
+          variant="primary"
+          size="lg"
+          loading={loading}
+          className="w-full"
+          iconRight={!loading && <ArrowRight size={16} />}
+        >
+          Sign in
+        </Button>
+      </form>
+
+      <div className="mt-6 border-t border-line pt-5">
+        <button
+          onClick={() => setShowDemo((s) => !s)}
+          className="flex w-full items-center justify-between text-[12.5px] text-ink-faint transition-colors hover:text-ink-soft"
+        >
+          <span>Demo accounts for evaluation</span>
+          <ChevronDown
+            size={15}
+            className={"transition-transform " + (showDemo ? "rotate-180" : "")}
+          />
+        </button>
+        {showDemo && (
+          <div className="mt-3 space-y-1.5">
+            {demoAccounts.map((a) => (
+              <button
+                key={a.email}
+                onClick={() => {
+                  setEmail(a.email);
+                  setPassword(a.password);
+                }}
+                className="flex w-full items-center justify-between rounded-[9px] border border-line bg-inset px-3 py-2 text-left transition-colors hover:border-line-strong"
+              >
+                <span className="text-[12.5px] font-medium text-ink-soft">{a.role}</span>
+                <span className="font-mono text-[11.5px] text-ink-faint">{a.email}</span>
+              </button>
+            ))}
+            <p className="pt-1 text-[11.5px] leading-relaxed text-ink-faint">
+              This is a protected console. Activity is logged and audited.
+            </p>
           </div>
-        </motion.div>
+        )}
       </div>
-    </div>
+    </AuthLayout>
   );
 }

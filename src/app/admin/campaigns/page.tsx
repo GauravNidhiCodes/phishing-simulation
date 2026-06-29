@@ -1,44 +1,38 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect, useMemo } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  Send, 
-  Calendar, 
-  CheckCircle, 
-  Folder, 
-  Plus, 
-  X, 
-  AlertTriangle,
+import React, { useState, useEffect, useMemo } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  Plus,
   Play,
   Square,
-  Sparkles,
-  Info,
-  ShieldCheck,
-  CheckCircle2,
-  Clock,
-  Compass,
-  Layers,
-  HelpCircle,
-  ChevronRight,
-  ChevronLeft,
   Search,
-  User,
   Check,
+  Calendar,
+  Clock,
   Eye,
-  AlertCircle,
-  Sliders,
-  UserCheck,
   ShieldAlert,
-  Building,
-  MapPin,
-  CheckSquare
-} from 'lucide-react';
+  CheckCircle2,
+  ArrowRight,
+  ArrowLeft,
+  FolderOpen,
+  Users2,
+  Mail,
+  ClipboardCheck,
+  Info,
+} from "lucide-react";
+import { cn } from "@/lib/utils";
+import { PageHeader } from "@/components/ui/PageHeader";
+import { Button } from "@/components/ui/Button";
+import { Badge } from "@/components/ui/Badge";
+import { Input, Field, Select, Textarea } from "@/components/ui/Input";
+import { Modal, ModalHeader, ModalFooter } from "@/components/ui/Modal";
+import { LoadingState } from "@/components/ui/States";
 
 interface Campaign {
   id: string;
   name: string;
-  status: 'DRAFT' | 'SCHEDULED' | 'ACTIVE' | 'COMPLETED';
+  status: "DRAFT" | "SCHEDULED" | "ACTIVE" | "COMPLETED";
   template: { name: string; subject: string };
   scheduledStart: string | null;
   startedAt: string | null;
@@ -46,9 +40,6 @@ interface Campaign {
   description?: string | null;
   category?: string | null;
   riskLevel?: string | null;
-  organizationName?: string | null;
-  branches?: string | null;
-  departments?: string | null;
 }
 
 interface Template {
@@ -69,48 +60,40 @@ interface Employee {
   awarenessScore: number;
 }
 
-const INDIAN_BRANCHES = [
-  'Pune', 
-  'Bengaluru', 
-  'Hyderabad', 
-  'Mumbai', 
-  'Delhi', 
-  'Chennai', 
-  'Kolkata'
+const INDIAN_BRANCHES = ["Pune", "Bengaluru", "Hyderabad", "Mumbai", "Delhi", "Chennai", "Kolkata"];
+const DEPARTMENTS = ["Engineering", "HR", "Finance", "Sales", "Marketing", "Operations", "IT Support"];
+const CATEGORIES = ["Password Reset", "HR Notice", "IT Support", "Finance", "Compliance", "Festival Awareness"];
+
+const LANES: { key: Campaign["status"]; label: string; tone: "accent" | "warn" | "neutral" | "muted" }[] = [
+  { key: "ACTIVE", label: "Active", tone: "accent" },
+  { key: "SCHEDULED", label: "Scheduled", tone: "warn" },
+  { key: "DRAFT", label: "Drafts", tone: "muted" },
+  { key: "COMPLETED", label: "Completed", tone: "neutral" },
 ];
 
-const DEPARTMENTS = [
-  'Engineering', 
-  'HR', 
-  'Finance', 
-  'Sales', 
-  'Marketing', 
-  'Operations', 
-  'IT Support'
+const STEPS = [
+  { num: 1, label: "Details", icon: FolderOpen },
+  { num: 2, label: "Audience", icon: Users2 },
+  { num: 3, label: "Scenario", icon: Mail },
+  { num: 4, label: "Schedule", icon: Calendar },
+  { num: 5, label: "Review", icon: ClipboardCheck },
 ];
 
-const CATEGORIES = [
-  'Password Reset', 
-  'HR Notice', 
-  'IT Support', 
-  'Finance', 
-  'Compliance', 
-  'Festival Awareness'
-];
+const riskTone: Record<string, "accent" | "warn" | "danger"> = {
+  LOW: "accent",
+  MEDIUM: "warn",
+  HIGH: "danger",
+};
 
 export default function CampaignsPage() {
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
   const [templates, setTemplates] = useState<Template[]>([]);
   const [employees, setEmployees] = useState<Employee[]>([]);
-  
   const [loading, setLoading] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
   const [successModalOpen, setSuccessModalOpen] = useState(false);
-  
-  // Wizard Step State
   const [step, setStep] = useState(1);
 
-  // Success Confirmation State
   const [createdCampaignDetails, setCreatedCampaignDetails] = useState<{
     id: string;
     name: string;
@@ -121,51 +104,45 @@ export default function CampaignsPage() {
     templateName: string;
   } | null>(null);
 
-  // STEP 1 Form states
-  const [campaignName, setCampaignName] = useState('');
-  const [campaignDescription, setCampaignDescription] = useState('');
-  const [businessUnit, setBusinessUnit] = useState('Engineering');
-  const [organizationName, setOrganizationName] = useState('Acme India Corp');
-  const [campaignCategory, setCampaignCategory] = useState('Password Reset');
-  const [riskLevel, setRiskLevel] = useState('MEDIUM');
-  
-  // STEP 2 Target Audience states
+  const [campaignName, setCampaignName] = useState("");
+  const [campaignDescription, setCampaignDescription] = useState("");
+  const [businessUnit, setBusinessUnit] = useState("Engineering");
+  const [organizationName, setOrganizationName] = useState("Acme India Corp");
+  const [campaignCategory, setCampaignCategory] = useState("Password Reset");
+  const [riskLevel, setRiskLevel] = useState("MEDIUM");
+
   const [selectedDeptFilters, setSelectedDeptFilters] = useState<string[]>([]);
   const [selectedBranchFilters, setSelectedBranchFilters] = useState<string[]>([]);
   const [selectedUserIds, setSelectedUserIds] = useState<string[]>([]);
-  const [employeeSearchTerm, setEmployeeSearchTerm] = useState('');
+  const [employeeSearchTerm, setEmployeeSearchTerm] = useState("");
 
-  // STEP 3 Template states
-  const [selectedTemplate, setSelectedTemplate] = useState('');
-  const [templateSearchTerm, setTemplateSearchTerm] = useState('');
+  const [selectedTemplate, setSelectedTemplate] = useState("");
+  const [templateSearchTerm, setTemplateSearchTerm] = useState("");
   const [previewTemplate, setPreviewTemplate] = useState<Template | null>(null);
 
-  // STEP 4 Schedule states
-  const [dispatchType, setDispatchType] = useState<'IMMEDIATE' | 'SCHEDULED'>('IMMEDIATE');
-  const [scheduleDate, setScheduleDate] = useState('');
-  const [scheduleTime, setScheduleTime] = useState('');
+  const [dispatchType, setDispatchType] = useState<"IMMEDIATE" | "SCHEDULED">("IMMEDIATE");
+  const [scheduleDate, setScheduleDate] = useState("");
+  const [scheduleTime, setScheduleTime] = useState("");
 
-  // Ethical check / Submit errors
   const [ethicsAcknowledge, setEthicsAcknowledge] = useState(false);
   const [submitting, setSubmitting] = useState(false);
-  const [errorMsg, setErrorMsg] = useState('');
+  const [errorMsg, setErrorMsg] = useState("");
 
   const loadData = () => {
     setLoading(true);
-    fetch('/api/admin/campaigns')
-      .then(res => res.json())
-      .then(data => {
+    fetch("/api/admin/campaigns")
+      .then((res) => res.json())
+      .then((data) => {
         setCampaigns(data.campaigns || []);
         setTemplates(data.templates || []);
         setEmployees(data.employees || []);
-        
-        if (data.templates && data.templates.length > 0) {
+        if (data.templates?.length > 0) {
           setSelectedTemplate(data.templates[0].id);
           setPreviewTemplate(data.templates[0]);
         }
         setLoading(false);
       })
-      .catch(err => {
+      .catch((err) => {
         console.error(err);
         setLoading(false);
       });
@@ -175,32 +152,30 @@ export default function CampaignsPage() {
     loadData();
   }, []);
 
-  // Preset operations code names for Indian theme
-  const generateIndianOpsName = () => {
-    const prefixes = ['OP-DESI-SHIELD', 'OP-MONSOON-SEC', 'OP-CHAI-TAP', 'OP-DECCAN-GATE', 'OP-HIMALAYA-VORTEX'];
-    const randomNum = Math.floor(100 + Math.random() * 900);
-    setCampaignName(`${prefixes[Math.floor(Math.random() * prefixes.length)]}-${randomNum}`);
+  const generateName = () => {
+    const themes = ["Password Reset Drill", "Payroll Notice Check", "IT Support Test", "Invoice Review Drill", "Benefits Enrollment Test"];
+    const quarter = `Q${Math.floor(Math.random() * 4) + 1}`;
+    setCampaignName(`${quarter} ${themes[Math.floor(Math.random() * themes.length)]}`);
   };
 
   const openWizard = () => {
     setStep(1);
-    generateIndianOpsName();
-    setCampaignDescription('Annual security readiness verification and spear phishing compliance check.');
-    setBusinessUnit('Engineering');
-    setOrganizationName('Acme India Corp');
-    setCampaignCategory('Password Reset');
-    setRiskLevel('MEDIUM');
+    generateName();
+    setCampaignDescription("A routine awareness check to measure how the team responds to a realistic phishing attempt.");
+    setBusinessUnit("Engineering");
+    setOrganizationName("Acme India Corp");
+    setCampaignCategory("Password Reset");
+    setRiskLevel("MEDIUM");
     setSelectedDeptFilters([]);
     setSelectedBranchFilters([]);
     setSelectedUserIds([]);
-    setEmployeeSearchTerm('');
-    setTemplateSearchTerm('');
-    setDispatchType('IMMEDIATE');
-    setScheduleDate('');
-    setScheduleTime('');
+    setEmployeeSearchTerm("");
+    setTemplateSearchTerm("");
+    setDispatchType("IMMEDIATE");
+    setScheduleDate("");
+    setScheduleTime("");
     setEthicsAcknowledge(false);
-    setErrorMsg('');
-    
+    setErrorMsg("");
     if (templates.length > 0) {
       setSelectedTemplate(templates[0].id);
       setPreviewTemplate(templates[0]);
@@ -208,124 +183,73 @@ export default function CampaignsPage() {
     setModalOpen(true);
   };
 
-  // Filtered employees for Step 2 targeting preview
   const filteredEmployees = useMemo(() => {
-    return employees.filter(emp => {
+    return employees.filter((emp) => {
       const matchesDept = selectedDeptFilters.length === 0 || (emp.department && selectedDeptFilters.includes(emp.department));
       const matchesBranch = selectedBranchFilters.length === 0 || (emp.branch && selectedBranchFilters.includes(emp.branch));
-      const matchesSearch = !employeeSearchTerm.trim() || 
+      const matchesSearch =
+        !employeeSearchTerm.trim() ||
         (emp.name && emp.name.toLowerCase().includes(employeeSearchTerm.toLowerCase())) ||
         emp.email.toLowerCase().includes(employeeSearchTerm.toLowerCase());
       return matchesDept && matchesBranch && matchesSearch;
     });
   }, [employees, selectedDeptFilters, selectedBranchFilters, employeeSearchTerm]);
 
-  // Synchronize target selections when filters change
   useEffect(() => {
-    if (step === 2) {
-      setSelectedUserIds(filteredEmployees.map(e => e.id));
-    }
+    if (step === 2) setSelectedUserIds(filteredEmployees.map((e) => e.id));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedDeptFilters, selectedBranchFilters, step]);
 
-  const handleToggleDeptFilter = (dept: string) => {
-    setSelectedDeptFilters(prev => 
-      prev.includes(dept) ? prev.filter(d => d !== dept) : [...prev, dept]
-    );
+  const toggleDept = (d: string) =>
+    setSelectedDeptFilters((p) => (p.includes(d) ? p.filter((x) => x !== d) : [...p, d]));
+  const toggleBranch = (b: string) =>
+    setSelectedBranchFilters((p) => (p.includes(b) ? p.filter((x) => x !== b) : [...p, b]));
+  const toggleUser = (id: string) =>
+    setSelectedUserIds((p) => (p.includes(id) ? p.filter((x) => x !== id) : [...p, id]));
+  const selectAllFiltered = () => {
+    const ids = filteredEmployees.map((e) => e.id);
+    const all = ids.every((id) => selectedUserIds.includes(id));
+    if (all) setSelectedUserIds((p) => p.filter((id) => !ids.includes(id)));
+    else setSelectedUserIds((p) => Array.from(new Set([...p, ...ids])));
   };
 
-  const handleToggleBranchFilter = (branch: string) => {
-    setSelectedBranchFilters(prev => 
-      prev.includes(branch) ? prev.filter(b => b !== branch) : [...prev, branch]
-    );
-  };
+  const selectedTemplateDetails = useMemo(
+    () => templates.find((t) => t.id === selectedTemplate),
+    [templates, selectedTemplate]
+  );
 
-  const handleToggleUserSelect = (id: string) => {
-    setSelectedUserIds(prev => 
-      prev.includes(id) ? prev.filter(uid => uid !== id) : [...prev, id]
-    );
-  };
-
-  const handleSelectAllFiltered = () => {
-    const filteredIds = filteredEmployees.map(e => e.id);
-    const allSelected = filteredIds.every(id => selectedUserIds.includes(id));
-    if (allSelected) {
-      setSelectedUserIds(prev => prev.filter(id => !filteredIds.includes(id)));
-    } else {
-      setSelectedUserIds(prev => Array.from(new Set([...prev, ...filteredIds])));
-    }
-  };
-
-  // Validation routines per step
   const handleNextStep = () => {
-    setErrorMsg('');
-    
+    setErrorMsg("");
     if (step === 1) {
-      if (!campaignName.trim()) {
-        setErrorMsg('Campaign Name is required.');
-        return;
-      }
-      // Duplicate campaign name check
-      const nameExists = campaigns.some(c => c.name.toLowerCase().trim() === campaignName.toLowerCase().trim());
-      if (nameExists) {
-        setErrorMsg('A campaign with this name already exists in your registry.');
-        return;
-      }
-      if (!campaignDescription.trim()) {
-        setErrorMsg('Campaign Description is required.');
-        return;
-      }
-      if (!organizationName.trim()) {
-        setErrorMsg('Organization Name is required.');
-        return;
-      }
+      if (!campaignName.trim()) return setErrorMsg("Give your campaign a name.");
+      if (campaigns.some((c) => c.name.toLowerCase().trim() === campaignName.toLowerCase().trim()))
+        return setErrorMsg("You already have a campaign with this name.");
+      if (!campaignDescription.trim()) return setErrorMsg("Add a short description.");
+      if (!organizationName.trim()) return setErrorMsg("Organization name is required.");
     }
-
-    if (step === 2) {
-      // Employee selection validation
-      if (selectedUserIds.length === 0) {
-        setErrorMsg('Employee selection validation failed: You must target at least 1 employee.');
-        return;
-      }
+    if (step === 2 && selectedUserIds.length === 0)
+      return setErrorMsg("Select at least one person to include.");
+    if (step === 3 && !selectedTemplate) return setErrorMsg("Pick an email scenario.");
+    if (step === 4 && dispatchType === "SCHEDULED") {
+      if (!scheduleDate || !scheduleTime) return setErrorMsg("Choose a date and time.");
+      const dt = new Date(`${scheduleDate}T${scheduleTime}`);
+      if (isNaN(dt.getTime()) || dt <= new Date()) return setErrorMsg("Pick a time in the future.");
     }
-
-    if (step === 3) {
-      if (!selectedTemplate) {
-        setErrorMsg('Please select an email template.');
-        return;
-      }
-    }
-
-    if (step === 4) {
-      // Date/time validation for scheduled type
-      if (dispatchType === 'SCHEDULED') {
-        if (!scheduleDate || !scheduleTime) {
-          setErrorMsg('Please select both date and time for the scheduled release.');
-          return;
-        }
-        const selectedDateTime = new Date(`${scheduleDate}T${scheduleTime}`);
-        if (isNaN(selectedDateTime.getTime()) || selectedDateTime <= new Date()) {
-          setErrorMsg('Scheduled start date/time must be in the future.');
-          return;
-        }
-      }
-    }
-
-    setStep(prev => prev + 1);
+    setStep((p) => p + 1);
   };
 
   const handleCreateCampaign = async () => {
     if (!ethicsAcknowledge) return;
     setSubmitting(true);
-    setErrorMsg('');
-
-    const scheduledStartISO = dispatchType === 'SCHEDULED' && scheduleDate && scheduleTime 
-      ? new Date(`${scheduleDate}T${scheduleTime}`).toISOString()
-      : null;
-
+    setErrorMsg("");
+    const scheduledStartISO =
+      dispatchType === "SCHEDULED" && scheduleDate && scheduleTime
+        ? new Date(`${scheduleDate}T${scheduleTime}`).toISOString()
+        : null;
     try {
-      const res = await fetch('/api/admin/campaigns', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const res = await fetch("/api/admin/campaigns", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           name: campaignName,
           description: campaignDescription,
@@ -334,32 +258,27 @@ export default function CampaignsPage() {
           organizationName,
           templateId: selectedTemplate,
           scheduledStart: scheduledStartISO,
-          targetDepartments: selectedDeptFilters.length > 0 ? selectedDeptFilters : ['ALL'],
-          targetBranches: selectedBranchFilters.length > 0 ? selectedBranchFilters : ['ALL'],
-          targetUserIds: selectedUserIds
-        })
+          targetDepartments: selectedDeptFilters.length > 0 ? selectedDeptFilters : ["ALL"],
+          targetBranches: selectedBranchFilters.length > 0 ? selectedBranchFilters : ["ALL"],
+          targetUserIds: selectedUserIds,
+        }),
       });
-
       if (!res.ok) {
         const err = await res.json();
-        throw new Error(err.error || 'Failed to deploy campaign');
+        throw new Error(err.error || "We couldn't create the campaign.");
       }
-
       const created = await res.json();
-
-      // Configure details to display in premium success modal
       setCreatedCampaignDetails({
         id: created.id,
         name: created.name,
-        scheduledTime: scheduledStartISO 
-          ? new Date(scheduledStartISO).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }) + ' (IST)' 
-          : 'Immediate Dispatch',
+        scheduledTime: scheduledStartISO
+          ? new Date(scheduledStartISO).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) + " IST"
+          : "Sends immediately",
         targetCount: selectedUserIds.length,
         category: campaignCategory,
         riskLevel,
-        templateName: selectedTemplateDetails?.name || 'Custom Email Template'
+        templateName: selectedTemplateDetails?.name || "Custom template",
       });
-
       setModalOpen(false);
       setSuccessModalOpen(true);
       loadData();
@@ -370,1022 +289,576 @@ export default function CampaignsPage() {
     }
   };
 
-  const selectedTemplateDetails = useMemo(() => {
-    return templates.find(t => t.id === selectedTemplate);
-  }, [templates, selectedTemplate]);
-
-  const handleToggleStatus = async (id: string, newStatus: 'ACTIVE' | 'COMPLETED') => {
+  const handleToggleStatus = async (id: string, newStatus: "ACTIVE" | "COMPLETED") => {
     try {
-      const res = await fetch('/api/admin/campaigns', {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id, status: newStatus })
+      const res = await fetch("/api/admin/campaigns", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id, status: newStatus }),
       });
       if (res.ok) loadData();
     } catch (err) {
       console.error(err);
     }
-  };  if (loading) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-6">
-        <div className="relative w-12 h-12 flex items-center justify-center">
-          <div className="absolute inset-0 border border-white/10 rounded-full" />
-          <div className="absolute inset-0 border-t border-white border-r border-transparent rounded-full animate-spin" />
-          <Plus className="text-white" size={16} />
-        </div>
-        <div className="text-center space-y-1">
-          <span className="text-[10px] font-mono tracking-widest text-white uppercase animate-pulse">Initializing Campaigns...</span>
-          <p className="text-[9px] font-mono text-zinc-500">Querying active drill registers and employee progress streams...</p>
-        </div>
-      </div>
-    );
+  };
+
+  if (loading) {
+    return <LoadingState label="Loading campaigns" sublabel="Gathering your active drills and targets." />;
   }
 
-  const drafts = campaigns.filter(c => c.status === 'DRAFT');
-  const scheduled = campaigns.filter(c => c.status === 'SCHEDULED');
-  const active = campaigns.filter(c => c.status === 'ACTIVE');
-  const completed = campaigns.filter(c => c.status === 'COMPLETED');
-
   return (
-    <div className="space-y-10 relative">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 border-b border-[#1F1F1F] pb-5">
-        <div className="space-y-1">
-          <div className="flex items-center gap-2">
-            <span className="h-1.5 w-1.5 rounded-full bg-[#00D26A]" />
-            <span className="text-[9px] font-mono uppercase tracking-widest text-zinc-500 font-bold">Indian Compliance Suite</span>
-          </div>
-          <h1 className="text-xl font-bold tracking-tight uppercase font-mono text-white">
-            Campaign Operations
-          </h1>
-          <p className="text-xs text-zinc-400 font-mono">Configure, dispatch, and terminate authorized cybersecurity awareness simulation exercises in Indian branches.</p>
-        </div>
+    <div>
+      <PageHeader
+        eyebrow="Operations"
+        title="Campaigns"
+        description="Plan, launch, and wind down authorized phishing simulations — and watch how your teams respond."
+        actions={
+          <Button variant="primary" icon={<Plus size={15} />} onClick={openWizard}>
+            New campaign
+          </Button>
+        }
+      />
 
-        <button
-          onClick={openWizard}
-          className="flex items-center justify-center gap-2 bg-white hover:bg-zinc-200 text-black px-4 py-2 rounded-lg transition text-xs font-mono uppercase tracking-wider shrink-0 border border-white/10 cursor-pointer"
-        >
-          <Plus size={14} className="stroke-[3]" /> Launch India Drill
-        </button>
+      <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+        {LANES.map((lane) => {
+          const items = campaigns.filter((c) => c.status === lane.key);
+          return (
+            <div key={lane.key} className="space-y-3">
+              <div className="flex items-center justify-between rounded-[10px] border border-line bg-card px-3 py-2">
+                <span className="flex items-center gap-2 text-[13px] font-medium text-ink">
+                  <span
+                    className={cn(
+                      "h-1.5 w-1.5 rounded-full",
+                      lane.tone === "accent" && "bg-accent",
+                      lane.tone === "warn" && "bg-warn",
+                      lane.tone === "neutral" && "bg-ink-soft",
+                      lane.tone === "muted" && "bg-ink-faint"
+                    )}
+                  />
+                  {lane.label}
+                </span>
+                <span className="tnum rounded-md bg-inset px-1.5 py-0.5 text-[12px] text-ink-soft">
+                  {items.length}
+                </span>
+              </div>
+              <div className="min-h-[220px] space-y-3">
+                <AnimatePresence mode="popLayout">
+                  {items.map((c) => (
+                    <CampaignCard key={c.id} campaign={c} onToggleStatus={handleToggleStatus} />
+                  ))}
+                </AnimatePresence>
+                {items.length === 0 && (
+                  <div className="rounded-[12px] border border-dashed border-line px-4 py-8 text-center text-[12.5px] text-ink-faint">
+                    Nothing here yet
+                  </div>
+                )}
+              </div>
+            </div>
+          );
+        })}
       </div>
 
-      {/* Kanban lanes structure */}
-      <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-        
-        {/* Lane 1: Active */}
-        <div className="space-y-5">
-          <div className="flex items-center justify-between px-2 py-1 bg-white/[0.01] border border-[#1F1F1F] rounded-lg">
-            <div className="flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-white" />
-              <h3 className="text-[10px] font-bold font-mono text-zinc-300 uppercase tracking-widest">Active</h3>
-            </div>
-            <span className="text-[10px] font-mono text-white px-2 py-0.5 bg-[#121212] rounded border border-[#1F1F1F]">{active.length}</span>
-          </div>
-          <div className="space-y-4 min-h-[250px] relative">
-            <AnimatePresence mode="popLayout">
-              {active.map(c => (
-                <CampaignCard key={c.id} campaign={c} onToggleStatus={handleToggleStatus} />
-              ))}
-            </AnimatePresence>
-            {active.length === 0 && <EmptyLaneMessage />}
+      {/* Wizard */}
+      <Modal open={modalOpen} onClose={() => setModalOpen(false)} size="xl">
+        <ModalHeader
+          title="Create a campaign"
+          description="Five quick steps from idea to launch."
+          onClose={() => setModalOpen(false)}
+          icon={<Plus size={17} />}
+        />
+
+        {/* Stepper */}
+        <div className="border-b border-line px-6 py-4">
+          <div className="flex items-center">
+            {STEPS.map((s, i) => {
+              const active = step === s.num;
+              const done = step > s.num;
+              const Icon = s.icon;
+              return (
+                <React.Fragment key={s.num}>
+                  <div className="flex items-center gap-2">
+                    <span
+                      className={cn(
+                        "flex h-7 w-7 items-center justify-center rounded-full border text-[12px] font-medium transition-colors",
+                        active && "border-accent bg-accent text-[#04130c]",
+                        done && "border-accent/40 bg-accent-faint text-accent",
+                        !active && !done && "border-line bg-inset text-ink-faint"
+                      )}
+                    >
+                      {done ? <Check size={13} /> : <Icon size={13} />}
+                    </span>
+                    <span
+                      className={cn(
+                        "hidden text-[13px] font-medium sm:inline",
+                        active ? "text-ink" : "text-ink-faint"
+                      )}
+                    >
+                      {s.label}
+                    </span>
+                  </div>
+                  {i < STEPS.length - 1 && (
+                    <div className="mx-2 h-px flex-1 bg-line" />
+                  )}
+                </React.Fragment>
+              );
+            })}
           </div>
         </div>
 
-        {/* Lane 2: Scheduled */}
-        <div className="space-y-5">
-          <div className="flex items-center justify-between px-2 py-1 bg-white/[0.01] border border-[#1F1F1F] rounded-lg">
-            <div className="flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-zinc-500" />
-              <h3 className="text-[10px] font-bold font-mono text-zinc-300 uppercase tracking-widest">Scheduled</h3>
+        <div className="scrollbar-thin flex-1 overflow-y-auto px-6 py-5">
+          {errorMsg && (
+            <div className="mb-4 flex items-center gap-2 rounded-[10px] border border-[#492626] bg-[#1a1111] px-3.5 py-2.5 text-[13px] text-danger">
+              <ShieldAlert size={15} className="shrink-0" />
+              {errorMsg}
             </div>
-            <span className="text-[10px] font-mono text-zinc-400 px-2 py-0.5 bg-[#121212] rounded border border-[#1F1F1F]">{scheduled.length}</span>
-          </div>
-          <div className="space-y-4 min-h-[250px] relative">
-            <AnimatePresence mode="popLayout">
-              {scheduled.map(c => (
-                <CampaignCard key={c.id} campaign={c} onToggleStatus={handleToggleStatus} />
-              ))}
-            </AnimatePresence>
-            {scheduled.length === 0 && <EmptyLaneMessage />}
-          </div>
-        </div>
+          )}
 
-        {/* Lane 3: Drafts */}
-        <div className="space-y-5">
-          <div className="flex items-center justify-between px-2 py-1 bg-white/[0.01] border border-[#1F1F1F] rounded-lg">
-            <div className="flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-zinc-700" />
-              <h3 className="text-[10px] font-bold font-mono text-zinc-300 uppercase tracking-widest">Drafts</h3>
-            </div>
-            <span className="text-[10px] font-mono text-zinc-500 px-2 py-0.5 bg-[#121212] rounded border border-[#1F1F1F]">{drafts.length}</span>
-          </div>
-          <div className="space-y-4 min-h-[250px] relative">
-            <AnimatePresence mode="popLayout">
-              {drafts.map(c => (
-                <CampaignCard key={c.id} campaign={c} onToggleStatus={handleToggleStatus} />
-              ))}
-            </AnimatePresence>
-            {drafts.length === 0 && <EmptyLaneMessage />}
-          </div>
-        </div>
-
-        {/* Lane 4: Completed */}
-        <div className="space-y-5">
-          <div className="flex items-center justify-between px-2 py-1 bg-white/[0.01] border border-[#1F1F1F] rounded-lg">
-            <div className="flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#00D26A]" />
-              <h3 className="text-[10px] font-bold font-mono text-zinc-300 uppercase tracking-widest">Completed</h3>
-            </div>
-            <span className="text-[10px] font-mono text-[#00D26A] px-2 py-0.5 bg-emerald-500/5 border border-emerald-500/10 rounded">{completed.length}</span>
-          </div>
-          <div className="space-y-4 min-h-[250px] relative">
-            <AnimatePresence mode="popLayout">
-              {completed.map(c => (
-                <CampaignCard key={c.id} campaign={c} onToggleStatus={handleToggleStatus} />
-              ))}
-            </AnimatePresence>
-            {completed.length === 0 && <EmptyLaneMessage />}
-          </div>
-        </div>
-
-      </div>
-
-      {/* Creation Multi-Step Wizard Modal */}
-      <AnimatePresence>
-        {modalOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-            <motion.div 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 0.7 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setModalOpen(false)}
-              className="absolute inset-0 bg-black/85 backdrop-blur-md"
-            />
-            <motion.div 
-              initial={{ opacity: 0, scale: 0.95, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              transition={{ type: 'spring', damping: 28, stiffness: 220 }}
-              className="p-6 sm:p-8 rounded-xl max-w-4xl w-full relative z-10 border border-[#1F1F1F] overflow-hidden bg-zinc-950 shadow-2xl flex flex-col max-h-[90vh]"
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={step}
+              initial={{ opacity: 0, x: 12 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -12 }}
+              transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
             >
-              {/* Wizard Header */}
-              <div className="flex justify-between items-start mb-6 shrink-0">
-                <div className="flex items-center gap-3">
-                  <div className="p-2 rounded bg-[#0A0A0A] border border-[#1F1F1F] text-white">
-                    <Sparkles size={14} />
-                  </div>
-                  <div>
-                    <h2 className="text-xl font-extrabold text-white tracking-tight">Deploy Awareness Drill</h2>
-                    <p className="text-[9px] text-zinc-400 font-mono tracking-widest uppercase">Targeted Campaign Setup Suite</p>
-                  </div>
-                </div>
-                <button 
-                  onClick={() => setModalOpen(false)}
-                  className="text-zinc-500 hover:text-white p-2 rounded-xl hover:bg-white/5 border border-transparent hover:border-white/5 transition-all cursor-pointer"
-                >
-                  <X size={18} />
-                </button>
-              </div>
-
-              {/* Steps Progress Tracker */}
-              <div className="grid grid-cols-5 gap-2 pb-5 border-b border-[#1F1F1F] mb-6 shrink-0 font-mono text-[9px]">
-                {[
-                  { num: 1, label: 'Identity' },
-                  { num: 2, label: 'Audience' },
-                  { num: 3, label: 'Scenario' },
-                  { num: 4, label: 'Schedule' },
-                  { num: 5, label: 'Audit' }
-                ].map((s) => {
-                  const isActive = step === s.num;
-                  const isCompleted = step > s.num;
-                  return (
-                    <div key={s.num} className="space-y-2">
-                      <div className="flex items-center gap-1.5">
-                        <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[9px] font-black transition-all ${
-                          isActive ? 'bg-white text-black font-bold' :
-                          isCompleted ? 'bg-[#121212] text-[#00D26A] border border-[#1F1F1F]' :
-                          'bg-white/5 text-zinc-500 border border-white/5'
-                        }`}>
-                          {isCompleted ? <Check size={10} className="stroke-[3]" /> : s.num}
-                        </span>
-                        <span className={`hidden sm:inline font-bold uppercase tracking-wider ${
-                          isActive ? 'text-white' :
-                          isCompleted ? 'text-[#00D26A]' :
-                          'text-zinc-500'
-                        }`}>
-                          {s.label}
-                        </span>
-                      </div>
-                      <div className="h-0.5 rounded-full w-full bg-white/[0.03] overflow-hidden">
-                        <motion.div 
-                          className={`h-full ${isCompleted ? 'bg-[#00D26A]' : isActive ? 'bg-white' : 'bg-transparent'}`}
-                          initial={{ width: 0 }}
-                          animate={{ width: isActive || isCompleted ? '100%' : '0%' }}
-                          transition={{ duration: 0.3 }}
-                        />
-                      </div>
+              {step === 1 && (
+                <div className="grid gap-5 sm:grid-cols-2">
+                  <Field label="Campaign name">
+                    <Input value={campaignName} onChange={(e) => setCampaignName(e.target.value)} placeholder="Q3 Password Reset Drill" />
+                  </Field>
+                  <Field label="Organization">
+                    <Input value={organizationName} onChange={(e) => setOrganizationName(e.target.value)} placeholder="Acme India Corp" />
+                  </Field>
+                  <Field label="Description" className="sm:col-span-2">
+                    <Textarea value={campaignDescription} onChange={(e) => setCampaignDescription(e.target.value)} placeholder="What are you testing, and why?" />
+                  </Field>
+                  <Field label="Business unit">
+                    <Select value={businessUnit} onChange={(e) => setBusinessUnit(e.target.value)}>
+                      {DEPARTMENTS.map((d) => <option key={d}>{d}</option>)}
+                    </Select>
+                  </Field>
+                  <Field label="Category">
+                    <Select value={campaignCategory} onChange={(e) => setCampaignCategory(e.target.value)}>
+                      {CATEGORIES.map((c) => <option key={c}>{c}</option>)}
+                    </Select>
+                  </Field>
+                  <Field label="Risk level" className="sm:col-span-2">
+                    <div className="inline-flex gap-1.5 rounded-[10px] border border-line bg-inset p-1">
+                      {(["LOW", "MEDIUM", "HIGH"] as const).map((r) => (
+                        <button
+                          key={r}
+                          type="button"
+                          onClick={() => setRiskLevel(r)}
+                          className={cn(
+                            "rounded-[8px] px-4 py-1.5 text-[13px] font-medium transition-colors",
+                            riskLevel === r
+                              ? "bg-card-hover text-ink"
+                              : "text-ink-faint hover:text-ink-soft"
+                          )}
+                        >
+                          {r.charAt(0) + r.slice(1).toLowerCase()}
+                        </button>
+                      ))}
                     </div>
-                  );
-                })}
-              </div>
-
-              {/* Error Message */}
-              {errorMsg && (
-                <div className="mb-4 p-3 rounded-lg bg-[#0A0A0A] border border-[#1F1F1F] text-[10px] text-[#EF4444] flex items-center gap-2 font-mono shrink-0">
-                  <AlertTriangle size={14} className="shrink-0" />
-                  <span>{errorMsg}</span>
+                  </Field>
                 </div>
               )}
 
-              {/* Wizard Scrollable Content area */}
-              <div className="flex-1 overflow-y-auto pr-1 select-none space-y-6">
-                
-                {/* STEP 1: CAMPAIGN DETAILS */}
-                {step === 1 && (
-                  <motion.div 
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    className="space-y-6"
-                  >
-                    <div className="space-y-2">
-                      <h3 className="text-sm font-bold text-white tracking-tight flex items-center gap-2">
-                        <Folder size={14} className="text-white" /> Campaign Details & Scope
-                      </h3>
-                      <p className="text-[10px] text-zinc-400 font-mono">STEP 1: Define baseline parameters and regulatory contexts for the simulation exercise.</p>
+              {step === 2 && (
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <p className="text-[13px] text-ink-soft">Filter, then fine-tune who's included.</p>
+                    <Badge tone="accent">{selectedUserIds.length} selected</Badge>
+                  </div>
+                  <div className="grid gap-5 md:grid-cols-3">
+                    <div className="space-y-4 md:col-span-1">
+                      <FilterGroup title="Departments" items={DEPARTMENTS} selected={selectedDeptFilters} onToggle={toggleDept} />
+                      <FilterGroup title="Branches" items={INDIAN_BRANCHES} selected={selectedBranchFilters} onToggle={toggleBranch} />
                     </div>
-
-                    <div className="grid sm:grid-cols-2 gap-5">
-                      <div className="space-y-4">
-                        <div>
-                          <label className="block text-[9px] font-mono uppercase tracking-wider text-zinc-400 mb-1.5 font-semibold">Campaign Name</label>
-                          <input
-                            type="text"
-                            required
-                            placeholder="e.g. OP-DESI-SHIELD-349"
-                            value={campaignName}
-                            onChange={(e) => setCampaignName(e.target.value)}
-                            className="w-full px-4 py-2.5 rounded-lg border border-[#1F1F1F] bg-black text-white focus:outline-none focus:border-zinc-700 text-xs font-mono"
+                    <div className="space-y-3 md:col-span-2">
+                      <Input
+                        icon={<Search size={15} />}
+                        placeholder="Search people by name or email"
+                        value={employeeSearchTerm}
+                        onChange={(e) => setEmployeeSearchTerm(e.target.value)}
+                      />
+                      <div className="overflow-hidden rounded-[12px] border border-line">
+                        <div className="flex items-center gap-3 border-b border-line bg-inset px-3.5 py-2.5">
+                          <CheckboxBox
+                            checked={filteredEmployees.length > 0 && filteredEmployees.every((e) => selectedUserIds.includes(e.id))}
+                            onChange={selectAllFiltered}
                           />
+                          <span className="text-[12px] font-medium text-ink-soft">Select all matching ({filteredEmployees.length})</span>
                         </div>
-
-                        <div>
-                          <label className="block text-[9px] font-mono uppercase tracking-wider text-zinc-400 mb-1.5 font-semibold">Campaign Description</label>
-                          <textarea
-                            required
-                            rows={3}
-                            placeholder="Describe the goals and compliance scope of this campaign..."
-                            value={campaignDescription}
-                            onChange={(e) => setCampaignDescription(e.target.value)}
-                            className="w-full px-4 py-2.5 rounded-lg border border-[#1F1F1F] bg-black text-white focus:outline-none focus:border-zinc-700 text-xs font-mono"
-                          />
-                        </div>
-                      </div>
-
-                      <div className="space-y-4">
-                        <div className="grid grid-cols-2 gap-3">
-                          <div>
-                            <label className="block text-[9px] font-mono uppercase tracking-wider text-zinc-400 mb-1.5 font-semibold">Business Unit / Dept</label>
-                            <select
-                              value={businessUnit}
-                              onChange={(e) => setBusinessUnit(e.target.value)}
-                              className="w-full px-4 py-2.5 rounded-lg border border-[#1F1F1F] bg-black text-white focus:outline-none focus:border-zinc-700 text-xs font-mono"
-                            >
-                              {DEPARTMENTS.map(d => (
-                                <option key={d} value={d}>{d}</option>
-                              ))}
-                            </select>
-                          </div>
-
-                          <div>
-                            <label className="block text-[9px] font-mono uppercase tracking-wider text-zinc-400 mb-1.5 font-semibold">Organization Name</label>
-                            <input
-                              type="text"
-                              required
-                              placeholder="e.g. Acme India Ltd"
-                              value={organizationName}
-                              onChange={(e) => setOrganizationName(e.target.value)}
-                              className="w-full px-4 py-2.5 rounded-lg border border-[#1F1F1F] bg-black text-white focus:outline-none focus:border-zinc-700 text-xs font-mono"
-                            />
-                          </div>
-                        </div>
-
-                        <div className="grid grid-cols-2 gap-3">
-                          <div>
-                            <label className="block text-[9px] font-mono uppercase tracking-wider text-zinc-400 mb-1.5 font-semibold">Campaign Category</label>
-                            <select
-                              value={campaignCategory}
-                              onChange={(e) => setCampaignCategory(e.target.value)}
-                              className="w-full px-4 py-2.5 rounded-lg border border-[#1F1F1F] bg-black text-white focus:outline-none focus:border-zinc-700 text-xs font-mono"
-                            >
-                              {CATEGORIES.map(c => (
-                                <option key={c} value={c}>{c}</option>
-                              ))}
-                            </select>
-                          </div>
-
-                          <div>
-                            <label className="block text-[9px] font-mono uppercase tracking-wider text-zinc-400 mb-1.5 font-semibold">Risk Level</label>
-                            <div className="flex items-center gap-1.5 bg-[#0A0A0A] border border-[#1F1F1F] p-1 rounded-lg">
-                              {(['LOW', 'MEDIUM', 'HIGH'] as const).map((r) => (
+                        <div className="scrollbar-thin max-h-[260px] divide-y divide-line overflow-y-auto">
+                          {filteredEmployees.length > 0 ? (
+                            filteredEmployees.map((emp) => {
+                              const selected = selectedUserIds.includes(emp.id);
+                              return (
                                 <button
-                                  key={r}
+                                  key={emp.id}
                                   type="button"
-                                  onClick={() => setRiskLevel(r)}
-                                  className={`flex-1 py-1 rounded text-[9px] font-mono font-bold transition-all cursor-pointer ${
-                                    riskLevel === r 
-                                      ? r === 'HIGH' ? 'bg-red-500/10 border border-red-500/20 text-[#EF4444]' :
-                                        r === 'MEDIUM' ? 'bg-amber-500/10 border border-amber-500/20 text-[#F59E0B]' :
-                                        'bg-emerald-500/10 border border-emerald-500/20 text-[#22C55E]'
-                                      : 'bg-transparent border border-transparent text-zinc-500 hover:text-zinc-300'
-                                  }`}
+                                  onClick={() => toggleUser(emp.id)}
+                                  className={cn(
+                                    "flex w-full items-center gap-3 px-3.5 py-2.5 text-left transition-colors hover:bg-white/[0.02]",
+                                    selected && "bg-white/[0.025]"
+                                  )}
                                 >
-                                  {r}
-                                </button>
-                              ))}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </motion.div>
-                )}
-
-                {/* STEP 2: TARGET AUDIENCE */}
-                {step === 2 && (
-                  <motion.div 
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    className="space-y-6"
-                  >
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                      <div className="space-y-1">
-                        <h3 className="text-sm font-bold text-white tracking-tight flex items-center gap-2">
-                          <UserCheck size={14} className="text-white" /> Define Target Audience
-                        </h3>
-                        <p className="text-[10px] text-zinc-400 font-mono">STEP 2: Filter targeted employee nodes dynamically by branches and divisions.</p>
-                      </div>
-                      <div className="text-right shrink-0 p-3 rounded-lg bg-[#0A0A0A] border border-[#1F1F1F]">
-                        <span className="text-[9px] uppercase font-mono text-zinc-500 block font-bold">Target Employee Preview</span>
-                        <span className="text-sm font-bold font-mono text-white">
-                          {selectedUserIds.length} employees selected
-                        </span>
-                      </div>
-                    </div>
-
-                    <div className="grid md:grid-cols-3 gap-6">
-                      {/* Left: Department & Branch Filters */}
-                      <div className="space-y-5 md:col-span-1">
-                        <div className="space-y-3 p-4 rounded-lg bg-[#0A0A0A] border border-[#1F1F1F]">
-                          <div className="flex items-center gap-1.5 text-zinc-300 font-mono text-[9px] font-bold">
-                            <Building size={11} className="text-white" /> SELECT DEPARTMENTS
-                          </div>
-                          <div className="space-y-2 max-h-[140px] overflow-y-auto pr-1 scrollbar-thin">
-                            {DEPARTMENTS.map(d => {
-                              const isChecked = selectedDeptFilters.includes(d);
-                              return (
-                                <label key={d} className="flex items-center gap-2 text-[10px] font-mono text-zinc-400 hover:text-white cursor-pointer select-none">
-                                  <input
-                                    type="checkbox"
-                                    checked={isChecked}
-                                    onChange={() => handleToggleDeptFilter(d)}
-                                    className="peer shrink-0 appearance-none w-3.5 h-3.5 rounded border border-white/10 bg-black/40 checked:bg-white checked:border-white focus:outline-none transition-all cursor-pointer"
-                                  />
-                                  <span>{d}</span>
-                                </label>
-                              );
-                            })}
-                          </div>
-                        </div>
-
-                        <div className="space-y-3 p-4 rounded-lg bg-[#0A0A0A] border border-[#1F1F1F]">
-                          <div className="flex items-center gap-1.5 text-zinc-300 font-mono text-[9px] font-bold">
-                            <MapPin size={11} className="text-white" /> SELECT BRANCHES
-                          </div>
-                          <div className="space-y-2 max-h-[140px] overflow-y-auto pr-1 scrollbar-thin">
-                            {INDIAN_BRANCHES.map(b => {
-                              const isChecked = selectedBranchFilters.includes(b);
-                              return (
-                                <label key={b} className="flex items-center gap-2 text-[10px] font-mono text-zinc-400 hover:text-white cursor-pointer select-none">
-                                  <input
-                                    type="checkbox"
-                                    checked={isChecked}
-                                    onChange={() => handleToggleBranchFilter(b)}
-                                    className="peer shrink-0 appearance-none w-3.5 h-3.5 rounded border border-white/10 bg-black/40 checked:bg-white checked:border-white focus:outline-none transition-all cursor-pointer"
-                                  />
-                                  <span>{b}</span>
-                                </label>
-                              );
-                            })}
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Right: Employee Directory Table */}
-                      <div className="md:col-span-2 space-y-3">
-                        <div className="relative">
-                          <Search className="absolute left-3 top-2.5 text-zinc-500" size={12} />
-                          <input
-                            type="text"
-                            placeholder="Filter matching employees by name or email..."
-                            value={employeeSearchTerm}
-                            onChange={(e) => setEmployeeSearchTerm(e.target.value)}
-                            className="w-full pl-9 pr-4 py-2 rounded-lg border border-[#1F1F1F] bg-black text-white focus:outline-none focus:border-zinc-700 text-xs font-mono placeholder:text-zinc-600"
-                          />
-                        </div>
-
-                        <div className="border border-[#1F1F1F] rounded-lg overflow-hidden bg-white/[0.005]">
-                          <div className="grid grid-cols-12 gap-2 px-3 py-2 bg-white/[0.02] border-b border-[#1F1F1F] font-mono text-[8px] text-zinc-500 font-bold items-center">
-                            <div className="col-span-1">
-                              <input
-                                type="checkbox"
-                                checked={filteredEmployees.length > 0 && filteredEmployees.every(e => selectedUserIds.includes(e.id))}
-                                onChange={handleSelectAllFiltered}
-                                className="peer shrink-0 appearance-none w-3.5 h-3.5 rounded border border-white/10 bg-black/40 checked:bg-white checked:border-white focus:outline-none transition-all cursor-pointer"
-                              />
-                            </div>
-                            <div className="col-span-4">NAME</div>
-                            <div className="col-span-4">EMAIL</div>
-                            <div className="col-span-2">BRANCH</div>
-                            <div className="col-span-1 text-right">RISK</div>
-                          </div>
-
-                          <div className="max-h-[220px] overflow-y-auto divide-y divide-white/[0.03] scrollbar-thin bg-black">
-                            {filteredEmployees.length > 0 ? (
-                              filteredEmployees.map((emp) => {
-                                const isSelected = selectedUserIds.includes(emp.id);
-                                return (
-                                  <div 
-                                    key={emp.id}
-                                    onClick={() => handleToggleUserSelect(emp.id)}
-                                    className={`grid grid-cols-12 gap-2 px-3 py-2 items-center cursor-pointer transition-all hover:bg-white/[0.02] text-[10px] ${
-                                      isSelected ? 'bg-white/5' : ''
-                                    }`}
-                                  >
-                                    <div className="col-span-1 flex items-center" onClick={(e) => e.stopPropagation()}>
-                                      <input
-                                        type="checkbox"
-                                        checked={isSelected}
-                                        onChange={() => handleToggleUserSelect(emp.id)}
-                                        className="peer shrink-0 appearance-none w-3.5 h-3.5 rounded border border-white/10 bg-black/40 checked:bg-white checked:border-white focus:outline-none transition-all cursor-pointer"
-                                      />
-                                    </div>
-                                    <div className="col-span-4 font-extrabold text-white truncate">{emp.name || 'Anonymous Target'}</div>
-                                    <div className="col-span-4 font-mono text-zinc-400 truncate">{emp.email}</div>
-                                    <div className="col-span-2 font-mono text-zinc-500 uppercase">{emp.branch || 'N/A'}</div>
-                                    <div className="col-span-1 text-right">
-                                      <span className={`px-1 py-0.5 rounded text-[8px] font-mono font-bold ${
-                                        emp.riskCategory === 'HIGH' ? 'bg-red-500/10 text-[#EF4444]' :
-                                        emp.riskCategory === 'MEDIUM' ? 'bg-amber-500/10 text-[#F59E0B]' :
-                                        'bg-emerald-500/10 text-[#22C55E]'
-                                      }`}>
-                                        {emp.riskCategory.substring(0, 3)}
-                                      </span>
-                                    </div>
+                                  <CheckboxBox checked={selected} onChange={() => toggleUser(emp.id)} />
+                                  <div className="min-w-0 flex-1">
+                                    <p className="truncate text-[13px] font-medium text-ink">{emp.name || "Unnamed"}</p>
+                                    <p className="truncate text-[12px] text-ink-faint">{emp.email}</p>
                                   </div>
-                                );
-                              })
-                            ) : (
-                              <div className="p-8 text-center text-zinc-600 font-mono text-[9px] uppercase tracking-widest">
-                                No employees match criteria
+                                  <span className="hidden text-[12px] text-ink-faint sm:block">{emp.branch || "—"}</span>
+                                  <Badge tone={riskTone[emp.riskCategory] || "neutral"}>{emp.riskCategory.toLowerCase()}</Badge>
+                                </button>
+                              );
+                            })
+                          ) : (
+                            <div className="px-4 py-10 text-center text-[13px] text-ink-faint">No one matches these filters.</div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {step === 3 && (
+                <div className="grid gap-5 md:grid-cols-2">
+                  <div className="space-y-3">
+                    <Input
+                      icon={<Search size={15} />}
+                      placeholder="Search scenarios"
+                      value={templateSearchTerm}
+                      onChange={(e) => setTemplateSearchTerm(e.target.value)}
+                    />
+                    <div className="scrollbar-thin max-h-[300px] space-y-2 overflow-y-auto pr-1">
+                      {templates
+                        .filter((t) => !templateSearchTerm.trim() || t.name.toLowerCase().includes(templateSearchTerm.toLowerCase()))
+                        .map((t) => {
+                          const selected = selectedTemplate === t.id;
+                          return (
+                            <button
+                              key={t.id}
+                              type="button"
+                              onClick={() => {
+                                setSelectedTemplate(t.id);
+                                setPreviewTemplate(t);
+                              }}
+                              className={cn(
+                                "flex w-full items-center justify-between gap-3 rounded-[10px] border px-3.5 py-3 text-left transition-colors",
+                                selected
+                                  ? "border-accent/40 bg-accent-faint/40"
+                                  : "border-line bg-inset hover:border-line-strong"
+                              )}
+                            >
+                              <div className="min-w-0">
+                                <p className="truncate text-[13.5px] font-medium text-ink">{t.name}</p>
+                                <p className="truncate text-[12px] text-ink-faint">{t.subject}</p>
                               </div>
-                            )}
-                          </div>
-                        </div>
-                      </div>
+                              {selected && <Check size={16} className="shrink-0 text-accent" />}
+                            </button>
+                          );
+                        })}
                     </div>
-                  </motion.div>
-                )}
-
-                {/* STEP 3: EMAIL TEMPLATES */}
-                {step === 3 && (
-                  <motion.div 
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    className="grid md:grid-cols-2 gap-6"
-                  >
-                    {/* Scenario List */}
-                    <div className="space-y-4 flex flex-col min-h-0">
-                      <div className="space-y-1">
-                        <h3 className="text-sm font-bold text-white tracking-tight flex items-center gap-2">
-                          <Compass size={14} className="text-white" /> Indian Corporate Scenarios
-                        </h3>
-                        <p className="text-[10px] text-zinc-400 font-mono">STEP 3: Select the phishing simulation template to test validation skills.</p>
-                      </div>
-
-                      <div className="relative">
-                        <Search className="absolute left-3 top-2.5 text-zinc-500" size={12} />
-                        <input
-                          type="text"
-                          placeholder="Search Indian scenarios..."
-                          value={templateSearchTerm}
-                          onChange={(e) => setTemplateSearchTerm(e.target.value)}
-                          className="w-full pl-9 pr-4 py-2 rounded-lg border border-[#1F1F1F] bg-black text-white focus:outline-none focus:border-zinc-700 text-xs font-mono placeholder:text-zinc-600"
-                        />
-                      </div>
-
-                      <div className="overflow-y-auto space-y-2 max-h-[240px] pr-1 scrollbar-thin flex-1 bg-black">
-                        {templates
-                          .filter(t => !templateSearchTerm.trim() || t.name.toLowerCase().includes(templateSearchTerm.toLowerCase()))
-                          .map((t) => {
-                            const isSelected = selectedTemplate === t.id;
-                            return (
-                              <div
-                                key={t.id}
-                                onClick={() => {
-                                  setSelectedTemplate(t.id);
-                                  setPreviewTemplate(t);
-                                }}
-                                className={`p-3 rounded-lg border transition duration-150 cursor-pointer flex justify-between items-center text-left ${
-                                  isSelected 
-                                    ? 'bg-[#121212] border-white text-white' 
-                                    : 'bg-[#0A0A0A] border-[#1F1F1F] text-zinc-400 hover:border-zinc-700 hover:bg-[#1C1C1C]'
-                                }`}
-                              >
-                                <div className="space-y-0.5 select-none pr-3 truncate">
-                                  <span className="text-xs font-extrabold text-white block truncate">{t.name}</span>
-                                  <span className="text-[9px] font-mono text-zinc-500 block truncate">SUBJECT: {t.subject}</span>
-                                </div>
-                                <div className="shrink-0">
-                                  {isSelected && <span className="p-0.5 rounded-full bg-white text-black"><Check size={8} className="stroke-[3]" /></span>}
-                                </div>
-                              </div>
-                            );
-                          })}
-                      </div>
-
-                      <div className="p-3 rounded-lg bg-[#0A0A0A] border border-[#1F1F1F] text-[9px] font-mono text-zinc-400 flex items-start gap-2 leading-relaxed">
-                        <Info size={12} className="shrink-0 mt-0.5" />
-                        <div>
-                          <strong>Domain spoofing telemetry enabled.</strong> This campaign will test employee verification by using simulated corporate domains such as <strong>@company.co.in</strong> and <strong>@company.in</strong>.
-                        </div>
-                      </div>
+                  </div>
+                  <div className="flex flex-col overflow-hidden rounded-[12px] border border-line bg-surface">
+                    <div className="flex items-center gap-2 border-b border-line px-4 py-2.5">
+                      <span className="h-2 w-2 rounded-full bg-[#2a2a2e]" />
+                      <span className="h-2 w-2 rounded-full bg-[#2a2a2e]" />
+                      <span className="ml-2 text-[12px] text-ink-faint">Email preview</span>
                     </div>
-
-                    {/* Preview Box */}
-                    <div className="p-4.5 rounded-lg border border-[#1F1F1F] flex flex-col h-full min-h-[300px] overflow-hidden bg-[#121212]">
-                      <div className="flex items-center justify-between border-b border-white/[0.04] pb-2 mb-3 shrink-0">
-                        <span className="text-[9px] font-mono text-zinc-400 font-bold uppercase tracking-wider">Mail Sandbox Sandbox</span>
-                        <div className="flex gap-1">
-                          <span className="w-1.5 h-1.5 rounded-full bg-red-500/50" />
-                          <span className="w-1.5 h-1.5 rounded-full bg-yellow-500/50" />
-                          <span className="w-1.5 h-1.5 rounded-full bg-green-500/50" />
-                        </div>
-                      </div>
-
-                      {previewTemplate ? (
-                        <div className="flex-1 flex flex-col min-h-0 text-[10px]">
-                          <div className="space-y-1 font-mono text-[9px] text-zinc-400 border-b border-white/[0.04] pb-2.5 shrink-0">
-                            <div><span className="text-zinc-600">FROM:</span> Indian Security Operations Center &lt;dispatcher@acme.co.in&gt;</div>
-                            <div><span className="text-zinc-600">SUBJECT:</span> <span className="text-white font-semibold font-sans text-[10px]">{previewTemplate.subject}</span></div>
-                          </div>
-                          
-                          <div className="flex-1 overflow-y-auto mt-2.5 p-2.5 bg-white/[0.01] border border-white/[0.03] rounded-xl text-zinc-300 font-sans text-xs scrollbar-thin select-text leading-relaxed">
-                            <div 
-                              dangerouslySetInnerHTML={{ __html: previewTemplate.bodyHtml }} 
-                              className="prose prose-invert max-w-none text-[11px]"
-                            />
-                          </div>
-                        </div>
-                      ) : (
-                        <div className="flex-1 flex flex-col items-center justify-center text-center text-zinc-600 font-mono text-[9px] uppercase tracking-widest">
-                          <Eye size={18} className="mb-1 text-zinc-700" />
-                          No preview selected
-                        </div>
-                      )}
-                    </div>
-                  </motion.div>
-                )}
-
-                {/* STEP 4: SCHEDULE CAMPAIGN */}
-                {step === 4 && (
-                  <motion.div 
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    className="space-y-6"
-                  >
-                    <div className="space-y-2">
-                      <h3 className="text-sm font-bold text-white tracking-tight flex items-center gap-2">
-                        <Calendar size={14} className="text-white" /> Scheduling & Delivery Options
-                      </h3>
-                      <p className="text-[10px] text-zinc-400 font-mono">STEP 4: Set the campaign dispatch details. Timing is aligned with Asia/Kolkata (IST).</p>
-                    </div>
-
-                    <div className="space-y-6">
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div
-                          onClick={() => setDispatchType('IMMEDIATE')}
-                          className={`p-4.5 rounded-lg border transition duration-150 cursor-pointer flex items-start gap-3.5 text-left ${
-                            dispatchType === 'IMMEDIATE' 
-                              ? 'bg-[#121212] border-white text-white' 
-                              : 'bg-[#0A0A0A] border-[#1F1F1F] text-zinc-400 hover:border-zinc-700 hover:bg-[#1C1C1C]'
-                          }`}
-                        >
-                          <div className={`p-2 rounded-lg ${dispatchType === 'IMMEDIATE' ? 'bg-white/10 text-white' : 'bg-white/5 text-zinc-500'} shrink-0 mt-0.5`}>
-                            <Play size={14} className="fill-current" />
-                          </div>
-                          <div className="space-y-1">
-                            <span className="text-xs font-extrabold text-white block">Send Immediately</span>
-                            <span className="text-[9px] leading-relaxed font-mono block text-zinc-500">Initiate operations and send simulated payloads directly after launch confirmation.</span>
-                          </div>
-                        </div>
-
-                        <div
-                          onClick={() => setDispatchType('SCHEDULED')}
-                          className={`p-4.5 rounded-lg border transition duration-150 cursor-pointer flex items-start gap-3.5 text-left ${
-                            dispatchType === 'SCHEDULED' 
-                              ? 'bg-[#121212] border-white text-white' 
-                              : 'bg-[#0A0A0A] border-[#1F1F1F] text-zinc-400 hover:border-zinc-700 hover:bg-[#1C1C1C]'
-                          }`}
-                        >
-                          <div className={`p-2 rounded-lg ${dispatchType === 'SCHEDULED' ? 'bg-white/10 text-white' : 'bg-white/5 text-zinc-500'} shrink-0 mt-0.5`}>
-                            <Clock size={14} />
-                          </div>
-                          <div className="space-y-1">
-                            <span className="text-xs font-extrabold text-white block">Schedule Later</span>
-                            <span className="text-[9px] leading-relaxed font-mono block text-zinc-500">Delay campaign startup to a designated date and time window.</span>
-                          </div>
-                        </div>
-                      </div>
-
-                      {dispatchType === 'SCHEDULED' && (
-                        <motion.div
-                          initial={{ opacity: 0, y: -10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          className="p-5 rounded-lg bg-[#0A0A0A] border border-[#1F1F1F] grid sm:grid-cols-2 gap-4"
-                        >
-                          <div>
-                            <label className="block text-[9px] font-mono uppercase tracking-wider text-zinc-400 mb-1.5 font-semibold">Scheduled Date (IST)</label>
-                            <input
-                              type="date"
-                              required
-                              value={scheduleDate}
-                              onChange={(e) => setScheduleDate(e.target.value)}
-                              className="w-full px-4 py-2.5 rounded-lg border border-[#1F1F1F] bg-black text-white focus:outline-none focus:border-zinc-700 text-xs font-mono"
-                            />
-                          </div>
-
-                          <div>
-                            <label className="block text-[9px] font-mono uppercase tracking-wider text-zinc-400 mb-1.5 font-semibold">Scheduled Time (IST)</label>
-                            <input
-                              type="time"
-                              required
-                              value={scheduleTime}
-                              onChange={(e) => setScheduleTime(e.target.value)}
-                              className="w-full px-4 py-2.5 rounded-lg border border-[#1F1F1F] bg-black text-white focus:outline-none focus:border-zinc-700 text-xs font-mono"
-                            />
-                          </div>
-                        </motion.div>
-                      )}
-
-                      <div className="p-4 rounded-lg bg-[#0A0A0A] border border-[#1F1F1F] flex items-center justify-between text-xs font-mono">
-                        <span className="text-zinc-500 uppercase tracking-widest text-[9px] font-bold">Standard Time Zone</span>
-                        <span className="text-white font-extrabold flex items-center gap-1.5">
-                          <GlobeIndia size={12} className="text-white" /> Asia/Kolkata (IST)
-                        </span>
-                      </div>
-                    </div>
-                  </motion.div>
-                )}
-
-                {/* STEP 5: REVIEW & LAUNCH */}
-                {step === 5 && (
-                  <motion.div 
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    className="space-y-6"
-                  >
-                    <div className="space-y-2">
-                      <h3 className="text-sm font-bold text-white tracking-tight flex items-center gap-2">
-                        <ShieldAlert size={14} className="text-[#EF4444]" /> Final Audit & Launch Approval
-                      </h3>
-                      <p className="text-[10px] text-zinc-400 font-mono">STEP 5: Validate campaign configuration details prior to execution.</p>
-                    </div>
-
-                    <div className="grid md:grid-cols-2 gap-5">
-                      
-                      {/* Configuration Sheet */}
-                      <div className="p-4.5 rounded-lg bg-[#0A0A0A] border border-[#1F1F1F] space-y-3 relative overflow-hidden font-mono text-[9px]">
-                        <h4 className="text-[10px] font-bold text-white/90 uppercase tracking-widest flex items-center gap-1.5">
-                          <Info size={12} className="text-white" /> SIMULATION SUMMARY
-                        </h4>
-                        
-                        <div className="space-y-2 divide-y divide-white/[0.03] pt-1">
-                          <div className="flex justify-between py-1">
-                            <span className="text-zinc-500">CAMPAIGN NAME:</span>
-                            <span className="text-white font-extrabold">{campaignName}</span>
-                          </div>
-                          <div className="flex justify-between py-1">
-                            <span className="text-zinc-500">BUSINESS UNIT:</span>
-                            <span className="text-zinc-300 font-extrabold">{businessUnit}</span>
-                          </div>
-                          <div className="flex justify-between py-1">
-                            <span className="text-zinc-500">ORGANIZATION:</span>
-                            <span className="text-zinc-300 font-extrabold">{organizationName}</span>
-                          </div>
-                          <div className="flex justify-between py-1">
-                            <span className="text-zinc-500">CATEGORY:</span>
-                            <span className="text-white font-black">{campaignCategory}</span>
-                          </div>
-                          <div className="flex justify-between py-1">
-                            <span className="text-zinc-500">RISK THRESHOLD:</span>
-                            <span className="text-zinc-300 font-extrabold">{riskLevel}</span>
-                          </div>
-                          <div className="flex justify-between py-1">
-                            <span className="text-zinc-500">TARGET SCALE:</span>
-                            <span className="text-white font-extrabold">{selectedUserIds.length} employees</span>
-                          </div>
-                          <div className="flex justify-between py-1">
-                            <span className="text-zinc-500">SCENARIO:</span>
-                            <span className="text-zinc-300 font-extrabold uppercase truncate max-w-[130px]" title={selectedTemplateDetails?.name}>
-                              {selectedTemplateDetails?.name || 'N/A'}
-                            </span>
-                          </div>
-                          <div className="flex justify-between py-1">
-                            <span className="text-zinc-500">DISPATCH (IST):</span>
-                            <span className="text-white font-extrabold">
-                              {dispatchType === 'IMMEDIATE' ? 'LAUNCH IMMEDIATELY' : `${scheduleDate} ${scheduleTime}`}
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Consent Checkbox */}
-                      <div className="p-4.5 rounded-lg bg-[#0A0A0A] border border-[#1F1F1F] space-y-3.5 relative overflow-hidden text-[9px] font-mono text-zinc-300 flex flex-col justify-between">
-                        <div className="space-y-3">
-                          <div className="flex gap-2 items-center">
-                            <ShieldAlert size={14} className="text-[#EF4444] shrink-0" />
-                            <p className="text-[10px] text-[#EF4444] font-bold uppercase tracking-wider">Ethics & compliance Authorization</p>
-                          </div>
-                          <p className="leading-relaxed">
-                            Under organized security drills, you certify targeted domains and employees have consented to receive mock phishing exercises. <strong>Real password strings and inputs are client-intercepted and not cached.</strong>
+                    {previewTemplate ? (
+                      <div className="flex min-h-[280px] flex-1 flex-col">
+                        <div className="space-y-1 border-b border-line px-4 py-3 text-[12px] text-ink-faint">
+                          <p>From — Security Operations</p>
+                          <p>
+                            Subject — <span className="font-medium text-ink">{previewTemplate.subject}</span>
                           </p>
                         </div>
-                        
-                        <label className="flex items-center gap-3 cursor-pointer mt-4 pt-3 border-t border-white/[0.04]">
-                          <div className="relative flex items-center">
-                            <input
-                              type="checkbox"
-                              checked={ethicsAcknowledge}
-                              onChange={(e) => setEthicsAcknowledge(e.target.checked)}
-                              className="peer shrink-0 appearance-none w-4.5 h-4.5 rounded border border-white/10 bg-black/40 checked:bg-white checked:border-white focus:outline-none transition-all cursor-pointer"
-                            />
-                            <CheckCircle className="absolute w-3.5 h-3.5 text-black pointer-events-none scale-0 peer-checked:scale-100 transition-transform left-[2px] top-[2px]" />
-                          </div>
-                          <span className="text-[9px] uppercase font-bold text-zinc-300 select-none">
-                            I verify and authorize compliance
-                          </span>
-                        </label>
+                        <div
+                          className="scrollbar-thin flex-1 overflow-y-auto px-4 py-3 text-[13px] leading-relaxed text-ink-soft [&_a]:text-accent"
+                          dangerouslySetInnerHTML={{ __html: previewTemplate.bodyHtml }}
+                        />
                       </div>
+                    ) : (
+                      <div className="flex min-h-[280px] flex-1 flex-col items-center justify-center text-ink-faint">
+                        <Eye size={20} />
+                        <span className="mt-2 text-[13px]">Select a scenario to preview</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
 
+              {step === 4 && (
+                <div className="space-y-5">
+                  <div className="grid gap-3 sm:grid-cols-2">
+                    {([
+                      { type: "IMMEDIATE", icon: Play, title: "Send now", body: "Deliver the simulation as soon as you launch." },
+                      { type: "SCHEDULED", icon: Clock, title: "Schedule for later", body: "Pick a future date and time to send." },
+                    ] as const).map((opt) => {
+                      const active = dispatchType === opt.type;
+                      const Icon = opt.icon;
+                      return (
+                        <button
+                          key={opt.type}
+                          type="button"
+                          onClick={() => setDispatchType(opt.type)}
+                          className={cn(
+                            "flex items-start gap-3 rounded-[12px] border p-4 text-left transition-colors",
+                            active ? "border-accent/40 bg-accent-faint/40" : "border-line bg-inset hover:border-line-strong"
+                          )}
+                        >
+                          <span className={cn("mt-0.5 flex h-9 w-9 items-center justify-center rounded-[9px]", active ? "bg-accent/15 text-accent" : "bg-card text-ink-faint")}>
+                            <Icon size={16} />
+                          </span>
+                          <div>
+                            <p className="text-[14px] font-medium text-ink">{opt.title}</p>
+                            <p className="mt-0.5 text-[12.5px] leading-relaxed text-ink-soft">{opt.body}</p>
+                          </div>
+                        </button>
+                      );
+                    })}
+                  </div>
+                  {dispatchType === "SCHEDULED" && (
+                    <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} className="grid gap-4 rounded-[12px] border border-line bg-inset p-4 sm:grid-cols-2">
+                      <Field label="Date (IST)">
+                        <Input type="date" value={scheduleDate} onChange={(e) => setScheduleDate(e.target.value)} />
+                      </Field>
+                      <Field label="Time (IST)">
+                        <Input type="time" value={scheduleTime} onChange={(e) => setScheduleTime(e.target.value)} />
+                      </Field>
+                    </motion.div>
+                  )}
+                  <div className="flex items-center gap-2 rounded-[10px] border border-line bg-inset px-3.5 py-2.5 text-[12.5px] text-ink-soft">
+                    <Info size={14} className="text-ink-faint" />
+                    All times are in Asia/Kolkata (IST).
+                  </div>
+                </div>
+              )}
+
+              {step === 5 && (
+                <div className="grid gap-5 md:grid-cols-2">
+                  <div className="rounded-[12px] border border-line bg-inset p-5">
+                    <h4 className="mb-3 text-[14px] font-semibold text-ink">Summary</h4>
+                    <dl className="divide-y divide-line text-[13px]">
+                      {[
+                        ["Name", campaignName],
+                        ["Business unit", businessUnit],
+                        ["Organization", organizationName],
+                        ["Category", campaignCategory],
+                        ["Risk level", riskLevel.charAt(0) + riskLevel.slice(1).toLowerCase()],
+                        ["Recipients", `${selectedUserIds.length} people`],
+                        ["Scenario", selectedTemplateDetails?.name || "—"],
+                        ["Dispatch", dispatchType === "IMMEDIATE" ? "Send now" : `${scheduleDate} ${scheduleTime} IST`],
+                      ].map(([k, v]) => (
+                        <div key={k} className="flex items-center justify-between gap-4 py-2">
+                          <dt className="text-ink-faint">{k}</dt>
+                          <dd className="truncate text-right font-medium text-ink">{v}</dd>
+                        </div>
+                      ))}
+                    </dl>
+                  </div>
+                  <div className="flex flex-col justify-between rounded-[12px] border border-line bg-inset p-5">
+                    <div>
+                      <div className="flex items-center gap-2 text-ink">
+                        <ShieldAlert size={16} className="text-accent" />
+                        <p className="text-[14px] font-semibold">Ethics confirmation</p>
+                      </div>
+                      <p className="mt-2.5 text-[13px] leading-relaxed text-ink-soft">
+                        You confirm these recipients have consented to receive simulated
+                        phishing as part of an authorized program. Any data entered on the
+                        landing page is discarded in the browser and never stored.
+                      </p>
                     </div>
-                  </motion.div>
-                )}
-
-              </div>
-
-              {/* Wizard Footer controls */}
-              <div className="flex gap-4 border-t border-[#1F1F1F] pt-5 mt-6 shrink-0 font-mono">
-                {step > 1 && (
-                  <button
-                    type="button"
-                    onClick={() => setStep(prev => prev - 1)}
-                    className="px-4 py-2.5 rounded-lg bg-[#121212] border border-[#1F1F1F] hover:border-zinc-700 text-zinc-300 hover:text-white font-bold transition text-xs flex items-center gap-1.5 cursor-pointer"
-                  >
-                    <ChevronLeft size={14} /> Back
-                  </button>
-                )}
-
-                <button
-                  type="button"
-                  onClick={() => setModalOpen(false)}
-                  className="px-4 py-2.5 rounded-lg bg-[#121212] border border-[#1F1F1F] hover:border-zinc-700 text-zinc-500 hover:text-zinc-300 font-bold transition text-xs uppercase tracking-wider cursor-pointer"
-                >
-                  Cancel
-                </button>
-
-                <div className="flex-1" />
-
-                {step < 5 ? (
-                  <button
-                    type="button"
-                    onClick={handleNextStep}
-                    className="px-5 py-2.5 rounded-lg bg-white hover:bg-zinc-200 text-black font-bold transition text-xs flex items-center gap-1.5 uppercase tracking-wider cursor-pointer"
-                  >
-                    Continue <ChevronRight size={14} />
-                  </button>
-                ) : (
-                  <button
-                    type="button"
-                    onClick={handleCreateCampaign}
-                    disabled={!ethicsAcknowledge || submitting}
-                    className="px-5 py-2.5 rounded-lg bg-white hover:bg-zinc-200 text-black font-bold transition text-xs uppercase tracking-wider disabled:opacity-50 cursor-pointer"
-                  >
-                    {submitting ? 'Deploying...' : 'Launch Simulation'}
-                  </button>
-                )}
-              </div>
+                    <label className="mt-4 flex cursor-pointer items-center gap-3 border-t border-line pt-4">
+                      <CheckboxBox checked={ethicsAcknowledge} onChange={() => setEthicsAcknowledge(!ethicsAcknowledge)} />
+                      <span className="text-[13px] text-ink">I confirm this campaign is authorized.</span>
+                    </label>
+                  </div>
+                </div>
+              )}
             </motion.div>
+          </AnimatePresence>
+        </div>
+
+        <ModalFooter>
+          {step > 1 && (
+            <Button variant="ghost" icon={<ArrowLeft size={15} />} onClick={() => setStep((p) => p - 1)}>
+              Back
+            </Button>
+          )}
+          <div className="flex-1" />
+          <Button variant="ghost" onClick={() => setModalOpen(false)}>
+            Cancel
+          </Button>
+          {step < 5 ? (
+            <Button variant="primary" iconRight={<ArrowRight size={15} />} onClick={handleNextStep}>
+              Continue
+            </Button>
+          ) : (
+            <Button variant="accent" loading={submitting} disabled={!ethicsAcknowledge} onClick={handleCreateCampaign}>
+              Launch campaign
+            </Button>
+          )}
+        </ModalFooter>
+      </Modal>
+
+      {/* Success */}
+      <Modal open={successModalOpen} onClose={() => setSuccessModalOpen(false)} size="md">
+        {createdCampaignDetails && (
+          <div className="p-7 text-center">
+            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full border border-accent/40 bg-accent-faint text-accent">
+              <CheckCircle2 size={24} />
+            </div>
+            <h3 className="mt-5 text-[19px] font-semibold tracking-[-0.01em] text-ink">
+              Your campaign is live
+            </h3>
+            <p className="mt-1.5 text-[13.5px] text-ink-soft">
+              {createdCampaignDetails.name} is registered and ready.
+            </p>
+            <div className="mt-6 rounded-[12px] border border-line bg-inset p-4 text-left">
+              <dl className="divide-y divide-line text-[13px]">
+                {[
+                  ["Dispatch", createdCampaignDetails.scheduledTime],
+                  ["Recipients", `${createdCampaignDetails.targetCount} people`],
+                  ["Category", createdCampaignDetails.category],
+                  ["Scenario", createdCampaignDetails.templateName],
+                ].map(([k, v]) => (
+                  <div key={k} className="flex items-center justify-between gap-4 py-2">
+                    <dt className="text-ink-faint">{k}</dt>
+                    <dd className="truncate text-right font-medium text-ink">{v}</dd>
+                  </div>
+                ))}
+              </dl>
+            </div>
+            <Button variant="primary" className="mt-6 w-full" onClick={() => setSuccessModalOpen(false)}>
+              Done
+            </Button>
           </div>
         )}
-      </AnimatePresence>
-
-      {/* Success Confirmation Modal */}
-      <AnimatePresence>
-        {successModalOpen && createdCampaignDetails && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-            <motion.div 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 0.8 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setSuccessModalOpen(false)}
-              className="absolute inset-0 bg-black/90 backdrop-blur-md"
-            />
-            <motion.div 
-              initial={{ opacity: 0, scale: 0.9, y: 30 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.9, y: 30 }}
-              className="p-8 rounded-lg max-w-lg w-full relative z-10 border border-[#1F1F1F] overflow-hidden bg-[#121212] shadow-2xl text-center space-y-6"
-            >
-              
-              {/* Success Mark */}
-              <div className="w-12 h-12 rounded-full bg-[#0A0A0A] border border-[#1F1F1F] flex items-center justify-center mx-auto text-[#00D26A]">
-                <CheckCircle2 size={24} />
-              </div>
-
-              <div className="space-y-1.5">
-                <h3 className="text-xl font-extrabold text-white tracking-tight">Campaign Launched Successfully</h3>
-                <p className="text-[10px] text-zinc-400 font-mono uppercase tracking-widest">DRILL AGENT REGISTERED IN NETWORK</p>
-              </div>
-
-              {/* Specs box styled like a security terminal log */}
-              <div className="p-5 rounded-lg border border-[#1F1F1F] bg-[#0A0A0A] text-left font-mono text-[10px] leading-relaxed text-zinc-400 space-y-2">
-                <div className="flex justify-between border-b border-white/[0.03] pb-1.5">
-                  <span className="text-zinc-500">CAMPAIGN ID:</span>
-                  <span className="text-white font-extrabold">{createdCampaignDetails.id}</span>
-                </div>
-                <div className="flex justify-between border-b border-white/[0.03] pb-1.5">
-                  <span className="text-zinc-500">CODE NAME:</span>
-                  <span className="text-white font-bold">{createdCampaignDetails.name}</span>
-                </div>
-                <div className="flex justify-between border-b border-white/[0.03] pb-1.5">
-                  <span className="text-zinc-500">DISPATCH SCHEDULE (IST):</span>
-                  <span className="text-white font-bold">{createdCampaignDetails.scheduledTime}</span>
-                </div>
-                <div className="flex justify-between border-b border-white/[0.03] pb-1.5">
-                  <span className="text-zinc-500">TARGET ROSTER:</span>
-                  <span className="text-[#00D26A] font-extrabold">{createdCampaignDetails.targetCount} employees</span>
-                </div>
-                <div className="flex justify-between border-b border-white/[0.03] pb-1.5">
-                  <span className="text-zinc-500">ATTACK CATEGORY:</span>
-                  <span className="text-white">{createdCampaignDetails.category}</span>
-                </div>
-                <div className="flex justify-between border-b border-white/[0.03] pb-1.5">
-                  <span className="text-zinc-500">RISK LEVEL:</span>
-                  <span className="text-[#F59E0B] font-bold">{createdCampaignDetails.riskLevel}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-zinc-500">EMAIL TEMPLATE:</span>
-                  <span className="text-white truncate max-w-[170px]" title={createdCampaignDetails.templateName}>
-                    {createdCampaignDetails.templateName}
-                  </span>
-                </div>
-              </div>
-
-              <button
-                onClick={() => setSuccessModalOpen(false)}
-                className="w-full px-5 py-3 rounded-lg bg-white hover:bg-zinc-200 text-black font-bold transition text-xs font-mono uppercase tracking-wider cursor-pointer"
-              >
-                Close Console
-              </button>
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
-
+      </Modal>
     </div>
   );
 }
 
-// Campaign card inside lane
-const CampaignCard: React.FC<{
+function CampaignCard({
+  campaign,
+  onToggleStatus,
+}: {
   campaign: Campaign;
-  onToggleStatus: (id: string, newStatus: 'ACTIVE' | 'COMPLETED') => void;
-}> = ({ campaign, onToggleStatus }) => {
-  const itemTransition = { type: 'spring' as const, damping: 22, stiffness: 200 };
-  
-  let statusGlow = "bg-zinc-500";
-  if (campaign.status === 'ACTIVE') statusGlow = "bg-[#00D26A]";
-  else if (campaign.status === 'SCHEDULED') statusGlow = "bg-zinc-600";
-  else if (campaign.status === 'COMPLETED') statusGlow = "bg-zinc-700";
-
+  onToggleStatus: (id: string, s: "ACTIVE" | "COMPLETED") => void;
+}) {
   return (
-    <motion.div 
+    <motion.div
       layout
-      variants={{
-        hidden: { opacity: 0, y: 12 },
-        show: { opacity: 1, y: 0 }
-      }}
-      exit={{ opacity: 0, scale: 0.95 }}
-      transition={itemTransition}
-      className="p-5 rounded-lg border border-[#1F1F1F] bg-[#121212] space-y-4 hover:border-zinc-700 relative group"
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, scale: 0.97 }}
+      transition={{ type: "spring", stiffness: 280, damping: 26 }}
+      className="group space-y-3 rounded-[12px] border border-line bg-card p-4 transition-colors hover:border-line-strong"
     >
-      <div className="space-y-2">
-        <div className="flex items-start justify-between gap-3">
-          <h4 className="font-extrabold text-white text-xs tracking-tight leading-snug group-hover:text-white transition duration-300">{campaign.name}</h4>
-          <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${statusGlow}`} />
+      <div className="flex items-start justify-between gap-2">
+        <h4 className="text-[13.5px] font-medium leading-snug text-ink">{campaign.name}</h4>
+      </div>
+      {campaign.description && (
+        <p className="line-clamp-2 text-[12px] leading-relaxed text-ink-faint">{campaign.description}</p>
+      )}
+      <div className="space-y-1.5 text-[12px]">
+        <div className="flex justify-between">
+          <span className="text-ink-faint">Category</span>
+          <span className="text-ink-soft">{campaign.category || "Phishing"}</span>
         </div>
-        
-        {campaign.description && (
-          <p className="text-[9px] text-zinc-500 font-mono leading-normal line-clamp-2">{campaign.description}</p>
-        )}
-
-        <div className="space-y-1">
-          <div className="flex justify-between text-[9px] text-zinc-500 font-mono">
-            <span>CATEGORY:</span>
-            <span className="text-zinc-400">{campaign.category || 'Phishing'}</span>
-          </div>
-          <div className="flex justify-between text-[9px] text-zinc-500 font-mono">
-            <span>TEMPLATE:</span>
-            <span className="text-zinc-400 truncate max-w-[110px]" title={campaign.template?.name}>
-              {campaign.template?.name || 'Standard Email'}
-            </span>
-          </div>
+        <div className="flex justify-between gap-2">
+          <span className="text-ink-faint">Template</span>
+          <span className="truncate text-ink-soft" title={campaign.template?.name}>
+            {campaign.template?.name || "Standard"}
+          </span>
         </div>
       </div>
-
-      <div className="border-t border-[#1F1F1F] pt-3 flex items-center justify-between text-[10px] text-zinc-400">
-        {campaign.status === 'DRAFT' && (
+      <div className="flex items-center justify-between border-t border-line pt-3">
+        {campaign.status === "DRAFT" && (
           <>
-            <span className="font-mono text-zinc-500 uppercase tracking-wider text-[9px] flex items-center gap-1">
-              <Folder size={11} /> Draft Node
-            </span>
-            <button
-              onClick={() => onToggleStatus(campaign.id, 'ACTIVE')}
-              className="flex items-center gap-1.5 text-white hover:border-zinc-700 font-bold font-mono uppercase text-[9px] px-2 py-1 rounded bg-[#121212] border border-[#1F1F1F] hover:bg-[#1C1C1C] transition cursor-pointer"
-            >
-              <Play size={8} className="fill-current" /> Launch
-            </button>
+            <Badge tone="muted">Draft</Badge>
+            <Button size="sm" variant="secondary" icon={<Play size={13} />} onClick={() => onToggleStatus(campaign.id, "ACTIVE")}>
+              Launch
+            </Button>
           </>
         )}
-        {campaign.status === 'SCHEDULED' && (
+        {campaign.status === "SCHEDULED" && (
           <>
-            <span className="font-mono flex items-center gap-1 text-[9px] uppercase text-zinc-500 tracking-wider">
-              <Calendar size={11} /> {campaign.scheduledStart ? new Date(campaign.scheduledStart).toLocaleDateString() : ''}
+            <span className="flex items-center gap-1.5 text-[12px] text-ink-faint">
+              <Calendar size={12} />
+              {campaign.scheduledStart ? new Date(campaign.scheduledStart).toLocaleDateString() : ""}
             </span>
-            <button
-              onClick={() => onToggleStatus(campaign.id, 'ACTIVE')}
-              className="flex items-center gap-1.5 text-white hover:border-zinc-700 font-bold font-mono uppercase text-[9px] px-2 py-1 rounded bg-[#121212] border border-[#1F1F1F] hover:bg-[#1C1C1C] transition cursor-pointer"
-            >
-              <Play size={8} className="fill-current" /> Launch
-            </button>
+            <Button size="sm" variant="secondary" icon={<Play size={13} />} onClick={() => onToggleStatus(campaign.id, "ACTIVE")}>
+              Launch
+            </Button>
           </>
         )}
-        {campaign.status === 'ACTIVE' && (
+        {campaign.status === "ACTIVE" && (
           <>
-            <span className="text-white font-bold flex items-center gap-1.5 font-mono uppercase tracking-wider text-[9px]">
-              <span className="w-1 h-1 rounded-full bg-[#00D26A]" /> Scanning
-            </span>
-            <button
-              onClick={() => onToggleStatus(campaign.id, 'COMPLETED')}
-              className="flex items-center gap-1 text-[#EF4444] hover:border-zinc-700 font-bold font-mono uppercase text-[9px] px-2 py-1 rounded bg-[#121212] border border-[#1F1F1F] hover:bg-[#1C1C1C] transition cursor-pointer"
-            >
-              <Square size={8} className="fill-current" /> Terminate
-            </button>
+            <Badge tone="accent" dot>Running</Badge>
+            <Button size="sm" variant="danger" icon={<Square size={12} />} onClick={() => onToggleStatus(campaign.id, "COMPLETED")}>
+              Stop
+            </Button>
           </>
         )}
-        {campaign.status === 'COMPLETED' && (
-          <div className="flex items-center gap-1.5 text-[#00D26A] font-mono uppercase tracking-widest text-[9px] w-full font-bold">
-            <CheckCircle2 size={11} /> TERMINATED {campaign.completedAt ? new Date(campaign.completedAt).toLocaleDateString() : ''}
-          </div>
+        {campaign.status === "COMPLETED" && (
+          <span className="flex items-center gap-1.5 text-[12px] text-ink-soft">
+            <CheckCircle2 size={13} className="text-accent" />
+            Completed {campaign.completedAt ? new Date(campaign.completedAt).toLocaleDateString() : ""}
+          </span>
         )}
       </div>
     </motion.div>
   );
-};
+}
 
-const EmptyLaneMessage = () => (
-  <div className="border border-dashed border-[#1F1F1F] rounded-lg p-8 text-center text-[9px] font-mono text-zinc-600 uppercase tracking-widest bg-[#0A0A0A]">
-    No campaigns in lane
-  </div>
-);
+function FilterGroup({
+  title,
+  items,
+  selected,
+  onToggle,
+}: {
+  title: string;
+  items: string[];
+  selected: string[];
+  onToggle: (v: string) => void;
+}) {
+  return (
+    <div className="rounded-[12px] border border-line bg-inset p-3.5">
+      <p className="mb-2.5 text-[12px] font-semibold uppercase tracking-[0.06em] text-ink-faint">{title}</p>
+      <div className="scrollbar-thin max-h-[150px] space-y-1.5 overflow-y-auto pr-1">
+        {items.map((item) => (
+          <label key={item} className="flex cursor-pointer items-center gap-2.5 text-[13px] text-ink-soft">
+            <CheckboxBox checked={selected.includes(item)} onChange={() => onToggle(item)} />
+            {item}
+          </label>
+        ))}
+      </div>
+    </div>
+  );
+}
 
-// Map pin/Globe icon for India timezone reference
-const GlobeIndia = ({ className, size }: { className?: string, size?: number }) => (
-  <svg 
-    xmlns="http://www.w3.org/2000/svg" 
-    width={size || 14} 
-    height={size || 14} 
-    viewBox="0 0 24 24" 
-    fill="none" 
-    stroke="currentColor" 
-    strokeWidth="2" 
-    strokeLinecap="round" 
-    strokeLinejoin="round" 
-    className={className}
-  >
-    <circle cx="12" cy="12" r="10" />
-    <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" />
-    <path d="M2 12h20" />
-    <path d="M12 8a3 3 0 1 0 0 6 3 3 0 0 0 0-6" fill="currentColor" />
-  </svg>
-);
+function CheckboxBox({ checked, onChange }: { checked: boolean; onChange: () => void }) {
+  return (
+    <button
+      type="button"
+      role="checkbox"
+      aria-checked={checked}
+      onClick={(e) => {
+        e.stopPropagation();
+        onChange();
+      }}
+      className={cn(
+        "flex h-4 w-4 shrink-0 items-center justify-center rounded-[5px] border transition-colors",
+        checked ? "border-accent bg-accent text-[#04130c]" : "border-line-strong bg-inset"
+      )}
+    >
+      {checked && <Check size={11} strokeWidth={3} />}
+    </button>
+  );
+}

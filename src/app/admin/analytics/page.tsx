@@ -1,55 +1,30 @@
-'use client';
+"use client";
 
-import React, { useEffect, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  BarChart3, 
-  Search, 
-  Filter, 
-  CheckCircle2, 
-  XCircle, 
-  Mail, 
-  MailOpen, 
-  MousePointerClick, 
-  FileSpreadsheet, 
-  AlertTriangle, 
-  Clock,
-  Database,
+import React, { useEffect, useState } from "react";
+import { motion } from "framer-motion";
+import {
   ShieldCheck,
-  Zap,
-  Activity,
-  Cpu,
-  Sparkles,
-  Calendar,
+  ShieldOff,
+  GraduationCap,
   Users,
-  Award,
-  ArrowUpRight,
-  ArrowDownRight,
-  Terminal,
-  ChevronDown,
+  FileSpreadsheet,
   RotateCcw,
-  TrendingUp,
-  PieChart as PieIcon,
-  Layers,
-  Building
-} from 'lucide-react';
-import { 
-  AreaChart, 
-  Area, 
-  BarChart, 
-  Bar, 
-  LineChart, 
-  Line, 
-  XAxis, 
-  YAxis, 
-  CartesianGrid, 
-  Tooltip, 
-  ResponsiveContainer,
-  PieChart,
-  Pie,
-  Cell,
-  Legend
-} from 'recharts';
+  AlertTriangle,
+  Sparkles,
+} from "lucide-react";
+import {
+  AreaChart, Area, BarChart, Bar, LineChart, Line, XAxis, YAxis,
+  CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend,
+} from "recharts";
+import { PageHeader } from "@/components/ui/PageHeader";
+import { Card, CardHeader } from "@/components/ui/Card";
+import { StatCard, Counter } from "@/components/ui/Stat";
+import { Button } from "@/components/ui/Button";
+import { Select } from "@/components/ui/Input";
+import { Segmented } from "@/components/ui/Segmented";
+import { Skeleton, ErrorState } from "@/components/ui/States";
+import { ChartTooltip, chartColors, axisProps } from "@/components/ui/Chart";
+import { stagger, rise } from "@/lib/motion";
 
 interface FilterOptions {
   departments: string[];
@@ -57,153 +32,64 @@ interface FilterOptions {
   campaigns: Array<{ id: string; name: string; status: string }>;
   riskLevels: string[];
 }
-
 interface AnalyticsMetrics {
-  avgScore: number;
-  activeCampaigns: number;
-  campaignSuccessRate: number;
-  emailDeliveryRate: number;
-  emailOpenRate: number;
-  linkClickRate: number;
-  formInteractionRate: number;
-  trainingCompletionRate: number;
-  totalEmployees: number;
-  highRiskEmployees: number;
-  mediumRiskEmployees: number;
-  lowRiskEmployees: number;
+  avgScore: number; activeCampaigns: number; campaignSuccessRate: number;
+  emailDeliveryRate: number; emailOpenRate: number; linkClickRate: number;
+  formInteractionRate: number; trainingCompletionRate: number; totalEmployees: number;
+  highRiskEmployees: number; mediumRiskEmployees: number; lowRiskEmployees: number;
 }
-
 interface ChartsData {
   monthlyAwarenessGrowth: Array<{ name: string; score: number }>;
-  campaignPerformanceTrend: Array<{ name: string; openRate: number; clickRate: number; submitRate: number; successRate: number }>;
+  campaignPerformanceTrend: Array<{ name: string; clickRate: number; successRate: number }>;
   employeeEngagementTrend: Array<{ name: string; opens: number; clicks: number; submissions: number }>;
-  departmentComparison: Array<{ name: string; employees: number; awarenessScore: number; clickRate: number; openRate: number; submitRate: number }>;
-  branchComparison: Array<{ name: string; employees: number; awarenessScore: number; clickRate: number; openRate: number; submitRate: number }>;
+  departmentComparison: Array<{ name: string; employees: number; awarenessScore: number; clickRate: number }>;
+  branchComparison: Array<{ name: string; employees: number; awarenessScore: number; clickRate: number }>;
   riskDistribution: Array<{ name: string; value: number; color: string }>;
   securityScoreTrend: Array<{ name: string; score: number }>;
   campaignFunnel: Array<{ stage: string; count: number; fill: string }>;
   monthlyComplianceTrend: Array<{ name: string; complianceRate: number }>;
 }
-
 interface AIInsights {
-  highestRiskDepartment: string;
-  bestPerformingBranch: string;
-  awarenessImprovement: number;
-  employeesNeedingTraining: number;
-  recentCampaignSummary: string;
+  highestRiskDepartment: string; bestPerformingBranch: string;
+  awarenessImprovement: number; employeesNeedingTraining: number; recentCampaignSummary: string;
 }
-
 interface AnalyticsData {
-  filters: FilterOptions;
-  metrics: AnalyticsMetrics;
-  charts: ChartsData;
-  insights: AIInsights;
+  filters: FilterOptions; metrics: AnalyticsMetrics; charts: ChartsData; insights: AIInsights;
 }
 
-// Awwwards-style Animated Counter Component
-const AnimatedCounter = ({ value, suffix = "" }: { value: number; suffix?: string }) => {
-  const [count, setCount] = useState(0);
-
-  useEffect(() => {
-    let start = 0;
-    const end = value;
-    if (start === end) {
-      setCount(end);
-      return;
-    }
-    
-    const duration = 1000; 
-    const steps = 40;
-    const stepTime = duration / steps;
-    const increment = Math.ceil(end / steps);
-
-    const timer = setInterval(() => {
-      start += increment;
-      if (start >= end) {
-        setCount(end);
-        clearInterval(timer);
-      } else {
-        setCount(start);
-      }
-    }, stepTime);
-
-    return () => clearInterval(timer);
-  }, [value]);
-
-  return <span>{count}{suffix}</span>;
-};
-
-// Systems local time clock
-const LiveClock = () => {
-  const [timeStr, setTimeStr] = useState('');
-  useEffect(() => {
-    const update = () => {
-      const now = new Date();
-      setTimeStr(now.toUTCString().replace('GMT', 'UTC'));
-    };
-    update();
-    const interval = setInterval(update, 1000);
-    return () => clearInterval(interval);
-  }, []);
-  return <span className="font-mono text-[9px] text-zinc-500 tracking-wider">{timeStr}</span>;
-};
+const riskColors = [chartColors.accent, "#8a8a93", "#f06b6b"];
+const datePresets = [
+  { value: "ALL_TIME", label: "All time" },
+  { value: "LAST_90_DAYS", label: "90 days" },
+  { value: "LAST_30_DAYS", label: "30 days" },
+  { value: "LAST_7_DAYS", label: "7 days" },
+];
 
 export default function AnalyticsDashboard() {
   const [data, setData] = useState<AnalyticsData | null>(null);
   const [loading, setLoading] = useState(true);
   const [mounted, setMounted] = useState(false);
 
-  // Filter parameters
-  const [selectedDept, setSelectedDept] = useState('ALL');
-  const [selectedBranch, setSelectedBranch] = useState('ALL');
-  const [selectedCampaign, setSelectedCampaign] = useState('ALL');
-  const [selectedRisk, setSelectedRisk] = useState('ALL');
-  const [datePreset, setDatePreset] = useState('ALL_TIME');
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
+  const [selectedDept, setSelectedDept] = useState("ALL");
+  const [selectedBranch, setSelectedBranch] = useState("ALL");
+  const [selectedCampaign, setSelectedCampaign] = useState("ALL");
+  const [selectedRisk, setSelectedRisk] = useState("ALL");
+  const [datePreset, setDatePreset] = useState("ALL_TIME");
 
-  // Fetch function
   const fetchAnalytics = async () => {
     setLoading(true);
     try {
       let url = `/api/admin/analytics?department=${selectedDept}&branch=${selectedBranch}&campaignId=${selectedCampaign}&riskLevel=${selectedRisk}`;
-      
-      // Calculate date preset values
-      let computedStart = startDate;
-      let computedEnd = endDate;
-      if (datePreset !== 'CUSTOM') {
-        const now = new Date();
-        if (datePreset === 'LAST_7_DAYS') {
-          const d = new Date();
-          d.setDate(now.getDate() - 7);
-          computedStart = d.toISOString().split('T')[0];
-          computedEnd = now.toISOString().split('T')[0];
-        } else if (datePreset === 'LAST_30_DAYS') {
-          const d = new Date();
-          d.setDate(now.getDate() - 30);
-          computedStart = d.toISOString().split('T')[0];
-          computedEnd = now.toISOString().split('T')[0];
-        } else if (datePreset === 'LAST_90_DAYS') {
-          const d = new Date();
-          d.setDate(now.getDate() - 90);
-          computedStart = d.toISOString().split('T')[0];
-          computedEnd = now.toISOString().split('T')[0];
-        } else {
-          computedStart = '';
-          computedEnd = '';
-        }
-      }
-
-      if (computedStart) url += `&startDate=${computedStart}`;
-      if (computedEnd) url += `&endDate=${computedEnd}`;
-
+      const now = new Date();
+      let computedStart = "";
+      if (datePreset === "LAST_7_DAYS") { const d = new Date(); d.setDate(now.getDate() - 7); computedStart = d.toISOString().split("T")[0]; }
+      else if (datePreset === "LAST_30_DAYS") { const d = new Date(); d.setDate(now.getDate() - 30); computedStart = d.toISOString().split("T")[0]; }
+      else if (datePreset === "LAST_90_DAYS") { const d = new Date(); d.setDate(now.getDate() - 90); computedStart = d.toISOString().split("T")[0]; }
+      if (computedStart) url += `&startDate=${computedStart}&endDate=${now.toISOString().split("T")[0]}`;
       const res = await fetch(url);
-      if (res.ok) {
-        const d = await res.json();
-        setData(d);
-      }
-    } catch (error) {
-      console.error('Failed to retrieve security analytics:', error);
+      if (res.ok) setData(await res.json());
+    } catch (e) {
+      console.error(e);
     } finally {
       setLoading(false);
     }
@@ -212,938 +98,364 @@ export default function AnalyticsDashboard() {
   useEffect(() => {
     setMounted(true);
     fetchAnalytics();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Re-fetch on filter update
   useEffect(() => {
-    if (mounted) {
-      fetchAnalytics();
-    }
-  }, [selectedDept, selectedBranch, selectedCampaign, selectedRisk, datePreset, startDate, endDate]);
+    if (mounted) fetchAnalytics();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedDept, selectedBranch, selectedCampaign, selectedRisk, datePreset]);
 
-  const handleResetFilters = () => {
-    setSelectedDept('ALL');
-    setSelectedBranch('ALL');
-    setSelectedCampaign('ALL');
-    setSelectedRisk('ALL');
-    setDatePreset('ALL_TIME');
-    setStartDate('');
-    setEndDate('');
+  const handleReset = () => {
+    setSelectedDept("ALL"); setSelectedBranch("ALL"); setSelectedCampaign("ALL");
+    setSelectedRisk("ALL"); setDatePreset("ALL_TIME");
   };
 
-  // CSV Report Generator
   const handleExportCSV = () => {
     if (!data) return;
-    const headers = ['Metric/Item', 'Value', 'Status/Ref'];
+    const headers = ["Metric", "Value"];
     const rows = [
-      ['Overall Awareness Score', `${data.metrics.avgScore}%`, 'Aggregate Score'],
-      ['Campaign Success Rate', `${data.metrics.campaignSuccessRate}%`, 'Phishing Avoidance'],
-      ['Active Campaigns', data.metrics.activeCampaigns.toString(), 'Current Scope'],
-      ['Delivery Rate', `${data.metrics.emailDeliveryRate}%`, 'Successful Dispatches'],
-      ['Open Rate', `${data.metrics.emailOpenRate}%`, 'Interaction Score'],
-      ['Link Click Rate', `${data.metrics.linkClickRate}%`, 'Trap Conversion'],
-      ['Form Submission Rate', `${data.metrics.formInteractionRate}%`, 'Vulnerability Index'],
-      ['Training Completion Rate', `${data.metrics.trainingCompletionRate}%`, 'Learning Progress'],
-      ['Total Monitored Employees', data.metrics.totalEmployees.toString(), 'Target Nodes'],
-      ['High Risk Category count', data.metrics.highRiskEmployees.toString(), 'Priority Training List'],
-      ['Medium Risk Category count', data.metrics.mediumRiskEmployees.toString(), 'Secondary Target list'],
-      ['Low Risk Category count', data.metrics.lowRiskEmployees.toString(), 'Secure Node Group']
+      ["Awareness score", `${data.metrics.avgScore}%`],
+      ["Avoidance rate", `${data.metrics.campaignSuccessRate}%`],
+      ["Active campaigns", `${data.metrics.activeCampaigns}`],
+      ["Delivery rate", `${data.metrics.emailDeliveryRate}%`],
+      ["Open rate", `${data.metrics.emailOpenRate}%`],
+      ["Click rate", `${data.metrics.linkClickRate}%`],
+      ["Submission rate", `${data.metrics.formInteractionRate}%`],
+      ["Training completion", `${data.metrics.trainingCompletionRate}%`],
+      ["Total employees", `${data.metrics.totalEmployees}`],
+      ["High risk", `${data.metrics.highRiskEmployees}`],
+      ["Medium risk", `${data.metrics.mediumRiskEmployees}`],
+      ["Low risk", `${data.metrics.lowRiskEmployees}`],
     ];
-
-    const csvContent = 
-      "data:text/csv;charset=utf-8," + 
-      [headers.join(','), ...rows.map(e => e.map(val => `"${val.replace(/"/g, '""')}"`).join(','))].join('\n');
-    
-    const encodedUri = encodeURI(csvContent);
+    const csv = "data:text/csv;charset=utf-8," + [headers.join(","), ...rows.map((r) => r.map((v) => `"${v}"`).join(","))].join("\n");
     const link = document.createElement("a");
-    link.setAttribute("href", encodedUri);
-    link.setAttribute("download", `pinkman_security_analytics_${Date.now()}.csv`);
+    link.setAttribute("href", encodeURI(csv));
+    link.setAttribute("download", `pinkman_analytics_${Date.now()}.csv`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
   };
 
-  // Animation Layout Configurations
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    show: {
-      opacity: 1,
-      transition: { staggerChildren: 0.05 }
-    }
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 15 },
-    show: { opacity: 1, y: 0, transition: { type: 'spring' as const, damping: 25, stiffness: 180 } }
-  };
-
   if (!mounted) return null;
 
   return (
-    <div className="space-y-8 relative min-h-screen pb-16">
-      {/* 1. Header Area */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 border-b border-[#1F1F1F] pb-5">
-        <div className="space-y-1">
-          <div className="flex items-center gap-2">
-            <span className="h-1.5 w-1.5 rounded-full bg-[#00D26A]" />
-            <span className="text-[9px] font-mono uppercase tracking-widest text-zinc-500 font-bold">Audit Analytics Hub</span>
-          </div>
-          <h1 className="text-xl font-bold tracking-tight uppercase font-mono text-white">
-            System Telemetry & Analytics
-          </h1>
-          <p className="text-xs text-zinc-400 font-mono">
-            Granular employee behavioral threat indicators, campaign funnels, and compliance growth telemetry.
-          </p>
-        </div>
+    <div>
+      <PageHeader
+        eyebrow="Operations"
+        title="Analytics"
+        description="The full behavioral picture — awareness trends, campaign funnels, and where to focus next."
+        actions={
+          <Button variant="secondary" icon={<FileSpreadsheet size={15} />} disabled={loading || !data} onClick={handleExportCSV}>
+            Export CSV
+          </Button>
+        }
+      />
 
-        <div className="flex flex-wrap items-center gap-3 shrink-0">
-          <div className="flex items-center gap-3 px-4 py-2 rounded-xl bg-white/[0.01] border border-white/[0.04] shadow-2xl">
-            <div className="flex items-center gap-2">
-              <Cpu size={12} className="text-zinc-500" />
-              <span className="text-[9px] font-mono text-zinc-400">ENGINE:</span>
-              <span className="text-[9px] font-mono text-brand-cyan font-bold flex items-center gap-1">
-                <span className="w-1 h-1 rounded-full bg-brand-cyan animate-pulse" /> SOC_SECURE
-              </span>
-            </div>
-            <div className="h-3 w-px bg-white/[0.08]" />
-            <div className="flex items-center gap-1.5">
-              <Clock size={12} className="text-zinc-500" />
-              <LiveClock />
-            </div>
-          </div>
-          <button
-            onClick={handleExportCSV}
-            disabled={loading || !data}
-            className="flex items-center justify-center gap-2 bg-white/5 border border-white/10 hover:border-brand-cyan/40 hover:bg-brand-cyan/10 active:scale-[0.98] disabled:opacity-50 text-white font-bold px-4 py-2.5 rounded-xl transition duration-200 text-xs font-mono uppercase tracking-wider cursor-pointer"
-          >
-            <FileSpreadsheet size={13} className="text-brand-cyan shrink-0" /> Export CSV Report
-          </button>
-        </div>
-      </div>
-
-      {/* 2. Interactive Filter Panel */}
-      <div className="glass-panel p-6 rounded-3xl border border-white/[0.04] relative space-y-6">
-        <div className="absolute top-0 right-0 w-32 h-32 bg-brand-cyan/2 rounded-full blur-2xl pointer-events-none" />
-        
-        {/* Date presets + custom selectors */}
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-white/[0.03] pb-4">
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest font-bold mr-2 flex items-center gap-1">
-              <Calendar size={12} className="text-zinc-600" /> Date Preset:
-            </span>
-            {[
-              { id: 'ALL_TIME', label: 'All Time' },
-              { id: 'LAST_90_DAYS', label: 'Last 90 Days' },
-              { id: 'LAST_30_DAYS', label: 'Last 30 Days' },
-              { id: 'LAST_7_DAYS', label: 'Last 7 Days' },
-              { id: 'CUSTOM', label: 'Custom Range' }
-            ].map(preset => (
-              <button
-                key={preset.id}
-                onClick={() => setDatePreset(preset.id)}
-                className={`px-3 py-1.5 rounded-lg text-[10px] font-mono uppercase tracking-wider transition-all duration-200 border cursor-pointer ${
-                  datePreset === preset.id
-                    ? 'bg-brand-cyan/10 border-brand-cyan text-brand-cyan font-bold shadow-[0_0_12px_rgba(6,182,212,0.15)]'
-                    : 'bg-white/[0.01] border-white/[0.05] text-zinc-400 hover:text-white hover:bg-white/[0.03]'
-                }`}
-              >
-                {preset.label}
-              </button>
-            ))}
-          </div>
-
-          {datePreset === 'CUSTOM' && (
-            <motion.div 
-              initial={{ opacity: 0, x: 10 }}
-              animate={{ opacity: 1, x: 0 }}
-              className="flex items-center gap-2"
-            >
-              <input
-                type="date"
-                value={startDate}
-                onChange={(e) => setStartDate(e.target.value)}
-                className="px-3 py-1.5 rounded-lg glass-input text-[10px] font-mono text-zinc-300"
-              />
-              <span className="text-zinc-500 font-mono text-xs">to</span>
-              <input
-                type="date"
-                value={endDate}
-                onChange={(e) => setEndDate(e.target.value)}
-                className="px-3 py-1.5 rounded-lg glass-input text-[10px] font-mono text-zinc-300"
-              />
-            </motion.div>
-          )}
-        </div>
-
-        {/* Dropdowns */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 items-end">
-          <div>
-            <label className="block text-[8px] font-mono uppercase tracking-widest text-zinc-500 mb-2 font-bold flex items-center gap-1">
-              <Building size={10} /> Office Branch
-            </label>
-            <select
-              value={selectedBranch}
-              onChange={(e) => setSelectedBranch(e.target.value)}
-              className="w-full px-4 py-2.5 rounded-xl glass-input text-xs font-mono text-zinc-300 cursor-pointer"
-            >
-              <option value="ALL">All India Branches</option>
-              {data?.filters.branches.map(b => (
-                <option key={b} value={b}>{b}</option>
-              ))}
-            </select>
-          </div>
-
-          <div>
-            <label className="block text-[8px] font-mono uppercase tracking-widest text-zinc-500 mb-2 font-bold flex items-center gap-1">
-              <Layers size={10} /> Department
-            </label>
-            <select
-              value={selectedDept}
-              onChange={(e) => setSelectedDept(e.target.value)}
-              className="w-full px-4 py-2.5 rounded-xl glass-input text-xs font-mono text-zinc-300 cursor-pointer"
-            >
-              <option value="ALL">All Departments</option>
-              {data?.filters.departments.map(d => (
-                <option key={d} value={d}>{d}</option>
-              ))}
-            </select>
-          </div>
-
-          <div>
-            <label className="block text-[8px] font-mono uppercase tracking-widest text-zinc-500 mb-2 font-bold flex items-center gap-1">
-              <BarChart3 size={10} /> Campaign Scope
-            </label>
-            <select
-              value={selectedCampaign}
-              onChange={(e) => setSelectedCampaign(e.target.value)}
-              className="w-full px-4 py-2.5 rounded-xl glass-input text-xs font-mono text-zinc-300 cursor-pointer"
-            >
-              <option value="ALL">All Campaigns</option>
-              {data?.filters.campaigns.map(c => (
-                <option key={c.id} value={c.id}>{c.name} ({c.status})</option>
-              ))}
-            </select>
-          </div>
-
-          <div>
-            <label className="block text-[8px] font-mono uppercase tracking-widest text-zinc-500 mb-2 font-bold flex items-center gap-1">
-              <AlertTriangle size={10} /> Risk Classification
-            </label>
-            <select
-              value={selectedRisk}
-              onChange={(e) => setSelectedRisk(e.target.value)}
-              className="w-full px-4 py-2.5 rounded-xl glass-input text-xs font-mono text-zinc-300 cursor-pointer"
-            >
-              <option value="ALL">All Risks</option>
-              {data?.filters.riskLevels.map(r => (
-                <option key={r} value={r}>{r} RISK</option>
-              ))}
-            </select>
+      {/* Filters */}
+      <Card pad="md" className="mb-6">
+        <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+          <Segmented value={datePreset} onChange={setDatePreset} options={datePresets} layoutId="datePreset" />
+          <div className="flex flex-wrap items-center gap-2.5">
+            <Select value={selectedBranch} onChange={(e) => setSelectedBranch(e.target.value)} className="w-auto">
+              <option value="ALL">All branches</option>
+              {data?.filters.branches.map((b) => <option key={b} value={b}>{b}</option>)}
+            </Select>
+            <Select value={selectedDept} onChange={(e) => setSelectedDept(e.target.value)} className="w-auto">
+              <option value="ALL">All departments</option>
+              {data?.filters.departments.map((d) => <option key={d} value={d}>{d}</option>)}
+            </Select>
+            <Select value={selectedCampaign} onChange={(e) => setSelectedCampaign(e.target.value)} className="w-auto">
+              <option value="ALL">All campaigns</option>
+              {data?.filters.campaigns.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
+            </Select>
+            <Select value={selectedRisk} onChange={(e) => setSelectedRisk(e.target.value)} className="w-auto">
+              <option value="ALL">All risk</option>
+              {data?.filters.riskLevels.map((r) => <option key={r} value={r}>{r.charAt(0) + r.slice(1).toLowerCase()}</option>)}
+            </Select>
+            <Button variant="ghost" size="sm" icon={<RotateCcw size={14} />} onClick={handleReset}>Reset</Button>
           </div>
         </div>
-
-        {/* Action triggers */}
-        <div className="flex justify-end gap-2 border-t border-white/[0.03] pt-4">
-          <button
-            onClick={handleResetFilters}
-            className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-mono text-zinc-400 hover:text-white hover:bg-white/[0.02] border border-transparent transition cursor-pointer"
-          >
-            <RotateCcw size={12} /> Clear Filters
-          </button>
-        </div>
-      </div>
+      </Card>
 
       {loading ? (
-        // 3. Shimmering Loading skeletons
-        <div className="space-y-8">
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[...Array(4)].map((_, idx) => (
-              <div key={idx} className="glass-panel p-6 h-36 rounded-2.5xl animate-pulse bg-white/[0.01] border border-white/[0.04]">
-                <div className="flex justify-between items-center mb-4">
-                  <div className="h-4 w-20 bg-zinc-800 rounded" />
-                  <div className="h-8 w-8 bg-zinc-800 rounded-lg" />
-                </div>
-                <div className="h-8 w-24 bg-zinc-800 rounded mb-2" />
-                <div className="h-3 w-32 bg-zinc-850 rounded" />
-              </div>
-            ))}
+        <div className="space-y-6">
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {[...Array(4)].map((_, i) => <Skeleton key={i} className="h-32" />)}
           </div>
-
-          <div className="grid lg:grid-cols-3 gap-8">
-            <div className="glass-panel p-6 h-96 rounded-3xl lg:col-span-2 animate-pulse bg-white/[0.01] border border-white/[0.04]" />
-            <div className="glass-panel p-6 h-96 rounded-3xl animate-pulse bg-white/[0.01] border border-white/[0.04]" />
+          <div className="grid gap-6 lg:grid-cols-3">
+            <Skeleton className="h-80 lg:col-span-2" />
+            <Skeleton className="h-80" />
           </div>
         </div>
       ) : !data ? (
-        // Error state
-        <div className="glass-panel p-12 rounded-3xl text-center space-y-4 max-w-md mx-auto border border-brand-rose/20 shadow-[0_0_30px_rgba(244,63,94,0.05)]">
-          <AlertTriangle className="text-brand-rose mx-auto animate-bounce" size={40} />
-          <h2 className="text-lg font-bold text-white tracking-tight">Telemetry Pipeline Offline</h2>
-          <p className="text-zinc-400 text-xs font-mono leading-relaxed">
-            Analytics metrics aggregation failed to complete. Refresh filters or check SQLite db seeding status.
-          </p>
-        </div>
+        <ErrorState
+          icon={<AlertTriangle size={20} />}
+          title="Analytics couldn't load"
+          description="The aggregation service didn't respond. Adjust filters or check the database, then retry."
+          action={<Button variant="secondary" onClick={fetchAnalytics}>Retry</Button>}
+        />
       ) : (
-        // 4. Redesigned Dashboard Content
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate="show"
-          className="space-y-8"
-        >
-          {/* Executive KPI Section */}
-          <div className="space-y-4">
+        <motion.div variants={stagger} initial="hidden" animate="show" className="space-y-6">
+          {/* KPIs */}
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            <StatCard label="Awareness score" value={<Counter value={data.metrics.avgScore} suffix="%" />} delta={{ value: `+${data.insights.awarenessImprovement}%`, positive: true }} hint="growth" icon={<ShieldCheck size={17} />} />
+            <StatCard label="Avoidance rate" value={<Counter value={data.metrics.campaignSuccessRate} suffix="%" />} hint="bypassed the lure" icon={<ShieldOff size={17} />} />
+            <StatCard label="Training completion" value={<Counter value={data.metrics.trainingCompletionRate} suffix="%" />} hint="of assigned modules" icon={<GraduationCap size={17} />} />
+            <StatCard label="People monitored" value={<Counter value={data.metrics.totalEmployees} />} hint="active accounts" icon={<Users size={17} />} />
+          </div>
+
+          {/* Sub metrics */}
+          <Card pad="md">
+            <div className="grid grid-cols-2 gap-x-4 gap-y-5 sm:grid-cols-4 lg:grid-cols-8">
+              {[
+                ["Active drills", `${data.metrics.activeCampaigns}`],
+                ["Delivery", `${data.metrics.emailDeliveryRate}%`],
+                ["Open", `${data.metrics.emailOpenRate}%`],
+                ["Click", `${data.metrics.linkClickRate}%`],
+                ["Submission", `${data.metrics.formInteractionRate}%`],
+                ["High risk", `${data.metrics.highRiskEmployees}`],
+                ["Medium risk", `${data.metrics.mediumRiskEmployees}`],
+                ["Low risk", `${data.metrics.lowRiskEmployees}`],
+              ].map(([label, value]) => (
+                <div key={label}>
+                  <p className="text-[12px] text-ink-faint">{label}</p>
+                  <p className="tnum mt-1 text-[18px] font-semibold text-ink">{value}</p>
+                </div>
+              ))}
+            </div>
+          </Card>
+
+          {/* AI insight strip */}
+          <Card pad="lg">
             <div className="flex items-center gap-2">
-              <Layers size={13} className="text-brand-cyan" />
-              <h2 className="text-sm font-bold text-zinc-300 font-mono uppercase tracking-widest">Executive KPIs</h2>
+              <Sparkles size={16} className="text-accent" />
+              <h3 className="text-[15px] font-semibold text-ink">What the data is telling you</h3>
             </div>
-            
-            {/* Primary KPI Grid (4 Premium Cards) */}
-            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {/* Card 1: Awareness Index */}
-              <motion.div 
-                variants={itemVariants}
-                whileHover={{ y: -2 }}
-                className="glass-panel p-6 rounded-xl flex flex-col justify-between border border-[#1F1F1F] relative group overflow-hidden"
-              >
-                <div className="flex justify-between items-start mb-6">
-                  <div className="space-y-0.5">
-                    <span className="text-[8px] uppercase font-mono text-zinc-500 tracking-wider font-semibold">Security Health</span>
-                    <h4 className="text-xs font-bold text-white/90">Awareness Index</h4>
-                  </div>
-                  <div className="p-2 rounded bg-[#0A0A0A] border border-[#1F1F1F] text-white">
-                    <Award size={12} />
-                  </div>
-                </div>
-                <div>
-                  <div className="text-3xl font-bold text-white font-mono tracking-tight">
-                    <AnimatedCounter value={data.metrics.avgScore} suffix="%" />
-                  </div>
-                  <p className="text-[9px] text-[#00D26A] font-mono mt-3 flex items-center gap-1">
-                    <ArrowUpRight size={11} /> +{data.insights.awarenessImprovement}% growth
-                  </p>
-                </div>
-              </motion.div>
-
-              {/* Card 2: Failure Avoidance Success Rate */}
-              <motion.div 
-                variants={itemVariants}
-                whileHover={{ y: -2 }}
-                className="glass-panel p-6 rounded-xl flex flex-col justify-between border border-[#1F1F1F] relative group overflow-hidden"
-              >
-                <div className="flex justify-between items-start mb-6">
-                  <div className="space-y-0.5">
-                    <span className="text-[8px] uppercase font-mono text-zinc-500 tracking-wider font-semibold">Risk Prevention</span>
-                    <h4 className="text-xs font-bold text-white/90">Avoidance Rate</h4>
-                  </div>
-                  <div className="p-2 rounded bg-[#0A0A0A] border border-[#1F1F1F] text-white">
-                    <ShieldCheck size={12} />
-                  </div>
-                </div>
-                <div>
-                  <div className="text-3xl font-bold text-white font-mono tracking-tight">
-                    <AnimatedCounter value={data.metrics.campaignSuccessRate} suffix="%" />
-                  </div>
-                  <p className="text-[9px] text-zinc-400 font-mono mt-3">
-                    Drill bypass compliance rate
-                  </p>
-                </div>
-              </motion.div>
-
-              {/* Card 3: Training Completion */}
-              <motion.div 
-                variants={itemVariants}
-                whileHover={{ y: -2 }}
-                className="glass-panel p-6 rounded-xl flex flex-col justify-between border border-[#1F1F1F] relative group overflow-hidden"
-              >
-                <div className="flex justify-between items-start mb-6">
-                  <div className="space-y-0.5">
-                    <span className="text-[8px] uppercase font-mono text-zinc-500 tracking-wider font-semibold">Education progress</span>
-                    <h4 className="text-xs font-bold text-white/90">Training Completion</h4>
-                  </div>
-                  <div className="p-2 rounded bg-[#0A0A0A] border border-[#1F1F1F] text-white">
-                    <Zap size={12} />
-                  </div>
-                </div>
-                <div>
-                  <div className="text-3xl font-bold text-white font-mono tracking-tight">
-                    <AnimatedCounter value={data.metrics.trainingCompletionRate} suffix="%" />
-                  </div>
-                  <div className="w-full h-1 bg-[#050505] rounded-full overflow-hidden mt-3.5 border border-[#1F1F1F]">
-                    <div className="h-full bg-white" style={{ width: `${data.metrics.trainingCompletionRate}%` }} />
-                  </div>
-                </div>
-              </motion.div>
-
-              {/* Card 4: Total Roster monitored */}
-              <motion.div 
-                variants={itemVariants}
-                whileHover={{ y: -2 }}
-                className="glass-panel p-6 rounded-xl flex flex-col justify-between border border-[#1F1F1F] relative group overflow-hidden"
-              >
-                <div className="flex justify-between items-start mb-6">
-                  <div className="space-y-0.5">
-                    <span className="text-[8px] uppercase font-mono text-zinc-500 tracking-wider font-semibold">Roster Monitor</span>
-                    <h4 className="text-xs font-bold text-white/90">Target Registry</h4>
-                  </div>
-                  <div className="p-2 rounded bg-[#0A0A0A] border border-[#1F1F1F] text-white">
-                    <Users size={12} />
-                  </div>
-                </div>
-                <div>
-                  <div className="text-3xl font-bold text-white font-mono tracking-tight">
-                    <AnimatedCounter value={data.metrics.totalEmployees} />
-                  </div>
-                  <p className="text-[9px] text-zinc-500 font-mono mt-3">
-                    Active monitored accounts
-                  </p>
-                </div>
-              </motion.div>
+            <div className="mt-4 grid gap-4 md:grid-cols-2">
+              <Insight label="Highest-risk team" value={`${data.insights.highestRiskDepartment}`} tone="danger" note="Lowest awareness, highest click rate." />
+              <Insight label="Top-performing branch" value={`${data.insights.bestPerformingBranch}`} tone="accent" note="Leading on engagement and scores." />
+              <Insight label="Need a refresher" value={`${data.insights.employeesNeedingTraining} people`} tone="warn" note="Scoring under 70% or flagged high-risk." />
+              <Insight label="Latest campaign" value={data.insights.recentCampaignSummary} tone="neutral" />
             </div>
+          </Card>
 
-            {/* Sub-KPIs Grid */}
-            <div className="grid grid-cols-2 lg:grid-cols-8 gap-4 font-mono text-[9px]">
-              <div className="p-4 rounded-xl bg-[#121212] border border-[#1F1F1F] space-y-1">
-                <span className="text-zinc-500 block font-bold uppercase tracking-widest">Active Drills</span>
-                <div className="text-base font-bold text-white tracking-tight">{data.metrics.activeCampaigns}</div>
-              </div>
-              <div className="p-4 rounded-xl bg-[#121212] border border-[#1F1F1F] space-y-1">
-                <span className="text-zinc-500 block font-bold uppercase tracking-widest">Delivery Rate</span>
-                <div className="text-base font-bold text-white tracking-tight">{data.metrics.emailDeliveryRate}%</div>
-              </div>
-              <div className="p-4 rounded-xl bg-[#121212] border border-[#1F1F1F] space-y-1">
-                <span className="text-zinc-500 block font-bold uppercase tracking-widest">Open Rate</span>
-                <div className="text-base font-bold text-white tracking-tight">{data.metrics.emailOpenRate}%</div>
-              </div>
-              <div className="p-4 rounded-xl bg-[#121212] border border-[#1F1F1F] space-y-1">
-                <span className="text-zinc-500 block font-bold uppercase tracking-widest">Click Rate</span>
-                <div className="text-base font-bold text-white tracking-tight">{data.metrics.linkClickRate}%</div>
-              </div>
-              <div className="p-4 rounded-xl bg-[#121212] border border-[#1F1F1F] space-y-1">
-                <span className="text-zinc-500 block font-bold uppercase tracking-widest">Submission</span>
-                <div className="text-base font-bold text-white tracking-tight">{data.metrics.formInteractionRate}%</div>
-              </div>
-              <div className="p-4 rounded-xl bg-[#121212] border border-[#1F1F1F] space-y-1">
-                <span className="text-zinc-500 block font-bold uppercase tracking-widest">High Risk</span>
-                <div className="text-base font-bold text-white tracking-tight">{data.metrics.highRiskEmployees}</div>
-              </div>
-              <div className="p-4 rounded-xl bg-[#121212] border border-[#1F1F1F] space-y-1">
-                <span className="text-zinc-500 block font-bold uppercase tracking-widest">Medium Risk</span>
-                <div className="text-base font-bold text-white tracking-tight">{data.metrics.mediumRiskEmployees}</div>
-              </div>
-              <div className="p-4 rounded-xl bg-[#121212] border border-[#1F1F1F] space-y-1">
-                <span className="text-zinc-500 block font-bold uppercase tracking-widest">Low Risk</span>
-                <div className="text-base font-bold text-white tracking-tight">{data.metrics.lowRiskEmployees}</div>
-              </div>
-            </div>
-          </div>
-
-          {/* AI secops cognitive insights terminal */}
-          <motion.div 
-            variants={itemVariants}
-            className="glass-panel p-6 rounded-3xl border border-white/[0.04] bg-white/[0.005] font-mono text-xs text-zinc-300 relative overflow-hidden"
-          >
-            <div className="absolute top-0 right-0 w-40 h-40 bg-brand-cyan/2 rounded-full blur-3xl pointer-events-none" />
-            <div className="flex items-center justify-between border-b border-white/[0.05] pb-3 mb-4">
-              <div className="flex items-center gap-2">
-                <Terminal size={14} className="text-brand-cyan" />
-                <span className="text-[10px] font-bold text-white tracking-widest uppercase">SecOps Cognitive AI Analyst</span>
-              </div>
-              <span className="text-[8px] text-zinc-500 animate-pulse">SYSTEM_ONLINE // ANALYSING...</span>
-            </div>
-            <div className="grid md:grid-cols-2 gap-6">
-              <div className="space-y-2">
-                <div className="flex gap-2">
-                  <span className="text-brand-cyan font-bold">&gt;</span>
-                  <div>
-                    <span className="text-zinc-500 uppercase text-[9px] font-bold block">Highest Risk Division</span>
-                    <span className="text-brand-rose font-bold">{data.insights.highestRiskDepartment} Department</span>
-                    <span className="text-[10px] text-zinc-400 block mt-0.5">Calculated based on average security awareness score threshold and fail click ratios.</span>
-                  </div>
-                </div>
-                <div className="flex gap-2">
-                  <span className="text-brand-cyan font-bold">&gt;</span>
-                  <div>
-                    <span className="text-zinc-500 uppercase text-[9px] font-bold block">Optimal Branch Performance</span>
-                    <span className="text-brand-emerald font-bold">{data.insights.bestPerformingBranch} Office</span>
-                    <span className="text-[10px] text-zinc-400 block mt-0.5">Leading other offices with the highest average security training engagement scores.</span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <div className="flex gap-2">
-                  <span className="text-brand-cyan font-bold">&gt;</span>
-                  <div>
-                    <span className="text-zinc-500 uppercase text-[9px] font-bold block">Critical Intervention Target</span>
-                    <span className="text-brand-amber font-bold">{data.insights.employeesNeedingTraining} employees require immediate retraining</span>
-                    <span className="text-[10px] text-zinc-400 block mt-0.5">Employees showing awareness score &lt; 70% or flagged in High Risk profiling category.</span>
-                  </div>
-                </div>
-                <div className="flex gap-2">
-                  <span className="text-brand-cyan font-bold">&gt;</span>
-                  <div>
-                    <span className="text-zinc-500 uppercase text-[9px] font-bold block">Recent Campaign Summary</span>
-                    <span className="text-zinc-300 font-bold block truncate max-w-md" title={data.insights.recentCampaignSummary}>
-                      {data.insights.recentCampaignSummary}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </motion.div>
-
-          {/* Charts Row 1: Awareness Growth (Area) & Risk Distribution (Pie) */}
-          <div className="grid lg:grid-cols-3 gap-8">
-            <motion.div 
-              variants={itemVariants}
-              className="glass-panel p-6 rounded-3xl lg:col-span-2 space-y-4 border border-white/[0.04]"
-            >
-              <div className="space-y-1">
-                <h3 className="text-lg font-bold text-white tracking-tight flex items-center gap-2">
-                  <TrendingUp size={16} className="text-brand-cyan" /> Monthly Awareness Growth
-                </h3>
-                <p className="text-xs text-zinc-400">Progression of average security awareness indices over the last 6 months.</p>
-              </div>
-              <div className="h-72 w-full pt-4">
-                <ResponsiveContainer width="100%" height="100%">
-                  <AreaChart data={data.charts.monthlyAwarenessGrowth} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                    <defs>
-                      <linearGradient id="growthGrad" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#06b6d4" stopOpacity={0.25}/>
-                        <stop offset="95%" stopColor="#06b6d4" stopOpacity={0}/>
-                      </linearGradient>
-                    </defs>
-                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.015)" />
-                    <XAxis dataKey="name" stroke="#71717a" fontSize={9} tickLine={false} axisLine={false} />
-                    <YAxis stroke="#71717a" fontSize={9} domain={[0, 100]} unit="%" tickLine={false} axisLine={false} />
-                    <Tooltip
-                      content={({ active, payload }) => {
-                        if (active && payload && payload.length) {
-                          return (
-                            <div className="glass-panel p-3.5 rounded-2xl border border-white/[0.08] shadow-2xl backdrop-blur-md space-y-1 bg-zinc-950/95 min-w-[130px] font-mono text-xs">
-                              <p className="text-[9px] uppercase tracking-wider text-zinc-500 font-bold">{payload[0].payload.name}</p>
-                              <div className="flex items-baseline gap-1">
-                                <span className="text-lg font-extrabold text-white">{payload[0].value}%</span>
-                                <span className="text-[9px] text-zinc-500">score</span>
-                              </div>
-                            </div>
-                          );
-                        }
-                        return null;
-                      }}
-                    />
-                    <Area type="monotone" dataKey="score" stroke="#06b6d4" strokeWidth={2.5} fillOpacity={1} fill="url(#growthGrad)" />
-                  </AreaChart>
-                </ResponsiveContainer>
-              </div>
-            </motion.div>
-
-            <motion.div 
-              variants={itemVariants}
-              className="glass-panel p-6 rounded-3xl flex flex-col justify-between border border-white/[0.04]"
-            >
-              <div className="space-y-1">
-                <h3 className="text-lg font-bold text-white tracking-tight flex items-center gap-2">
-                  <PieIcon size={16} className="text-brand-purple" /> Risk Profile Spread
-                </h3>
-                <p className="text-xs text-zinc-400">Employee threat classification profile share.</p>
-              </div>
-              <div className="h-52 w-full flex items-center justify-center relative">
-                <div className="absolute flex flex-col items-center justify-center">
-                  <span className="text-[8px] uppercase tracking-widest text-zinc-500 font-bold font-mono">Index Average</span>
-                  <span className="text-2xl font-black text-white font-mono mt-0.5">{data.metrics.avgScore}</span>
-                </div>
-                <ResponsiveContainer width="100%" height="100%">
-                  <PieChart>
-                    <Pie
-                      data={data.charts.riskDistribution}
-                      cx="50%"
-                      cy="50%"
-                      innerRadius={60}
-                      outerRadius={76}
-                      paddingAngle={5}
-                      dataKey="value"
-                    >
-                      {data.charts.riskDistribution.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={entry.color} stroke="rgba(9,9,11,0.6)" strokeWidth={2} />
-                      ))}
-                    </Pie>
-                    <Tooltip
-                      content={({ active, payload }) => {
-                        if (active && payload && payload.length) {
-                          const item = payload[0];
-                          return (
-                            <div className="glass-panel p-3.5 rounded-2xl border border-white/[0.08] shadow-2xl backdrop-blur-md bg-zinc-950/95 min-w-[130px] font-mono text-xs">
-                              <p className="text-[9px] uppercase tracking-wider font-bold" style={{ color: item.payload.color }}>{item.name}</p>
-                              <div className="flex items-baseline gap-1">
-                                <span className="text-lg font-extrabold text-white">{item.value}</span>
-                                <span className="text-[9px] text-zinc-500">employees</span>
-                              </div>
-                            </div>
-                          );
-                        }
-                        return null;
-                      }}
-                    />
-                  </PieChart>
-                </ResponsiveContainer>
-              </div>
-              <div className="grid grid-cols-3 gap-2 border-t border-white/[0.04] pt-4 text-center font-mono text-xs">
-                <div className="space-y-0.5">
-                  <div className="flex items-center justify-center gap-1">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                    <p className="text-[8px] uppercase tracking-wider text-zinc-500">Low</p>
-                  </div>
-                  <p className="text-sm font-extrabold text-emerald-400">{data.metrics.lowRiskEmployees}</p>
-                </div>
-                <div className="space-y-0.5">
-                  <div className="flex items-center justify-center gap-1">
-                    <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
-                    <p className="text-[8px] uppercase tracking-wider text-zinc-500">Medium</p>
-                  </div>
-                  <p className="text-sm font-extrabold text-amber-400">{data.metrics.mediumRiskEmployees}</p>
-                </div>
-                <div className="space-y-0.5">
-                  <div className="flex items-center justify-center gap-1">
-                    <span className="w-1.5 h-1.5 rounded-full bg-rose-500" />
-                    <p className="text-[8px] uppercase tracking-wider text-zinc-500">High</p>
-                  </div>
-                  <p className="text-sm font-extrabold text-rose-400">{data.metrics.highRiskEmployees}</p>
-                </div>
-              </div>
-            </motion.div>
-          </div>
-
-          {/* Charts Row 2: Campaign Funnel & Campaign Performance Trend */}
-          <div className="grid lg:grid-cols-2 gap-8">
-            <motion.div 
-              variants={itemVariants}
-              className="glass-panel p-6 rounded-3xl space-y-4 border border-white/[0.04]"
-            >
-              <div className="space-y-1">
-                <h3 className="text-lg font-bold text-white tracking-tight flex items-center gap-2">
-                  <Layers size={16} className="text-brand-purple" /> Campaign Action Funnel
-                </h3>
-                <p className="text-xs text-zinc-400 font-mono">Conversion metrics tracker (Delivered → Opened → Clicked → Form Interaction).</p>
-              </div>
-              <div className="h-72 w-full pt-4">
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={data.charts.campaignFunnel} layout="vertical" margin={{ left: 10, right: 20, bottom: 5 }}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.015)" horizontal={false} />
-                    <XAxis type="number" stroke="#71717a" fontSize={9} tickLine={false} axisLine={false} />
-                    <YAxis dataKey="stage" type="category" stroke="#a1a1aa" fontSize={9} width={90} tickLine={false} axisLine={false} />
-                    <Tooltip
-                      cursor={{ fill: 'rgba(255,255,255,0.015)' }}
-                      content={({ active, payload }) => {
-                        if (active && payload && payload.length) {
-                          const val = payload[0].payload;
-                          return (
-                            <div className="glass-panel p-3.5 rounded-2xl border border-white/[0.08] shadow-2xl backdrop-blur-md bg-zinc-950/95 min-w-[130px] font-mono text-xs">
-                              <p className="text-[9px] uppercase tracking-wider text-zinc-500 font-bold">{val.stage}</p>
-                              <div className="flex items-baseline gap-1">
-                                <span className="text-lg font-extrabold text-white">{val.count}</span>
-                                <span className="text-[9px] text-zinc-500">interactions</span>
-                              </div>
-                            </div>
-                          );
-                        }
-                        return null;
-                      }}
-                    />
-                    <Bar dataKey="count" radius={[0, 6, 6, 0]} barSize={18}>
-                      {data.charts.campaignFunnel.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={entry.fill} />
-                      ))}
-                    </Bar>
-                  </BarChart>
-                </ResponsiveContainer>
-              </div>
-            </motion.div>
-
-            <motion.div 
-              variants={itemVariants}
-              className="glass-panel p-6 rounded-3xl space-y-4 border border-white/[0.04]"
-            >
-              <div className="space-y-1">
-                <h3 className="text-lg font-bold text-white tracking-tight flex items-center gap-2">
-                  <Sparkles size={16} className="text-brand-cyan" /> Campaign Performance Trend
-                </h3>
-                <p className="text-xs text-zinc-400">Avoidance success rate vs click failures across simulation instances.</p>
-              </div>
-              <div className="h-72 w-full pt-4">
-                {data.charts.campaignPerformanceTrend.length > 0 ? (
+          {/* Growth + risk */}
+          <div className="grid gap-6 lg:grid-cols-3">
+            <motion.div variants={rise} className="lg:col-span-2">
+              <Card pad="lg">
+                <CardHeader title="Awareness growth" description="Average security awareness over six months." />
+                <div className="mt-6 h-72">
                   <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={data.charts.campaignPerformanceTrend} margin={{ top: 10, right: 10, left: -20, bottom: 5 }}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.015)" />
-                      <XAxis dataKey="name" stroke="#71717a" fontSize={9} tickLine={false} axisLine={false} />
-                      <YAxis stroke="#71717a" fontSize={9} domain={[0, 100]} unit="%" tickLine={false} axisLine={false} />
-                      <Tooltip
-                        content={({ active, payload, label }) => {
-                          if (active && payload && payload.length) {
-                            return (
-                              <div className="glass-panel p-3.5 rounded-2.5xl border border-white/[0.08] shadow-2xl backdrop-blur-md bg-zinc-950/95 min-w-[180px] font-mono text-xs space-y-1">
-                                <p className="text-[9px] uppercase tracking-wider text-zinc-400 font-bold border-b border-white/[0.05] pb-1">{label}</p>
-                                {payload.map((p, idx) => (
-                                  <div key={idx} className="flex justify-between gap-4">
-                                    <span style={{ color: p.color }}>{p.name}:</span>
-                                    <span className="font-extrabold text-white">{p.value}%</span>
-                                  </div>
-                                ))}
-                              </div>
-                            );
-                          }
-                          return null;
-                        }}
-                      />
-                      <Legend verticalAlign="bottom" height={36} iconType="circle" formatter={(v) => <span className="text-[9px] text-zinc-400 font-mono">{v}</span>} />
-                      <Bar dataKey="successRate" name="Avoidance Success" fill="#22C55E" radius={[4, 4, 0, 0]} />
-                      <Bar dataKey="clickRate" name="Click Failures" fill="#EF4444" radius={[4, 4, 0, 0]} />
+                    <AreaChart data={data.charts.monthlyAwarenessGrowth} margin={{ left: -16, right: 8, top: 8 }}>
+                      <defs>
+                        <linearGradient id="g1" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="0%" stopColor={chartColors.accent} stopOpacity={0.25} />
+                          <stop offset="100%" stopColor={chartColors.accent} stopOpacity={0} />
+                        </linearGradient>
+                      </defs>
+                      <CartesianGrid stroke={chartColors.grid} />
+                      <XAxis dataKey="name" {...axisProps} />
+                      <YAxis domain={[0, 100]} unit="%" {...axisProps} />
+                      <Tooltip content={<ChartTooltip unit="%" />} />
+                      <Area type="monotone" dataKey="score" name="Score" stroke={chartColors.accent} strokeWidth={2.25} fill="url(#g1)" />
+                    </AreaChart>
+                  </ResponsiveContainer>
+                </div>
+              </Card>
+            </motion.div>
+            <motion.div variants={rise}>
+              <Card pad="lg" className="flex h-full flex-col">
+                <CardHeader title="Risk distribution" description="Employees by tier." />
+                <div className="relative mt-2 flex h-52 items-center justify-center">
+                  <div className="pointer-events-none absolute flex flex-col items-center">
+                    <span className="text-[11px] uppercase tracking-[0.08em] text-ink-faint">Avg score</span>
+                    <span className="tnum text-2xl font-semibold text-ink">{data.metrics.avgScore}</span>
+                  </div>
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie data={data.charts.riskDistribution} cx="50%" cy="50%" innerRadius={60} outerRadius={76} paddingAngle={3} dataKey="value" stroke="none">
+                        {data.charts.riskDistribution.map((_, i) => <Cell key={i} fill={riskColors[i] || chartColors.neutral} />)}
+                      </Pie>
+                      <Tooltip content={<ChartTooltip unit=" people" />} />
+                    </PieChart>
+                  </ResponsiveContainer>
+                </div>
+                <div className="mt-4 grid grid-cols-3 gap-2 border-t border-line pt-4 text-center">
+                  {[["Low", data.metrics.lowRiskEmployees, riskColors[0]], ["Medium", data.metrics.mediumRiskEmployees, riskColors[1]], ["High", data.metrics.highRiskEmployees, riskColors[2]]].map(([l, v, c]) => (
+                    <div key={l as string}>
+                      <span className="flex items-center justify-center gap-1.5 text-[12px] text-ink-faint">
+                        <span className="h-1.5 w-1.5 rounded-full" style={{ background: c as string }} /> {l}
+                      </span>
+                      <p className="tnum mt-0.5 text-[15px] font-semibold text-ink">{v as number}</p>
+                    </div>
+                  ))}
+                </div>
+              </Card>
+            </motion.div>
+          </div>
+
+          {/* Funnel + performance */}
+          <div className="grid gap-6 lg:grid-cols-2">
+            <motion.div variants={rise}>
+              <Card pad="lg">
+                <CardHeader title="Action funnel" description="Delivered → opened → clicked → submitted." />
+                <div className="mt-6 h-72">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={data.charts.campaignFunnel} layout="vertical" margin={{ left: 8, right: 20 }}>
+                      <CartesianGrid horizontal={false} stroke={chartColors.grid} />
+                      <XAxis type="number" {...axisProps} />
+                      <YAxis dataKey="stage" type="category" width={92} {...axisProps} />
+                      <Tooltip cursor={{ fill: "rgba(255,255,255,0.02)" }} content={<ChartTooltip />} />
+                      <Bar dataKey="count" name="People" radius={[0, 5, 5, 0]} barSize={20}>
+                        {data.charts.campaignFunnel.map((_, i) => <Cell key={i} fill={i < 2 ? "#52525b" : i === 2 ? chartColors.accentDim : chartColors.accent} />)}
+                      </Bar>
                     </BarChart>
                   </ResponsiveContainer>
-                ) : (
-                  <div className="h-full flex flex-col items-center justify-center border border-dashed border-white/[0.05] rounded-2xl bg-white/[0.005] p-8 text-center space-y-2">
-                    <AlertTriangle size={20} className="text-zinc-600" />
-                    <span className="text-xs font-mono text-zinc-400">Data Pending</span>
-                    <span className="text-[10px] font-mono text-zinc-500 max-w-[200px]">Launch and complete campaigns to show analytics timeline.</span>
-                  </div>
-                )}
-              </div>
+                </div>
+              </Card>
+            </motion.div>
+            <motion.div variants={rise}>
+              <Card pad="lg">
+                <CardHeader title="Campaign performance" description="Avoidance vs. clicks per campaign." />
+                <div className="mt-6 h-72">
+                  {data.charts.campaignPerformanceTrend.length > 0 ? (
+                    <ResponsiveContainer width="100%" height="100%">
+                      <BarChart data={data.charts.campaignPerformanceTrend} margin={{ left: -16, right: 8, top: 8 }}>
+                        <CartesianGrid stroke={chartColors.grid} />
+                        <XAxis dataKey="name" {...axisProps} />
+                        <YAxis domain={[0, 100]} unit="%" {...axisProps} />
+                        <Tooltip cursor={{ fill: "rgba(255,255,255,0.02)" }} content={<ChartTooltip unit="%" />} />
+                        <Legend iconType="circle" formatter={(v) => <span className="text-[12px] text-ink-soft">{v}</span>} />
+                        <Bar dataKey="successRate" name="Avoided" fill={chartColors.accent} radius={[4, 4, 0, 0]} />
+                        <Bar dataKey="clickRate" name="Clicked" fill="#f06b6b" radius={[4, 4, 0, 0]} />
+                      </BarChart>
+                    </ResponsiveContainer>
+                  ) : (
+                    <div className="flex h-full items-center justify-center text-[13px] text-ink-faint">No campaign data yet.</div>
+                  )}
+                </div>
+              </Card>
             </motion.div>
           </div>
 
-          {/* Charts Row 3: Employee Engagement (Line) & Monthly Compliance (Area) */}
-          <div className="grid lg:grid-cols-3 gap-8">
-            <motion.div 
-              variants={itemVariants}
-              className="glass-panel p-6 rounded-3xl lg:col-span-2 space-y-4 border border-white/[0.04]"
-            >
-              <div className="space-y-1">
-                <h3 className="text-lg font-bold text-white tracking-tight flex items-center gap-2">
-                  <Activity size={16} className="text-brand-cyan" /> Employee Engagement Trend
-                </h3>
-                <p className="text-xs text-zinc-400 font-mono">Monthly aggregates of telemetry opens, clicks, and credential uploads.</p>
-              </div>
-              <div className="h-72 w-full pt-4">
+          {/* Engagement + compliance */}
+          <div className="grid gap-6 lg:grid-cols-3">
+            <motion.div variants={rise} className="lg:col-span-2">
+              <Card pad="lg">
+                <CardHeader title="Engagement over time" description="Monthly opens, clicks, and submissions." />
+                <div className="mt-6 h-72">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <LineChart data={data.charts.employeeEngagementTrend} margin={{ left: -16, right: 8, top: 8 }}>
+                      <CartesianGrid stroke={chartColors.grid} />
+                      <XAxis dataKey="name" {...axisProps} />
+                      <YAxis {...axisProps} />
+                      <Tooltip content={<ChartTooltip />} />
+                      <Legend iconType="circle" formatter={(v) => <span className="text-[12px] text-ink-soft">{v}</span>} />
+                      <Line type="monotone" dataKey="opens" name="Opens" stroke="#8a8a93" strokeWidth={2} dot={false} />
+                      <Line type="monotone" dataKey="clicks" name="Clicks" stroke="#f0b86b" strokeWidth={2} dot={false} />
+                      <Line type="monotone" dataKey="submissions" name="Submissions" stroke={chartColors.accent} strokeWidth={2.25} dot={false} />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </div>
+              </Card>
+            </motion.div>
+            <motion.div variants={rise}>
+              <Card pad="lg">
+                <CardHeader title="Compliance trend" description="Share of compliant users." />
+                <div className="mt-6 h-72">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <AreaChart data={data.charts.monthlyComplianceTrend} margin={{ left: -16, right: 8, top: 8 }}>
+                      <defs>
+                        <linearGradient id="g2" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="0%" stopColor={chartColors.accent} stopOpacity={0.22} />
+                          <stop offset="100%" stopColor={chartColors.accent} stopOpacity={0} />
+                        </linearGradient>
+                      </defs>
+                      <CartesianGrid stroke={chartColors.grid} />
+                      <XAxis dataKey="name" {...axisProps} />
+                      <YAxis domain={[0, 100]} unit="%" {...axisProps} />
+                      <Tooltip content={<ChartTooltip unit="%" />} />
+                      <Area type="monotone" dataKey="complianceRate" name="Compliance" stroke={chartColors.accent} strokeWidth={2.25} fill="url(#g2)" />
+                    </AreaChart>
+                  </ResponsiveContainer>
+                </div>
+              </Card>
+            </motion.div>
+          </div>
+
+          {/* Dept + branch */}
+          <div className="grid gap-6 lg:grid-cols-2">
+            <motion.div variants={rise}>
+              <Card pad="lg">
+                <CardHeader title="By department" description="Awareness vs. click rate." />
+                <div className="mt-6 h-72">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={data.charts.departmentComparison} margin={{ left: -16, right: 8, top: 8 }}>
+                      <CartesianGrid stroke={chartColors.grid} />
+                      <XAxis dataKey="name" {...axisProps} />
+                      <YAxis domain={[0, 100]} unit="%" {...axisProps} />
+                      <Tooltip cursor={{ fill: "rgba(255,255,255,0.02)" }} content={<ChartTooltip unit="%" />} />
+                      <Legend iconType="circle" formatter={(v) => <span className="text-[12px] text-ink-soft">{v}</span>} />
+                      <Bar dataKey="awarenessScore" name="Awareness" fill="#8a8a93" radius={[4, 4, 0, 0]} />
+                      <Bar dataKey="clickRate" name="Click rate" fill={chartColors.accent} radius={[4, 4, 0, 0]} />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+              </Card>
+            </motion.div>
+            <motion.div variants={rise}>
+              <Card pad="lg">
+                <CardHeader title="By branch" description="Office posture ranked." />
+                <div className="mt-6 h-72">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={data.charts.branchComparison} layout="vertical" margin={{ left: 8, right: 20 }}>
+                      <CartesianGrid horizontal={false} stroke={chartColors.grid} />
+                      <XAxis type="number" {...axisProps} />
+                      <YAxis dataKey="name" type="category" width={72} {...axisProps} />
+                      <Tooltip cursor={{ fill: "rgba(255,255,255,0.02)" }} content={<ChartTooltip unit="%" />} />
+                      <Legend iconType="circle" formatter={(v) => <span className="text-[12px] text-ink-soft">{v}</span>} />
+                      <Bar dataKey="awarenessScore" name="Awareness" fill="#8a8a93" radius={[0, 4, 4, 0]} barSize={9} />
+                      <Bar dataKey="clickRate" name="Click rate" fill={chartColors.accent} radius={[0, 4, 4, 0]} barSize={9} />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+              </Card>
+            </motion.div>
+          </div>
+
+          {/* Security trend */}
+          <motion.div variants={rise}>
+            <Card pad="lg">
+              <CardHeader title="Company security score" description="The overall safety index over time." />
+              <div className="mt-6 h-64">
                 <ResponsiveContainer width="100%" height="100%">
-                  <LineChart data={data.charts.employeeEngagementTrend} margin={{ top: 10, right: 10, left: -20, bottom: 5 }}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.015)" />
-                    <XAxis dataKey="name" stroke="#71717a" fontSize={9} tickLine={false} axisLine={false} />
-                    <YAxis stroke="#71717a" fontSize={9} tickLine={false} axisLine={false} />
-                    <Tooltip
-                      content={({ active, payload, label }) => {
-                        if (active && payload && payload.length) {
-                          return (
-                            <div className="glass-panel p-3.5 rounded-2.5xl border border-white/[0.08] shadow-2xl backdrop-blur-md bg-zinc-950/95 min-w-[180px] font-mono text-xs space-y-1">
-                              <p className="text-[9px] uppercase tracking-wider text-zinc-400 font-bold border-b border-white/[0.05] pb-1">{label}</p>
-                              {payload.map((p, idx) => (
-                                <div key={idx} className="flex justify-between gap-4">
-                                  <span style={{ color: p.color }}>{p.name}:</span>
-                                  <span className="font-extrabold text-white">{p.value} logs</span>
-                                </div>
-                              ))}
-                            </div>
-                          );
-                        }
-                        return null;
-                      }}
-                    />
-                    <Legend verticalAlign="bottom" height={36} iconType="circle" formatter={(v) => <span className="text-[9px] text-zinc-400 font-mono">{v}</span>} />
-                    <Line type="monotone" dataKey="opens" name="Opened Email" stroke="#ffffff" strokeWidth={2} activeDot={{ r: 6 }} />
-                    <Line type="monotone" dataKey="clicks" name="Clicked Link" stroke="#a8a8a8" strokeWidth={2} activeDot={{ r: 6 }} />
-                    <Line type="monotone" dataKey="submissions" name="Entered Credentials" stroke="#00FF88" strokeWidth={2} activeDot={{ r: 6 }} />
+                  <LineChart data={data.charts.securityScoreTrend} margin={{ left: -16, right: 8, top: 8 }}>
+                    <CartesianGrid stroke={chartColors.grid} />
+                    <XAxis dataKey="name" {...axisProps} />
+                    <YAxis domain={[0, 100]} {...axisProps} />
+                    <Tooltip content={<ChartTooltip unit="%" />} />
+                    <Line type="monotone" dataKey="score" name="Security score" stroke={chartColors.accent} strokeWidth={2.5} dot={{ r: 3, strokeWidth: 0, fill: chartColors.accent }} activeDot={{ r: 5 }} />
                   </LineChart>
                 </ResponsiveContainer>
               </div>
-            </motion.div>
-
-            <motion.div 
-              variants={itemVariants}
-              className="glass-panel p-6 rounded-3xl space-y-4 border border-white/[0.04]"
-            >
-              <div className="space-y-1">
-                <h3 className="text-lg font-bold text-white tracking-tight flex items-center gap-2">
-                  <ShieldCheck size={16} className="text-brand-emerald" /> Monthly Compliance Trend
-                </h3>
-                <p className="text-xs text-zinc-400">Ratio of compliant users scoring &gt;= 75% security index.</p>
-              </div>
-              <div className="h-72 w-full pt-4">
-                <ResponsiveContainer width="100%" height="100%">
-                  <AreaChart data={data.charts.monthlyComplianceTrend} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                    <defs>
-                      <linearGradient id="compGrad" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#22C55E" stopOpacity={0.25}/>
-                        <stop offset="95%" stopColor="#22C55E" stopOpacity={0}/>
-                      </linearGradient>
-                    </defs>
-                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.015)" />
-                    <XAxis dataKey="name" stroke="#71717a" fontSize={9} tickLine={false} axisLine={false} />
-                    <YAxis stroke="#71717a" fontSize={9} domain={[0, 100]} unit="%" tickLine={false} axisLine={false} />
-                    <Tooltip
-                      content={({ active, payload }) => {
-                        if (active && payload && payload.length) {
-                          return (
-                            <div className="glass-panel p-3.5 rounded-2xl border border-white/[0.08] shadow-2xl backdrop-blur-md bg-zinc-950/95 min-w-[130px] font-mono text-xs">
-                              <p className="text-[9px] uppercase tracking-wider text-zinc-500 font-bold">{payload[0].payload.name}</p>
-                              <div className="flex items-baseline gap-1">
-                                <span className="text-lg font-extrabold text-white">{payload[0].value}%</span>
-                                <span className="text-[9px] text-zinc-500">compliance</span>
-                              </div>
-                            </div>
-                          );
-                        }
-                        return null;
-                      }}
-                    />
-                    <Area type="monotone" dataKey="complianceRate" stroke="#22C55E" strokeWidth={2.5} fillOpacity={1} fill="url(#compGrad)" />
-                  </AreaChart>
-                </ResponsiveContainer>
-              </div>
-            </motion.div>
-          </div>
-
-          {/* Charts Row 4: Department Comparison & Branch Comparison (Bar Graphs) */}
-          <div className="grid lg:grid-cols-2 gap-8">
-            <motion.div 
-              variants={itemVariants}
-              className="glass-panel p-6 rounded-3xl space-y-4 border border-white/[0.04]"
-            >
-              <div className="space-y-1">
-                <h3 className="text-lg font-bold text-white tracking-tight flex items-center gap-2">
-                  <Layers size={16} className="text-brand-cyan" /> Department Comparison
-                </h3>
-                <p className="text-xs text-zinc-400">Team division averages (Score vs click ratios).</p>
-              </div>
-              <div className="h-72 w-full pt-4">
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={data.charts.departmentComparison} margin={{ top: 10, right: 10, left: -20, bottom: 5 }}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.015)" />
-                    <XAxis dataKey="name" stroke="#71717a" fontSize={9} tickLine={false} axisLine={false} />
-                    <YAxis stroke="#71717a" fontSize={9} domain={[0, 100]} unit="%" tickLine={false} axisLine={false} />
-                    <Tooltip
-                      content={({ active, payload, label }) => {
-                        if (active && payload && payload.length) {
-                          const item = payload[0].payload;
-                          return (
-                            <div className="glass-panel p-3.5 rounded-2.5xl border border-white/[0.08] shadow-2xl backdrop-blur-md bg-zinc-950/95 min-w-[180px] font-mono text-xs space-y-1">
-                              <p className="text-[9px] uppercase tracking-wider text-zinc-400 font-bold border-b border-white/[0.05] pb-1">{label}</p>
-                              <div className="flex justify-between">
-                                <span>Employees:</span>
-                                <span className="font-extrabold text-white">{item.employees}</span>
-                              </div>
-                              <div className="flex justify-between">
-                                <span className="text-brand-cyan">Awareness Score:</span>
-                                <span className="font-extrabold text-brand-cyan">{item.awarenessScore}%</span>
-                              </div>
-                              <div className="flex justify-between">
-                                <span className="text-brand-rose">Click Rate:</span>
-                                <span className="font-extrabold text-brand-rose">{item.clickRate}%</span>
-                              </div>
-                            </div>
-                          );
-                        }
-                        return null;
-                      }}
-                    />
-                    <Legend verticalAlign="bottom" height={36} iconType="circle" formatter={(v) => <span className="text-[9px] text-zinc-400 font-mono">{v}</span>} />
-                    <Bar dataKey="awarenessScore" name="Awareness score" fill="#a8a8a8" radius={[4, 4, 0, 0]} />
-                    <Bar dataKey="clickRate" name="Trap Clicks" fill="#00D26A" radius={[4, 4, 0, 0]} />
-                  </BarChart>
-                </ResponsiveContainer>
-              </div>
-            </motion.div>
-
-            <motion.div 
-              variants={itemVariants}
-              className="glass-panel p-6 rounded-3xl space-y-4 border border-white/[0.04]"
-            >
-              <div className="space-y-1">
-                <h3 className="text-lg font-bold text-white tracking-tight flex items-center gap-2">
-                  <Building size={16} className="text-brand-purple" /> Indian Branch Comparison
-                </h3>
-                <p className="text-xs text-zinc-400">Office location threat profiles ranked by awareness index.</p>
-              </div>
-              <div className="h-72 w-full pt-4">
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={data.charts.branchComparison} layout="vertical" margin={{ left: 10, right: 20, bottom: 5 }}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.015)" horizontal={false} />
-                    <XAxis type="number" stroke="#71717a" fontSize={9} tickLine={false} axisLine={false} />
-                    <YAxis dataKey="name" type="category" stroke="#a1a1aa" fontSize={9} tickLine={false} axisLine={false} />
-                    <Tooltip
-                      cursor={{ fill: 'rgba(255,255,255,0.015)' }}
-                      content={({ active, payload, label }) => {
-                        if (active && payload && payload.length) {
-                          const item = payload[0].payload;
-                          return (
-                            <div className="glass-panel p-3.5 rounded-2.5xl border border-white/[0.08] shadow-2xl backdrop-blur-md bg-zinc-950/95 min-w-[180px] font-mono text-xs space-y-1">
-                              <p className="text-[9px] uppercase tracking-wider text-zinc-400 font-bold border-b border-white/[0.05] pb-1">{label} Office</p>
-                              <div className="flex justify-between">
-                                <span>Monitored Employees:</span>
-                                <span className="font-extrabold text-white">{item.employees}</span>
-                              </div>
-                              <div className="flex justify-between">
-                                <span className="text-brand-purple">Awareness Index:</span>
-                                <span className="font-extrabold text-brand-purple">{item.awarenessScore}%</span>
-                              </div>
-                              <div className="flex justify-between">
-                                <span className="text-brand-rose">Click Failures:</span>
-                                <span className="font-extrabold text-brand-rose">{item.clickRate}%</span>
-                              </div>
-                            </div>
-                          );
-                        }
-                        return null;
-                      }}
-                    />
-                    <Legend verticalAlign="bottom" height={36} iconType="circle" formatter={(v) => <span className="text-[9px] text-zinc-400 font-mono">{v}</span>} />
-                    <Bar dataKey="awarenessScore" name="Awareness Index" fill="#a8a8a8" radius={[0, 4, 4, 0]} barSize={10} />
-                    <Bar dataKey="clickRate" name="Click Rate" fill="#00D26A" radius={[0, 4, 4, 0]} barSize={10} />
-                  </BarChart>
-                </ResponsiveContainer>
-              </div>
-            </motion.div>
-          </div>
-
-          {/* Charts Row 5: Security Score Trend (Full width line tracking timeline) */}
-          <motion.div 
-            variants={itemVariants}
-            className="glass-panel p-6 rounded-3xl space-y-4 border border-white/[0.04]"
-          >
-            <div className="space-y-1">
-              <h3 className="text-lg font-bold text-white tracking-tight flex items-center gap-2">
-                <ShieldCheck size={16} className="text-brand-cyan" /> Security Score Trend
-              </h3>
-              <p className="text-xs text-zinc-400">Continuous timeline mapping of the overall company safety index score.</p>
-            </div>
-            <div className="h-64 w-full pt-4">
-              <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={data.charts.securityScoreTrend} margin={{ top: 10, right: 10, left: -20, bottom: 5 }}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.015)" />
-                  <XAxis dataKey="name" stroke="#71717a" fontSize={9} tickLine={false} axisLine={false} />
-                  <YAxis stroke="#71717a" fontSize={9} domain={[0, 100]} tickLine={false} axisLine={false} />
-                  <Tooltip
-                    content={({ active, payload }) => {
-                      if (active && payload && payload.length) {
-                        return (
-                          <div className="glass-panel p-3.5 rounded-2xl border border-white/[0.08] shadow-2xl backdrop-blur-md bg-zinc-950/95 min-w-[130px] font-mono text-xs">
-                            <p className="text-[9px] uppercase tracking-wider text-zinc-500 font-bold">{payload[0].payload.name}</p>
-                            <div className="flex items-baseline gap-1">
-                              <span className="text-lg font-extrabold text-brand-cyan">{payload[0].value}%</span>
-                              <span className="text-[9px] text-zinc-500">index score</span>
-                            </div>
-                          </div>
-                        );
-                      }
-                      return null;
-                    }}
-                  />
-                  <Line type="monotone" dataKey="score" name="Company Security Score" stroke="#00FF88" strokeWidth={3} activeDot={{ r: 6 }} dot={{ strokeWidth: 2, r: 3 }} />
-                </LineChart>
-              </ResponsiveContainer>
-            </div>
+            </Card>
           </motion.div>
         </motion.div>
       )}
+    </div>
+  );
+}
+
+function Insight({ label, value, note, tone }: { label: string; value: string; note?: string; tone: "danger" | "accent" | "warn" | "neutral" }) {
+  const dot = tone === "danger" ? "bg-danger" : tone === "accent" ? "bg-accent" : tone === "warn" ? "bg-warn" : "bg-ink-soft";
+  return (
+    <div className="rounded-[12px] border border-line bg-inset p-4">
+      <p className="flex items-center gap-1.5 text-[12px] text-ink-faint">
+        <span className={"h-1.5 w-1.5 rounded-full " + dot} /> {label}
+      </p>
+      <p className="mt-1.5 text-[14px] font-semibold leading-snug text-ink">{value}</p>
+      {note && <p className="mt-1 text-[12.5px] leading-relaxed text-ink-soft">{note}</p>}
     </div>
   );
 }
