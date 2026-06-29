@@ -19,7 +19,7 @@ const USER_REGISTRY: Record<string, { name: string; role: string; branch: string
   'admin@company.in': { name: 'Rajesh Kumar', role: 'SECURITY_ADMIN', branch: 'Bengaluru' },
   'hr@company.in': { name: 'Priya Sharma', role: 'HR_MANAGER', branch: 'Delhi' },
   'manager@company.in': { name: 'Vikram Malhotra', role: 'DEPT_MANAGER', branch: 'Mumbai' },
-  'secops@acme.com': { name: 'Sarah Jenkins', role: 'SECURITY_ADMIN', branch: 'Pune' }
+  'secops@company.in': { name: 'Sneha Nair', role: 'SECURITY_ADMIN', branch: 'Pune' }
 };
 
 const MOCK_ADMIN_ACTIVITIES = [

@@ -3,7 +3,7 @@
 import React, { useRef } from "react";
 import Link from "next/link";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { ArrowRight, ArrowUpRight, Check, Paperclip } from "lucide-react";
+import { ArrowRight, ArrowUpRight, Check, Paperclip, Star, ArrowLeft, FileText, Archive, Trash2 } from "lucide-react";
 import PPLogo from "@/components/layout/PPLogo";
 import { Counter } from "@/components/ui/Stat";
 import FishingLine, { LineAnchor } from "@/components/landing/FishingLine";
@@ -83,59 +83,77 @@ function PhishingScene() {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-80px" }}
         transition={{ duration: 1, ease: EASE }}
-        className="relative overflow-hidden rounded-[14px] border border-line bg-surface shadow-pop"
+        whileHover={{ y: -4 }}
+        className="group relative overflow-hidden rounded-[16px] border border-line bg-surface/85 shadow-pop backdrop-blur-xl transition-shadow duration-300 hover:shadow-[0_34px_90px_-32px_rgba(0,0,0,0.85)]"
       >
-        {/* mail toolbar */}
-        <div className="flex items-center gap-3 border-b border-line/70 bg-[#0b0b0c] px-4 py-2.5 text-ink-faint">
-          <ArrowRight size={13} className="-scale-x-100" />
-          <span className="text-[11.5px]">Inbox</span>
-          <span className="ml-auto flex items-center gap-1 rounded-full border border-warn/30 bg-warn-faint px-2 py-0.5 text-[10.5px] font-medium text-warn">
-            Quarantined sample
+        {/* action bar */}
+        <div className="flex items-center gap-3.5 border-b border-line/60 px-4 py-2.5 text-ink-faint">
+          <ArrowLeft size={15} className="transition-colors group-hover:text-ink-soft" />
+          <span className="h-4 w-px bg-line/70" />
+          <Archive size={15} className="transition-colors hover:text-ink-soft" />
+          <Trash2 size={15} className="transition-colors hover:text-ink-soft" />
+          <span className="ml-auto rounded-full border border-warn/25 bg-warn-faint px-2 py-0.5 text-[10.5px] font-medium text-warn">
+            Simulation
           </span>
         </div>
 
-        {/* header block */}
-        <div className="space-y-2.5 px-5 pt-4">
-          <h4 className="pr-20 text-[16.5px] font-semibold leading-snug tracking-[-0.01em]">
-            Action required: re-verify your account within 24 hours
+        {/* subject + labels */}
+        <div className="px-5 pt-5">
+          <h4 className="text-[17px] font-semibold leading-snug tracking-[-0.01em] text-ink">
+            Pending invoice approval — confirm by 6:00 PM today
           </h4>
-          <div className="flex items-center gap-3">
-            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#21211f] text-[12px] font-semibold text-warn">
-              IT
-            </div>
-            <div className="min-w-0 leading-tight">
-              <p className="truncate text-[12.5px]">
-                IT Service Desk{" "}
-                <span className="text-ink-faint">
-                  &lt;support@pinkman-secure-portal.com&gt;
-                </span>
-              </p>
-              <p className="truncate text-[11.5px] text-ink-faint">
-                to me, finance-all · 9:14 AM
-              </p>
-            </div>
+          <div className="mt-2 flex flex-wrap items-center gap-1.5">
+            <span className="rounded-[5px] bg-inset px-1.5 py-0.5 text-[10.5px] font-medium text-ink-faint">Inbox</span>
+            <span className="rounded-[5px] bg-inset px-1.5 py-0.5 text-[10.5px] font-medium text-ink-faint">Finance</span>
           </div>
         </div>
 
-        <div className="mt-4 h-px bg-line/70" />
+        {/* sender row */}
+        <div className="mt-4 flex items-center gap-3 px-5">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-[#3a2a16] to-[#241808] text-[14px] font-semibold text-warn ring-1 ring-warn/20">
+            A
+          </div>
+          <div className="min-w-0 flex-1 leading-tight">
+            <p className="flex flex-wrap items-baseline gap-x-1.5 text-[13px] font-medium text-ink">
+              Accounts Payable
+              <span className="truncate font-normal text-ink-faint">
+                &lt;accounts@payments-verify.in&gt;
+              </span>
+            </p>
+            <p className="mt-0.5 text-[11.5px] text-ink-faint">to me</p>
+          </div>
+          <div className="flex shrink-0 items-center gap-3 text-ink-faint">
+            <span className="text-[11.5px]">9:14&nbsp;AM</span>
+            <Star size={15} className="transition-colors group-hover:text-warn" />
+          </div>
+        </div>
 
         {/* body */}
-        <div className="space-y-4 px-5 py-5">
+        <div className="mt-5 space-y-4 px-5 pb-5">
           <p className="text-[13.5px] leading-relaxed text-ink-soft">
-            We detected unusual sign-in activity on your account. To avoid an
-            automatic lockout, confirm your credentials within 24 hours using the
-            secure link below.
+            Hi, a vendor payment of <span className="text-ink">₹2,48,500</span> is
+            awaiting your approval. To release it before end of day, review and
+            confirm the details using the secure link below.
           </p>
-          <span className="inline-flex items-center gap-1.5 rounded-[8px] bg-[#2b2b30] px-4 py-2.5 text-[13px] font-medium text-ink">
-            Verify my account
+          <span className="inline-flex items-center gap-1.5 rounded-[8px] bg-[#2b2b30] px-4 py-2.5 text-[13px] font-medium text-ink ring-1 ring-line/60 transition-colors group-hover:bg-[#34343b]">
+            Review &amp; approve
+            <ArrowRight size={13} />
           </span>
-          <div className="flex items-center gap-2 rounded-[8px] border border-line/70 bg-inset px-3 py-2 text-[12px] text-ink-soft">
-            <Paperclip size={13} className="text-ink-faint" />
-            account-verification.html
-            <span className="ml-auto text-[11px] text-ink-faint">38 KB</span>
+
+          {/* attachment */}
+          <div className="flex items-center gap-3 rounded-[10px] border border-line/70 bg-inset/60 px-3 py-2.5 transition-colors hover:border-line-strong hover:bg-inset">
+            <div className="flex h-9 w-9 items-center justify-center rounded-[7px] bg-danger-faint text-danger">
+              <FileText size={16} />
+            </div>
+            <div className="min-w-0 leading-tight">
+              <p className="truncate text-[12.5px] font-medium text-ink-soft">Invoice_7842.pdf</p>
+              <p className="text-[11px] text-ink-faint">PDF · 214 KB</p>
+            </div>
+            <Paperclip size={14} className="ml-auto shrink-0 text-ink-faint" />
           </div>
+
           <p className="text-[11.5px] leading-relaxed text-ink-faint">
-            Pinkman IT · Automated message, please do not reply.
+            Automated message from the accounts portal. Please do not share approval links.
           </p>
         </div>
 
@@ -145,18 +163,18 @@ function PhishingScene() {
           whileInView={{ opacity: 1, x: 0, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.7, delay: 0.4, ease: EASE }}
-          className="absolute right-3 top-[92px] rotate-1 rounded-[7px] border border-danger/40 bg-[#1f1414] px-2.5 py-1 text-[11px] font-medium text-danger shadow-card"
+          className="absolute right-3 top-[58px] rotate-1 rounded-[7px] border border-warn/40 bg-[#1e1a10] px-2.5 py-1 text-[11px] font-medium text-warn shadow-card"
         >
-          Look-alike domain
+          Manufactured urgency
         </motion.div>
         <motion.div
           initial={{ opacity: 0, x: -12, y: 6 }}
           whileInView={{ opacity: 1, x: 0, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.7, delay: 0.55, ease: EASE }}
-          className="absolute -left-3 bottom-[112px] -rotate-1 rounded-[7px] border border-warn/40 bg-[#1e1a10] px-2.5 py-1 text-[11px] font-medium text-warn shadow-pop"
+          className="absolute -left-3 top-[164px] -rotate-1 rounded-[7px] border border-danger/40 bg-[#1f1414] px-2.5 py-1 text-[11px] font-medium text-danger shadow-pop"
         >
-          Manufactured urgency
+          Look-alike domain
         </motion.div>
       </motion.div>
     </div>
@@ -195,7 +213,7 @@ function LessonScene() {
               The email you opened
             </p>
             <p className="mt-1 truncate text-[12.5px] text-ink-soft">
-              “Re-verify your account within 24 hours”
+              “Pending invoice approval — confirm by 6:00 PM today”
             </p>
           </div>
 
@@ -205,8 +223,8 @@ function LessonScene() {
           <div className="mt-4 space-y-2.5">
             {[
               "The domain wasn’t ours — read it right to left.",
-              "A countdown is pressure, not a real deadline.",
-              "Real IT never asks you to confirm a password.",
+              "A same-day deadline is pressure, not a real one.",
+              "Approvals never happen over an emailed link.",
             ].map((t, i) => (
               <motion.div
                 key={t}
@@ -381,40 +399,58 @@ const capabilities = [
 ];
 
 const stats = [
-  { value: 73, suffix: "%", decimals: 0, label: "fewer repeat clicks", sub: "after a couple of cycles" },
-  { value: 4.2, suffix: "×", decimals: 1, label: "faster reporting", sub: "once it becomes a habit" },
-  { value: 0, suffix: "", decimals: 0, label: "passwords stored", sub: "everything is discarded in the browser" },
+  {
+    value: 73,
+    suffix: "%",
+    decimals: 0,
+    label: "Stopped clicking",
+    desc: "Employees who avoided the link after a few rounds of simulations.",
+  },
+  {
+    value: 4.2,
+    suffix: "×",
+    decimals: 1,
+    label: "Faster reporting",
+    desc: "How much sooner teams flag a suspicious email once it becomes habit.",
+  },
+  {
+    value: 0,
+    suffix: "",
+    decimals: 0,
+    label: "Passwords stored",
+    desc: "Anything typed during a simulation is discarded in the browser.",
+  },
 ];
 
 const plans = [
   {
     name: "Starter",
-    price: "₹4,999",
+    price: "₹9,999",
     cadence: "/mo",
-    note: "Per organization · billed annually",
-    blurb: "For small teams running their first program.",
-    features: ["Up to 50 people", "2 verified domains", "Standard template library", "Monthly campaigns", "GST invoice"],
-    cta: "Start free",
+    note: "Per organization · billed monthly",
+    blurb: "For growing teams running their first awareness program.",
+    features: ["Up to 100 people", "2 verified domains", "Standard template library", "Monthly campaigns", "GST invoice"],
+    cta: "Start a simulation",
     featured: false,
   },
   {
     name: "Growth",
-    price: "₹14,999",
+    price: "₹24,999",
     cadence: "/mo",
-    note: "Per organization · billed annually",
-    blurb: "For teams that have outgrown the basics.",
-    features: ["Up to 500 people", "Unlimited domains", "Custom templates", "Live analytics", "CSV & PDF exports"],
-    cta: "Start free",
+    note: "Per organization · billed monthly",
+    blurb: "For organizations running continuous phishing simulations.",
+    features: ["Up to 1,000 people", "Unlimited domains", "Custom templates", "Live analytics", "CSV & PDF exports"],
+    cta: "Start a simulation",
     featured: true,
   },
   {
     name: "Enterprise",
-    price: "Custom",
+    price: "Contact Sales",
     cadence: "",
-    note: "Built around your setup",
-    blurb: "For larger orgs that need custom deployment, SSO, and hands-on onboarding.",
+    note: "Custom plan · billed annually",
+    blurb: "Custom deployments, compliance, dedicated onboarding and enterprise support.",
     features: ["Unlimited seats", "SSO, SAML & SCIM", "Dedicated infrastructure", "Compliance support", "Priority onboarding"],
-    cta: "Talk to us",
+    cta: "Contact sales",
     featured: false,
   },
 ];
@@ -463,10 +499,10 @@ export default function Home() {
             </Link>
             <Link
               href="/auth/login"
-              className="group inline-flex items-center gap-1.5 rounded-full bg-ink px-4 py-2 text-[14px] font-semibold text-canvas shadow-[0_1px_2px_rgba(0,0,0,0.4),inset_0_1px_0_rgba(255,255,255,0.25)] transition-[background-color,transform] duration-150 hover:bg-white active:scale-[0.97]"
+              className="group inline-flex items-center gap-1.5 rounded-full bg-ink px-4 py-2 text-[14px] font-semibold text-canvas shadow-[0_1px_2px_rgba(0,0,0,0.4),inset_0_1px_0_rgba(255,255,255,0.25)] transition-[background-color,transform] duration-200 ease-out-soft hover:bg-white active:scale-[0.97]"
             >
-              Open console
-              <ArrowRight size={15} className="transition-transform group-hover:translate-x-0.5" />
+              Start a simulation
+              <ArrowRight size={15} className="transition-transform duration-200 group-hover:translate-x-0.5" />
             </Link>
           </div>
         </div>
@@ -483,25 +519,22 @@ export default function Home() {
           <MorphHeadline triggerRef={heroRef} />
 
           <Reveal delay={0.5}>
-            <p className="mx-auto mt-8 max-w-xl text-[17px] leading-relaxed text-ink-soft sm:text-[18px]">
-              We send safe phishing tests, teach the moment someone slips, and
-              show you where the risk is. Passwords never leave the browser.
+            <p className="mx-auto mt-8 max-w-[560px] text-[17px] font-normal leading-loose text-ink-soft sm:text-[18px]">
+              The attack starts with curiosity.
+              <br />
+              The lesson starts with one click.
             </p>
           </Reveal>
 
           <Reveal delay={0.62}>
-            <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
+            <div className="mt-10 flex items-center justify-center">
               <Link
                 href="/auth/login"
-                className="group inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3 text-[15px] font-semibold text-[#04130c] shadow-[0_8px_30px_-8px_rgba(62,207,142,0.5)] transition-transform duration-150 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.97]"
+                className="group inline-flex items-center gap-2 rounded-full bg-accent px-7 py-3.5 text-[15px] font-semibold text-[#04130c] shadow-[0_10px_34px_-12px_rgba(62,207,142,0.55)] transition-[transform,box-shadow,background-color] duration-200 ease-out-soft hover:-translate-y-0.5 hover:bg-[#4ad99a] hover:shadow-[0_16px_44px_-12px_rgba(62,207,142,0.6)] active:translate-y-0 active:scale-[0.98]"
               >
-                Open the console
-                <ArrowRight size={16} className="transition-transform group-hover:translate-x-0.5" />
+                Start a simulation
+                <ArrowRight size={16} className="transition-transform duration-200 group-hover:translate-x-0.5" />
               </Link>
-              <a href="#how" className="inline-flex items-center gap-2 px-5 py-3 text-[15px] font-medium text-ink-soft transition-colors hover:text-ink">
-                See how it works
-                <ArrowRight size={15} />
-              </a>
             </div>
           </Reveal>
         </div>
@@ -513,18 +546,27 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Trust line */}
+      {/* Built for — honest segments and cities, no fabricated logos */}
       <section className="px-6 py-24 sm:py-32">
         <LineAnchor x={470} sway={1} />
         <Reveal>
           <p className="text-center text-[13px] uppercase tracking-[0.16em] text-ink-faint">
-            Some of the teams using Pinkman Protects
+            Built for security teams across India
           </p>
         </Reveal>
         <Reveal delay={0.1}>
-          <div className="mx-auto mt-10 flex max-w-4xl flex-wrap items-center justify-center gap-x-12 gap-y-6 text-[19px] font-semibold tracking-[-0.02em] text-ink-faint/70">
-            {["Northwind", "Aperture", "Meridian", "Cobalt Bank", "Vantage", "Lumen Health"].map((n) => (
-              <span key={n} className="transition-colors hover:text-ink-soft">{n}</span>
+          <p className="mx-auto mt-6 max-w-2xl text-center text-[clamp(1.25rem,2.6vw,1.85rem)] font-medium leading-snug tracking-[-0.02em] text-ink-soft">
+            Made for startups, colleges, SMEs and enterprise teams — from Pune and
+            Mumbai to Bengaluru, Hyderabad and Delhi.
+          </p>
+        </Reveal>
+        <Reveal delay={0.18}>
+          <div className="mx-auto mt-9 flex max-w-3xl flex-wrap items-center justify-center gap-x-7 gap-y-3 text-[12.5px] font-medium uppercase tracking-[0.12em] text-ink-faint/70">
+            {["Startups", "Colleges", "SMEs", "Enterprise", "Public sector"].map((s, i) => (
+              <span key={s} className="flex items-center gap-7">
+                {i > 0 && <span className="h-1 w-1 rounded-full bg-line-strong" />}
+                {s}
+              </span>
             ))}
           </div>
         </Reveal>
@@ -535,15 +577,15 @@ export default function Home() {
         <LineAnchor x={250} sway={1.3} />
         <div className="mx-auto max-w-4xl text-center">
           <Reveal>
-            <p className="text-[clamp(1.9rem,4.4vw,3.4rem)] font-semibold leading-[1.12] tracking-[-0.03em]">
-              <span className="text-ink-faint">Most breaches don&apos;t break in.</span>{" "}
-              Someone lets them in — usually by accident, usually in a hurry.
-            </p>
-          </Reveal>
-          <Reveal delay={0.15}>
-            <p className="mx-auto mt-7 max-w-xl text-[16px] leading-relaxed text-ink-soft">
-              You can&apos;t patch a person. But you can build the habit that
-              makes that mistake rare, and measure it as you go.
+            <p className="mx-auto max-w-[600px] text-[clamp(1.15rem,2.4vw,1.6rem)] font-normal leading-[1.6] text-ink-soft">
+              The door wasn&apos;t forced open.
+              <br />
+              It was held open.
+              <br />
+              <br />
+              Because hackers don&apos;t always break in.
+              <br />
+              <span className="text-ink">Sometimes they&apos;re invited.</span>
             </p>
           </Reveal>
         </div>
@@ -631,22 +673,25 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Metrics — large numbers, set on an uneven baseline */}
+      {/* Metrics — three numbers that mean something, divided cleanly */}
       <section className="px-6 py-24 sm:py-32">
         <LineAnchor x={630} sway={1.2} ring />
-        <div className="mx-auto grid max-w-6xl gap-14 sm:grid-cols-3 sm:gap-8">
+        <div className="mx-auto grid max-w-5xl grid-cols-1 gap-y-12 sm:grid-cols-3 sm:gap-y-0">
           {stats.map((s, i) => (
-            <Reveal
-              key={s.label}
-              delay={i * 0.1}
-              className={i === 1 ? "sm:mt-16" : i === 2 ? "sm:mt-7" : ""}
-            >
-              <div className="text-center sm:text-left">
-                <p className="text-[clamp(3.4rem,7vw,5rem)] font-semibold leading-none tracking-[-0.05em]">
+            <Reveal key={s.label} delay={i * 0.1}>
+              <div
+                className={
+                  "group sm:px-9 " +
+                  (i > 0 ? "sm:border-l sm:border-line" : "")
+                }
+              >
+                <p className="text-[clamp(3.2rem,6.4vw,4.75rem)] font-semibold leading-none tracking-[-0.05em] transition-transform duration-300 ease-out-soft group-hover:-translate-y-1">
                   <Counter value={s.value} suffix={s.suffix} decimals={s.decimals} />
                 </p>
-                <p className="mt-5 text-[15.5px] font-medium">{s.label}</p>
-                <p className="mt-1 text-[13.5px] text-ink-faint">{s.sub}</p>
+                <p className="mt-6 text-[15px] font-medium text-ink">{s.label}</p>
+                <p className="mt-2 max-w-[17rem] text-[13.5px] leading-relaxed text-ink-faint">
+                  {s.desc}
+                </p>
               </div>
             </Reveal>
           ))}
@@ -663,7 +708,7 @@ export default function Home() {
                 Priced to grow with the program.
               </h2>
               <p className="mx-auto mt-4 max-w-md text-[15.5px] text-ink-soft">
-                Prices in ₹. Start free, and upgrade when you&apos;re ready.
+                Plans in ₹, billed monthly. Move up or down whenever it suits you.
               </p>
             </div>
           </Reveal>
@@ -691,7 +736,14 @@ export default function Home() {
                   )}
                   <h3 className="text-[14px] font-medium uppercase tracking-[0.1em] text-ink-faint">{p.name}</h3>
                   <div className="mt-5 flex items-baseline gap-1">
-                    <span className="text-[40px] font-semibold tracking-[-0.04em]">{p.price}</span>
+                    <span
+                      className={
+                        "font-semibold tracking-[-0.04em] " +
+                        (p.cadence ? "text-[40px]" : "text-[27px]")
+                      }
+                    >
+                      {p.price}
+                    </span>
                     <span className="text-[15px] text-ink-faint">{p.cadence}</span>
                   </div>
                   <p className="mt-1.5 text-[12.5px] text-ink-faint">{p.note}</p>
@@ -730,24 +782,24 @@ export default function Home() {
         <div className="relative mx-auto max-w-3xl text-center">
           <Reveal>
             <h2 className="text-[clamp(2.4rem,6vw,4.4rem)] font-semibold leading-[1.02] tracking-[-0.04em]">
-              Make the bad second
+              See how your team
               <br />
-              <span className="text-ink-faint">rare.</span>
+              <span className="text-ink-faint">actually responds.</span>
             </h2>
           </Reveal>
           <Reveal delay={0.12}>
             <p className="mx-auto mt-7 max-w-md text-[16.5px] leading-relaxed text-ink-soft">
-              Open the console and send your first test. Most teams see a
-              difference within a couple of cycles.
+              Send one simulation to a small group and watch what happens. It
+              takes a few minutes to set up.
             </p>
           </Reveal>
           <Reveal delay={0.22}>
             <Link
               href="/auth/login"
-              className="group mt-10 inline-flex items-center gap-2 rounded-full bg-accent px-7 py-3.5 text-[15px] font-semibold text-[#04130c] shadow-[0_8px_30px_-8px_rgba(62,207,142,0.5)] transition-transform duration-150 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.97]"
+              className="group mt-10 inline-flex items-center gap-2 rounded-full bg-accent px-7 py-3.5 text-[15px] font-semibold text-[#04130c] shadow-[0_10px_34px_-12px_rgba(62,207,142,0.55)] transition-[transform,box-shadow,background-color] duration-200 ease-out-soft hover:-translate-y-0.5 hover:bg-[#4ad99a] hover:shadow-[0_16px_44px_-12px_rgba(62,207,142,0.6)] active:translate-y-0 active:scale-[0.98]"
             >
-              Open the console
-              <ArrowUpRight size={16} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+              Start a simulation
+              <ArrowUpRight size={16} className="transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
             </Link>
           </Reveal>
         </div>

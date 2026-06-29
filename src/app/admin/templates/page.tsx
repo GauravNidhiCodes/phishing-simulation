@@ -249,8 +249,8 @@ export default function TemplatesWorkspace() {
       .replace(/\{\{name\}\}/g, "Arjun Mehta")
       .replace(/\{\{department\}\}/g, "Engineering")
       .replace(/\{\{branch\}\}/g, "Bengaluru")
-      .replace(/\{\{managerName\}\}/g, "Sarah Jenkins")
-      .replace(/\{\{organizationName\}\}/g, "Tata Consultancy Services")
+      .replace(/\{\{managerName\}\}/g, "Rahul Sharma")
+      .replace(/\{\{organizationName\}\}/g, "your organisation")
       .replace(/\{\{link\}\}/g, "#")
       .replace(/href="\#"/g, 'href="javascript:void(0)"');
 

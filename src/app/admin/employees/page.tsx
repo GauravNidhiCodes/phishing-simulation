@@ -57,7 +57,7 @@ export default function EmployeesPage() {
   const [empEmail, setEmpEmail] = useState("");
   const [empDept, setEmpDept] = useState("Engineering");
   const [empBranch, setEmpBranch] = useState("Bengaluru");
-  const [empManager, setEmpManager] = useState("Sarah Jenkins");
+  const [empManager, setEmpManager] = useState("Rahul Sharma");
   const [addEmpError, setAddEmpError] = useState("");
   const [addingEmp, setAddingEmp] = useState(false);
   const [addEmpModalOpen, setAddEmpModalOpen] = useState(false);
@@ -100,7 +100,7 @@ export default function EmployeesPage() {
         body: JSON.stringify({ action: "ADD_EMPLOYEE", name: empName, email: empEmail, department: empDept, branch: empBranch, managerName: empManager }),
       });
       if (!res.ok) { const data = await res.json(); throw new Error(data.error || "Failed to add employee"); }
-      setEmpName(""); setEmpEmail(""); setEmpDept("Engineering"); setEmpBranch("Bengaluru"); setEmpManager("Sarah Jenkins");
+      setEmpName(""); setEmpEmail(""); setEmpDept("Engineering"); setEmpBranch("Bengaluru"); setEmpManager("Rahul Sharma");
       setAddEmpModalOpen(false); loadData();
     } catch (err: any) { setAddEmpError(err.message); } finally { setAddingEmp(false); }
   };
@@ -478,13 +478,13 @@ export default function EmployeesPage() {
         <form onSubmit={handleAddEmployee}>
           <ModalBody className="space-y-4">
             {addEmpError && <div className="rounded-[10px] border border-danger/30 bg-danger-faint/40 px-3.5 py-2.5 text-[13px] text-ink">{addEmpError}</div>}
-            <Field label="Full name"><Input required placeholder="Jordan Rivera" value={empName} onChange={(e) => setEmpName(e.target.value)} /></Field>
-            <Field label="Work email" hint="Must belong to a verified domain."><Input type="email" required placeholder="jordan@yourcompany.com" value={empEmail} onChange={(e) => setEmpEmail(e.target.value)} /></Field>
+            <Field label="Full name"><Input required placeholder="Ananya Singh" value={empName} onChange={(e) => setEmpName(e.target.value)} /></Field>
+            <Field label="Work email" hint="Must belong to a verified domain."><Input type="email" required placeholder="ananya@yourcompany.in" value={empEmail} onChange={(e) => setEmpEmail(e.target.value)} /></Field>
             <div className="grid grid-cols-2 gap-4">
               <Field label="Department"><Select value={empDept} onChange={(e) => setEmpDept(e.target.value)}>{DEPARTMENTS.map((d) => <option key={d} value={d}>{d}</option>)}</Select></Field>
               <Field label="Branch"><Select value={empBranch} onChange={(e) => setEmpBranch(e.target.value)}>{INDIAN_BRANCHES.map((b) => <option key={b} value={b}>{b}</option>)}</Select></Field>
             </div>
-            <Field label="Manager"><Input required placeholder="Sarah Jenkins" value={empManager} onChange={(e) => setEmpManager(e.target.value)} /></Field>
+            <Field label="Manager"><Input required placeholder="Rahul Sharma" value={empManager} onChange={(e) => setEmpManager(e.target.value)} /></Field>
           </ModalBody>
           <ModalFooter>
             <Button type="button" variant="ghost" onClick={() => setAddEmpModalOpen(false)} className="ml-auto">Cancel</Button>
@@ -499,7 +499,7 @@ export default function EmployeesPage() {
         <form onSubmit={handleAddDomain}>
           <ModalBody className="space-y-4">
             {addDomainError && <div className="rounded-[10px] border border-danger/30 bg-danger-faint/40 px-3.5 py-2.5 text-[13px] text-ink">{addDomainError}</div>}
-            <Field label="Domain"><Input required placeholder="yourcompany.com" value={newDomain} onChange={(e) => setNewDomain(e.target.value)} /></Field>
+            <Field label="Domain"><Input required placeholder="yourcompany.in" value={newDomain} onChange={(e) => setNewDomain(e.target.value)} /></Field>
           </ModalBody>
           <ModalFooter>
             <Button type="button" variant="ghost" onClick={() => setAddDomainModalOpen(false)} className="ml-auto">Cancel</Button>

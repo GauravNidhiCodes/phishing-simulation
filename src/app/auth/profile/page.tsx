@@ -58,9 +58,9 @@ const roleLabel: Record<string, string> = {
 
 const orgs = [
   "Pinkman Technologies Pvt. Ltd.",
-  "ABC Manufacturing India",
-  "XYZ Financial Services",
-  "TechNova Solutions",
+  "Sahyadri Logistics Pvt. Ltd.",
+  "Greenleaf Foods Pvt. Ltd.",
+  "Nivaan Healthcare Pvt. Ltd.",
 ];
 
 function Panel({

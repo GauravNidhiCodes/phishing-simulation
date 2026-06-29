@@ -71,7 +71,7 @@ export default function SimulationLandingPage({ params }: { params: Promise<{ id
                 <div className="space-y-1.5">
                   <label className="text-[12.5px] font-medium text-ink-soft">Work email</label>
                   <input
-                    type="email" required placeholder="name@company.com" value={emailInput}
+                    type="email" required placeholder="name@yourcompany.in" value={emailInput}
                     onChange={(e) => setEmailInput(e.target.value)}
                     className="focus-ring h-11 w-full rounded-[10px] border border-line bg-inset px-3.5 text-[13.5px] text-ink placeholder:text-ink-faint"
                   />

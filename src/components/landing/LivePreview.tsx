@@ -50,14 +50,14 @@ import { ChartTooltip, chartColors } from "@/components/ui/Chart";
 /* -------------------------------------------------------------------------- */
 
 const NAMES = [
-  "Aarav Mehta", "Priya Nair", "Daniel Cole", "Sofia Rossi", "Wei Chen",
-  "Maya Iyer", "Tom Becker", "Ananya Rao", "Lucas Brandt", "Hana Kim",
-  "Ravi Shah", "Elena Petrova", "Noah Schmidt", "Diya Kapoor",
+  "Rahul Sharma", "Priya Verma", "Ananya Singh", "Rohan Patel", "Sneha Nair",
+  "Arjun Mehta", "Kavya Iyer", "Aman Gupta", "Neha Joshi", "Vivek Kulkarni",
+  "Karthik Reddy", "Divya Menon", "Ishaan Bose", "Pooja Desai",
 ];
-const DEPTS = ["Finance", "Sales", "Engineering", "People", "Support", "Legal", "Marketing", "IT"];
+const DEPTS = ["HR", "Finance", "Accounts", "IT", "Operations", "Sales", "Legal", "Compliance"];
 const CAMPAIGNS = [
-  "Q2 Invoice Sweep", "Password Expiry Notice", "Payroll Update",
-  "DocuSign Request", "Shared Drive Access", "Calendar Invite",
+  "Fake UPI Refund", "HR Policy Update", "Salary Revision", "IT Password Reset",
+  "Vendor Payment Request", "GST Notice", "KYC Update", "Invoice Approval",
 ];
 
 const rand = <T,>(a: T[]): T => a[Math.floor(Math.random() * a.length)];
@@ -161,8 +161,8 @@ const INITIAL_AREA = [
 ];
 
 const INITIAL_TEAMS = [
-  { team: "Finance", v: 2.1 }, { team: "Sales", v: 6.4 }, { team: "Eng", v: 9.2 },
-  { team: "People", v: 3.0 }, { team: "Support", v: 4.1 }, { team: "Legal", v: 1.8 },
+  { team: "HR", v: 2.1 }, { team: "Finance", v: 6.4 }, { team: "Accounts", v: 9.2 },
+  { team: "IT", v: 3.0 }, { team: "Ops", v: 4.1 }, { team: "Sales", v: 1.8 },
 ];
 
 const INITIAL_RISK = [
@@ -175,25 +175,25 @@ const SPARK = [12, 14, 13, 16, 15, 18, 17, 20, 22, 23].map((v, i) => ({ i, v }))
 
 type FeedItem = { id: number; name: string; dept: string; action: string; tone: Tone; m: number };
 const INITIAL_FEED: FeedItem[] = [
-  { id: 1, name: "Aarav Mehta", dept: "Finance", action: "Reported", tone: "good", m: 0 },
-  { id: 2, name: "Priya Nair", dept: "Finance", action: "Clicked link", tone: "bad", m: 4 },
-  { id: 3, name: "Daniel Cole", dept: "Sales", action: "Opened", tone: "warn", m: 9 },
-  { id: 4, name: "Sofia Rossi", dept: "People", action: "Reported", tone: "good", m: 16 },
-  { id: 5, name: "Wei Chen", dept: "Engineering", action: "Enrolled", tone: "info", m: 22 },
+  { id: 1, name: "Rahul Sharma", dept: "Finance", action: "Reported", tone: "good", m: 0 },
+  { id: 2, name: "Priya Verma", dept: "Accounts", action: "Clicked link", tone: "bad", m: 4 },
+  { id: 3, name: "Rohan Patel", dept: "Sales", action: "Opened", tone: "warn", m: 9 },
+  { id: 4, name: "Sneha Nair", dept: "HR", action: "Reported", tone: "good", m: 16 },
+  { id: 5, name: "Vivek Kulkarni", dept: "IT", action: "Enrolled", tone: "info", m: 22 },
 ];
 
 const EMPLOYEES = [
-  { name: "Priya Nair", dept: "Finance", score: 64, risk: "High" as const, tone: "bad" as Tone },
-  { name: "Daniel Cole", dept: "Sales", score: 41, risk: "Watch" as const, tone: "warn" as Tone },
-  { name: "Lucas Brandt", dept: "Support", score: 37, risk: "Watch" as const, tone: "warn" as Tone },
-  { name: "Aarav Mehta", dept: "Finance", score: 18, risk: "Low" as const, tone: "good" as Tone },
-  { name: "Ananya Rao", dept: "Engineering", score: 14, risk: "Low" as const, tone: "good" as Tone },
+  { name: "Priya Verma", dept: "Accounts", score: 64, risk: "High" as const, tone: "bad" as Tone },
+  { name: "Rohan Patel", dept: "Sales", score: 41, risk: "Watch" as const, tone: "warn" as Tone },
+  { name: "Aman Gupta", dept: "Operations", score: 37, risk: "Watch" as const, tone: "warn" as Tone },
+  { name: "Rahul Sharma", dept: "Finance", score: 18, risk: "Low" as const, tone: "good" as Tone },
+  { name: "Ananya Singh", dept: "HR", score: 14, risk: "Low" as const, tone: "good" as Tone },
 ];
 
 const CAMPAIGN_ROWS = [
-  { name: "Q2 Invoice Sweep", status: "Running", tone: "good" as Tone, sent: "1,284", rate: "23%" },
-  { name: "Payroll Update", status: "Completed", tone: "mute" as Tone, sent: "980", rate: "31%" },
-  { name: "Password Expiry Notice", status: "Scheduled", tone: "info" as Tone, sent: "—", rate: "—" },
+  { name: "Vendor Payment Request", status: "Running", tone: "good" as Tone, sent: "1,284", rate: "23%" },
+  { name: "Salary Revision", status: "Completed", tone: "mute" as Tone, sent: "980", rate: "31%" },
+  { name: "IT Password Reset", status: "Scheduled", tone: "info" as Tone, sent: "—", rate: "—" },
 ];
 
 type Notif = { id: number; text: string; tone: Tone; Icon: typeof Flag };
@@ -427,9 +427,9 @@ export default function LivePreview() {
               {/* campaign header */}
               <div className="flex flex-wrap items-end justify-between gap-2">
                 <div>
-                  <h4 className="text-[15px] font-semibold tracking-[-0.01em]">Q2 Invoice Sweep</h4>
+                  <h4 className="text-[15px] font-semibold tracking-[-0.01em]">Vendor Payment Request</h4>
                   <p className="mt-0.5 text-[11.5px] text-ink-faint">
-                    Started Jun 24 · Finance, Sales, People · 3 templates
+                    Started 24 Jun · Finance, Accounts, Ops · 3 templates
                   </p>
                 </div>
                 <span className="flex items-center gap-1.5 rounded-full bg-accent-faint px-2.5 py-1 text-[11px] font-medium text-accent">

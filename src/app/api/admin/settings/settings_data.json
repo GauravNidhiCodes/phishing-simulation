@@ -16,7 +16,7 @@
     {
       "id": "br-pune",
       "name": "Pune",
-      "branchAdmin": "Sarah Jenkins",
+      "branchAdmin": "Sneha Nair",
       "employeeCount": 15,
       "activeCampaigns": 2,
       "isEnabled": true
@@ -106,7 +106,7 @@
     {
       "id": "dept-mktg",
       "name": "Marketing",
-      "managerName": "Karan Johar",
+      "managerName": "Kavya Iyer",
       "employeeCount": 5,
       "activeCampaigns": 0,
       "isArchived": false
@@ -114,7 +114,7 @@
     {
       "id": "dept-support",
       "name": "IT Support",
-      "managerName": "Sanjay Dutt",
+      "managerName": "Vivek Kulkarni",
       "employeeCount": 4,
       "activeCampaigns": 2,
       "isArchived": false

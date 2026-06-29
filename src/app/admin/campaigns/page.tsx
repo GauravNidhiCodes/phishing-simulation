@@ -106,8 +106,8 @@ export default function CampaignsPage() {
 
   const [campaignName, setCampaignName] = useState("");
   const [campaignDescription, setCampaignDescription] = useState("");
-  const [businessUnit, setBusinessUnit] = useState("Engineering");
-  const [organizationName, setOrganizationName] = useState("Acme India Corp");
+  const [businessUnit, setBusinessUnit] = useState("IT");
+  const [organizationName, setOrganizationName] = useState("");
   const [campaignCategory, setCampaignCategory] = useState("Password Reset");
   const [riskLevel, setRiskLevel] = useState("MEDIUM");
 
@@ -162,8 +162,8 @@ export default function CampaignsPage() {
     setStep(1);
     generateName();
     setCampaignDescription("A routine awareness check to measure how the team responds to a realistic phishing attempt.");
-    setBusinessUnit("Engineering");
-    setOrganizationName("Acme India Corp");
+    setBusinessUnit("IT");
+    setOrganizationName("");
     setCampaignCategory("Password Reset");
     setRiskLevel("MEDIUM");
     setSelectedDeptFilters([]);
@@ -427,7 +427,7 @@ export default function CampaignsPage() {
                     <Input value={campaignName} onChange={(e) => setCampaignName(e.target.value)} placeholder="Q3 Password Reset Drill" />
                   </Field>
                   <Field label="Organization">
-                    <Input value={organizationName} onChange={(e) => setOrganizationName(e.target.value)} placeholder="Acme India Corp" />
+                    <Input value={organizationName} onChange={(e) => setOrganizationName(e.target.value)} placeholder="Your organization name" />
                   </Field>
                   <Field label="Description" className="sm:col-span-2">
                     <Textarea value={campaignDescription} onChange={(e) => setCampaignDescription(e.target.value)} placeholder="What are you testing, and why?" />

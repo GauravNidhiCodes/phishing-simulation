@@ -104,7 +104,7 @@ export async function POST(request: Request) {
           email,
           department: department || 'General',
           branch: branch || 'Pune',
-          managerName: managerName || 'Sarah Jenkins',
+          managerName: managerName || 'Rahul Sharma',
           joiningDate: new Date(),
           organizationId: org.id,
           role: 'EMPLOYEE',

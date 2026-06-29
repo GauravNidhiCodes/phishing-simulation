@@ -137,33 +137,57 @@ export async function POST(request: Request) {
       const mockNotifs = [
         {
           category: 'SECURITY_ALERT',
-          title: 'High-Risk Employee Detected',
-          message: 'An operations manager in Hyderabad was flagged in the HIGH risk index after 2 click failures.',
+          title: 'Credentials entered in a simulation',
+          message: 'Rohan Patel from Accounts (Hyderabad) entered a password on the "Vendor Payment Request" test. A short lesson was assigned automatically.',
           priority: 'CRITICAL'
         },
         {
+          category: 'SECURITY_ALERT',
+          title: 'Click rate above threshold',
+          message: 'Click rate in Sales (Gurugram) reached 9% this week, above the 6% threshold you set.',
+          priority: 'HIGH'
+        },
+        {
           category: 'CAMPAIGN',
-          title: 'Campaign Completed',
-          message: 'Phishing Campaign "Festival Bonus Announcement" completed with 8% overall click rate.',
+          title: 'Campaign finished',
+          message: '"GST Notice" wrapped up across the Mumbai branch — 312 sent, 6.1% clicked, 41% reported it.',
+          priority: 'MEDIUM'
+        },
+        {
+          category: 'CAMPAIGN',
+          title: 'Campaign launched',
+          message: '"Fake UPI Refund" went out to 148 people in the Chennai branch.',
           priority: 'MEDIUM'
         },
         {
           category: 'LEARNING',
-          title: 'Employee Training Milestone',
-          message: 'Rohan Sharma from Mumbai branch successfully completed the compliance quiz with a 100% score.',
+          title: 'Lesson completed',
+          message: 'Priya Verma from the Pune Finance team finished the "Spotting fake invoices" module.',
           priority: 'LOW'
         },
         {
           category: 'AI_RECOMMENDATION',
-          title: 'AI Advisory Update',
-          message: 'Awareness dropped in Sales department. AI recommends executing a credential harvesting simulation.',
+          title: 'Worth a look',
+          message: 'Sales has been clicking payment-themed lures more often this month. An "Invoice Approval" test might be a good next step.',
           priority: 'HIGH'
         },
         {
-          category: 'ANNOUNCEMENT',
-          title: 'Security Policy Modification',
-          message: 'Administrator updated company authentication policy: Session timeouts enforced to 15 mins.',
+          category: 'REPORT',
+          title: 'Weekly board summary',
+          message: 'The board summary for this week has been generated and is ready to share.',
+          priority: 'LOW'
+        },
+        {
+          category: 'MILESTONE',
+          title: '90 days clean',
+          message: 'The Bengaluru branch has gone 90 days without a single credential submission.',
           priority: 'MEDIUM'
+        },
+        {
+          category: 'ANNOUNCEMENT',
+          title: 'New template added',
+          message: 'Added a new India-specific template: "EPFO Aadhaar linking reminder".',
+          priority: 'LOW'
         }
       ];
 

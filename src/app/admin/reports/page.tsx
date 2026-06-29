@@ -433,7 +433,7 @@ export default function ReportsPage() {
             <Field label="Category"><Select value={scheduleCategory} onChange={(e) => setScheduleCategory(e.target.value)}>{categories.map((c) => <option key={c} value={c}>{c}</option>)}</Select></Field>
             <div className="grid grid-cols-2 gap-4">
               <Field label="Frequency"><Select value={scheduleFrequency} onChange={(e) => setScheduleFrequency(e.target.value)}><option value="Weekly">Weekly</option><option value="Monthly">Monthly</option></Select></Field>
-              <Field label="Send to"><Input type="email" required placeholder="manager@company.com" value={scheduleEmail} onChange={(e) => setScheduleEmail(e.target.value)} /></Field>
+              <Field label="Send to"><Input type="email" required placeholder="manager@yourcompany.in" value={scheduleEmail} onChange={(e) => setScheduleEmail(e.target.value)} /></Field>
             </div>
           </ModalBody>
           <ModalFooter>

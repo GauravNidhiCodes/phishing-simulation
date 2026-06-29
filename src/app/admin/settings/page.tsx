@@ -192,9 +192,9 @@ export default function SettingsPage() {
             <Field label="GSTIN"><Input value={settings.profile.gstNumber} onChange={(e) => updateProfile("gstNumber", e.target.value)} placeholder="27AAPCP1234M1Z5" /></Field>
             <Field label="CIN"><Input value={settings.profile.cinNumber} onChange={(e) => updateProfile("cinNumber", e.target.value)} placeholder="U74999MH2026PTC398247" /></Field>
             <Field label="Address" className="md:col-span-2"><Textarea rows={2} value={settings.profile.address} onChange={(e) => updateProfile("address", e.target.value)} placeholder="Registered office address" /></Field>
-            <Field label="Support email"><Input icon={<Mail size={15} />} type="email" value={settings.profile.supportEmail} onChange={(e) => updateProfile("supportEmail", e.target.value)} placeholder="support@company.com" /></Field>
+            <Field label="Support email"><Input icon={<Mail size={15} />} type="email" value={settings.profile.supportEmail} onChange={(e) => updateProfile("supportEmail", e.target.value)} placeholder="support@yourcompany.in" /></Field>
             <Field label="Contact number"><Input icon={<Phone size={15} />} value={settings.profile.contactNumber} onChange={(e) => updateProfile("contactNumber", e.target.value)} placeholder="+91 20 4012 3456" /></Field>
-            <Field label="Website"><Input icon={<Globe size={15} />} value={settings.profile.website} onChange={(e) => updateProfile("website", e.target.value)} placeholder="https://company.com" /></Field>
+            <Field label="Website"><Input icon={<Globe size={15} />} value={settings.profile.website} onChange={(e) => updateProfile("website", e.target.value)} placeholder="https://yourcompany.in" /></Field>
             <div className="grid grid-cols-2 gap-4">
               <Field label="Time zone"><Select value={settings.profile.timezone} onChange={(e) => updateProfile("timezone", e.target.value)}><option value="Asia/Kolkata">Asia/Kolkata</option><option value="UTC">UTC</option><option value="Asia/Singapore">Asia/Singapore</option></Select></Field>
               <Field label="Language"><Select value={settings.profile.language} onChange={(e) => updateProfile("language", e.target.value)}><option>English</option><option>Hindi</option><option>Marathi</option><option>Tamil</option></Select></Field>
@@ -389,7 +389,7 @@ export default function SettingsPage() {
               {BRANCHES.map((loc) => <option key={loc} value={loc} disabled={settings.branches.some((b: any) => b.name === loc && b.id !== branchForm.id)}>{loc}</option>)}
             </Select>
           </Field>
-          <Field label="Administrator"><Input value={branchForm.branchAdmin} onChange={(e) => setBranchForm({ ...branchForm, branchAdmin: e.target.value })} placeholder="Sarah Jenkins" /></Field>
+          <Field label="Administrator"><Input value={branchForm.branchAdmin} onChange={(e) => setBranchForm({ ...branchForm, branchAdmin: e.target.value })} placeholder="Rahul Sharma" /></Field>
           <div className="grid grid-cols-2 gap-4">
             <Field label="Employees"><Input type="number" value={branchForm.employeeCount} onChange={(e) => setBranchForm({ ...branchForm, employeeCount: parseInt(e.target.value) || 0 })} /></Field>
             <Field label="Active campaigns"><Input type="number" value={branchForm.activeCampaigns} onChange={(e) => setBranchForm({ ...branchForm, activeCampaigns: parseInt(e.target.value) || 0 })} /></Field>
