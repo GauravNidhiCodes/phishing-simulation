@@ -4,7 +4,7 @@ import path from 'path';
 
 const NOTIFICATIONS_FILE = path.join(process.cwd(), 'src/app/api/notifications/notifications.json');
 
-// Helper to read JSON data safely
+
 function readNotifications(): any[] {
   try {
     if (fs.existsSync(NOTIFICATIONS_FILE)) {
@@ -17,7 +17,7 @@ function readNotifications(): any[] {
   return [];
 }
 
-// Helper to write JSON data safely
+
 function writeNotifications(data: any[]) {
   try {
     fs.writeFileSync(NOTIFICATIONS_FILE, JSON.stringify(data, null, 2), 'utf-8');
@@ -26,7 +26,7 @@ function writeNotifications(data: any[]) {
   }
 }
 
-// Session authentication check (matching the app session cookie)
+
 function getSessionUser(request: Request): any | null {
   try {
     const cookieHeader = request.headers.get('cookie') || '';
@@ -59,7 +59,7 @@ export async function GET(request: Request) {
 
     let allNotifs = readNotifications();
 
-    // 1. Filtering
+    
     if (search) {
       allNotifs = allNotifs.filter(n => 
         n.title.toLowerCase().includes(search) || 
@@ -75,10 +75,10 @@ export async function GET(request: Request) {
       allNotifs = allNotifs.filter(n => n.priority === priority);
     }
 
-    // Sort: newest first
+    
     allNotifs.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
 
-    // 2. Pagination
+    
     const totalCount = allNotifs.length;
     const startIndex = (page - 1) * limit;
     const paginatedNotifs = allNotifs.slice(startIndex, startIndex + limit);
@@ -132,7 +132,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ success: true, unreadCount: allNotifs.filter(n => !n.isRead).length });
     }
 
-    // Creating mock alerts dynamically to trigger real-time updates inside dashboard/feed
+    
     if (action === 'createMock') {
       const mockNotifs = [
         {
@@ -191,7 +191,7 @@ export async function POST(request: Request) {
         }
       ];
 
-      // Select random item
+      
       const chosen = mockNotifs[Math.floor(Math.random() * mockNotifs.length)];
       const newNotif = {
         id: `NTF-${Math.floor(Math.random() * 9000) + 1000}`,

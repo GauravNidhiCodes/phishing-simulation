@@ -3,13 +3,7 @@
 import React from "react";
 import { motion, useReducedMotion } from "framer-motion";
 
-/**
- * A restrained, premium carbon-fibre rod anchored in the hero. Its tip rests at
- * this element's origin (0,0) — exactly where the single fishing wire begins —
- * so the wire reads as cast from the rod and carried all the way down the page.
- * The blank sweeps up and off the top edge; the whole thing is low-contrast on
- * purpose, present but never shouting over the headline.
- */
+
 export default function FishingRod() {
   const reduce = useReducedMotion();
 
@@ -21,7 +15,7 @@ export default function FishingRod() {
       animate={{ opacity: 1 }}
       transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
     >
-      {/* the wire originates exactly at the rod tip (svg 0,0 → ~7.8,150 here) */}
+      {}
       <span
         aria-hidden
         data-fish-anchor
@@ -62,7 +56,7 @@ export default function FishingRod() {
           </radialGradient>
         </defs>
 
-        {/* soft shadow under the blank */}
+        {}
         <path
           d="M0 0 L243 -120 L252 -110 L4 4 Z"
           fill="#000000"
@@ -71,19 +65,19 @@ export default function FishingRod() {
           style={{ filter: "blur(3px)" }}
         />
 
-        {/* tapered carbon blank: thin at the tip (0,0), thick at the butt */}
+        {}
         <path
           d="M0.6 0.9 L246 -122 L256 -112 L-0.6 -0.9 Z"
           fill="url(#rod-blank)"
         />
-        {/* thin specular line along the blank */}
+        {}
         <path
           d="M1 -0.4 L249 -118"
           stroke="url(#rod-sheen)"
           strokeWidth="0.9"
           strokeLinecap="round"
         />
-        {/* faint carbon weave near the butt */}
+        {}
         {[0, 1, 2, 3].map((k) => (
           <path
             key={k}
@@ -94,10 +88,10 @@ export default function FishingRod() {
           />
         ))}
 
-        {/* tip ferrule */}
+        {}
         <path d="M0 0 L18 -8.6" stroke="#b9bfc5" strokeWidth="1.6" strokeLinecap="round" />
 
-        {/* line guides hanging under the blank */}
+        {}
         {[
           { x: 70, y: -33, r: 4.4 },
           { x: 138, y: -66, r: 4 },
@@ -124,7 +118,7 @@ export default function FishingRod() {
           </g>
         ))}
 
-        {/* reel seat + low-profile reel near the butt */}
+        {}
         <rect x="224" y="-118" width="34" height="9" rx="3" transform="rotate(-26 224 -118)" fill="#1b1d20" />
         <g transform="translate(232 -98)">
           <circle r="14" fill="url(#rod-reel)" stroke="#43494f" strokeWidth="1.2" />

@@ -3,13 +3,7 @@
 import { useEffect } from "react";
 import Lenis from "lenis";
 
-/**
- * Gives the page weight. Lenis interpolates real scroll so movement feels heavy
- * and cinematic rather than mechanical — while still driving native scroll, so
- * Framer's `useScroll` and anchor links keep working. Disabled entirely for
- * users who prefer reduced motion, and torn down on unmount (so it only governs
- * the landing route).
- */
+
 export default function SmoothScroll() {
   useEffect(() => {
     if (
@@ -34,7 +28,7 @@ export default function SmoothScroll() {
     };
     frame = requestAnimationFrame(raf);
 
-    // Smoothly handle in-page anchor links.
+    
     const onClick = (e: MouseEvent) => {
       const target = (e.target as HTMLElement)?.closest('a[href^="#"]');
       if (!target) return;

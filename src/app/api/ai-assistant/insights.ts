@@ -34,7 +34,7 @@ export interface CampaignSummary {
 }
 
 export async function getSecurityInsights() {
-  // 1. Fetch employees
+  
   const employees = await prisma.user.findMany({
     where: { role: 'EMPLOYEE' },
     orderBy: { awarenessScore: 'asc' }
@@ -42,7 +42,7 @@ export async function getSecurityInsights() {
 
   const totalEmployees = employees.length;
 
-  // 2. Fetch campaigns and logs
+  
   const campaigns = await prisma.campaign.findMany({
     include: {
       template: true,
@@ -62,12 +62,12 @@ export async function getSecurityInsights() {
     }
   });
 
-  // Calculate Overall Security Score
+  
   const avgScore = totalEmployees > 0 
     ? Math.round(employees.reduce((acc, curr) => acc + curr.awarenessScore, 0) / totalEmployees) 
     : 100;
 
-  // 3. Departments
+  
   const departments = Array.from(new Set(employees.map(e => e.department).filter(Boolean)));
   const departmentStats: DepartmentStat[] = departments.map(dept => {
     const deptEmps = employees.filter(e => e.department === dept);
@@ -86,7 +86,7 @@ export async function getSecurityInsights() {
     ? [...departmentStats].sort((a, b) => a.averageScore - b.averageScore || b.highRiskCount - a.highRiskCount)[0]
     : { name: 'None', averageScore: 100, highRiskCount: 0, employeesCount: 0 };
 
-  // 4. Branches
+  
   const branches = Array.from(new Set(employees.map(e => e.branch).filter(Boolean)));
   const branchStats: BranchStat[] = branches.map(br => {
     const brEmps = employees.filter(e => e.branch === br);
@@ -101,9 +101,9 @@ export async function getSecurityInsights() {
 
   const mostImprovedBranch = branchStats.length > 0
     ? [...branchStats].sort((a, b) => b.averageScore - a.averageScore)[0]
-    : { name: 'Pune', averageScore: 100, employeesCount: 0 }; // Pune as dynamic default
+    : { name: 'Pune', averageScore: 100, employeesCount: 0 }; 
 
-  // 5. High Risk Employees Needing Training
+  
   const highRiskEmployees: HighRiskEmployee[] = employees
     .filter(e => e.riskCategory === 'HIGH' || e.awarenessScore < 65)
     .slice(0, 5)
@@ -116,7 +116,7 @@ export async function getSecurityInsights() {
       riskCategory: e.riskCategory
     }));
 
-  // 6. Campaign effectiveness
+  
   const totalDelivered = logs.filter(l => l.deliveredAt).length;
   const totalOpened = logs.filter(l => l.openedAt).length;
   const totalClicked = logs.filter(l => l.clickedAt).length;
@@ -126,8 +126,8 @@ export async function getSecurityInsights() {
   const clickRate = totalDelivered > 0 ? Math.round((totalClicked / totalDelivered) * 100) : 0;
   const submitRate = totalDelivered > 0 ? Math.round((totalSubmitted / totalDelivered) * 100) : 0;
 
-  // 7. Top Failing Phishing Template (highest click rate)
-  // Let's analyze logs grouped by template name
+  
+  
   const templateFails: Record<string, { clicks: number; submits: number; total: number; name: string }> = {};
   logs.forEach(log => {
     const tName = log.campaign?.template?.name || log.campaign?.name || 'Unknown Template';
@@ -152,13 +152,13 @@ export async function getSecurityInsights() {
     ? failingTemplates[0] 
     : { name: 'Microsoft 365 Password Reset', clickRate: 42, submitRate: 28 };
 
-  // 8. Quiz progress & completion rates
+  
   const quizProgress = await prisma.quizProgress.findMany();
   const totalQuizzes = quizProgress.length;
   const completedQuizzes = quizProgress.filter(qp => qp.completed).length;
   const quizCompletionRate = totalQuizzes > 0 ? Math.round((completedQuizzes / totalQuizzes) * 100) : 0;
 
-  // Active campaigns
+  
   const activeCampaignsCount = campaigns.filter(c => c.status === 'ACTIVE').length;
 
   return {
@@ -197,7 +197,7 @@ export async function getSecurityInsights() {
   };
 }
 
-// User-specific fail checks
+
 export async function getEmployeeSecurityDetails(userEmail: string) {
   const user = await prisma.user.findUnique({
     where: { email: userEmail },
@@ -224,7 +224,7 @@ export async function getEmployeeSecurityDetails(userEmail: string) {
   const failedSimulations = user.campaignLogs.filter(log => log.clickedAt || log.submittedAt);
   const totalCampaigns = user.campaignLogs.length;
   
-  // Find recommended training modules not completed yet
+  
   const allModules = await prisma.trainingModule.findMany({
     include: { quizzes: true }
   });

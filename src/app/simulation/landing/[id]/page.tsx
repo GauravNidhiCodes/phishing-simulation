@@ -116,7 +116,7 @@ export default function SimulationLandingPage({ params }: { params: Promise<{ id
             transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
             className="relative z-10 grid w-full max-w-4xl gap-px overflow-hidden rounded-[18px] border border-line bg-line md:grid-cols-5"
           >
-            {/* Left: the reveal */}
+            {}
             <div className="space-y-6 bg-card p-7 md:col-span-2 md:p-9">
               <span className="flex h-12 w-12 items-center justify-center rounded-[13px] border border-accent/30 bg-accent-faint text-accent">
                 <ShieldCheck size={24} />
@@ -136,7 +136,7 @@ export default function SimulationLandingPage({ params }: { params: Promise<{ id
               </div>
             </div>
 
-            {/* Right: cues */}
+            {}
             <div className="space-y-5 bg-card p-7 md:col-span-3 md:p-9">
               <div>
                 <h2 className="flex items-center gap-2 text-[15px] font-semibold tracking-[-0.01em] text-ink"><Eye size={16} className="text-accent" /> What gave it away</h2>

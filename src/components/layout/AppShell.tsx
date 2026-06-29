@@ -75,7 +75,7 @@ const roleLabel: Record<string, string> = {
   EMPLOYEE: "Team member",
 };
 
-/* --------------------------------- Nav row -------------------------------- */
+
 
 function NavRow({
   item,
@@ -143,7 +143,7 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
   );
 }
 
-/* ------------------------------- Mobile gate ------------------------------ */
+
 
 function MobileGate({ onContinue }: { onContinue: () => void }) {
   return (
@@ -178,7 +178,7 @@ function MobileGate({ onContinue }: { onContinue: () => void }) {
   );
 }
 
-/* ------------------------------- App shell -------------------------------- */
+
 
 export const AppShell: React.FC<{ children: React.ReactNode }> = ({
   children,
@@ -221,7 +221,7 @@ export const AppShell: React.FC<{ children: React.ReactNode }> = ({
     }
   }, [pathname, isSimulationPage, isAuthPage]);
 
-  // Inactivity timeout — sign out after 15 minutes idle.
+  
   useEffect(() => {
     if (isSimulationPage || isAuthPage || !sessionUser) return;
     let timeoutId: ReturnType<typeof setTimeout>;
@@ -246,7 +246,7 @@ export const AppShell: React.FC<{ children: React.ReactNode }> = ({
     };
   }, [sessionUser, isSimulationPage, isAuthPage, router]);
 
-  // Bare canvases — auth, simulation, landing render without the shell.
+  
   if (isAuthPage) {
     return (
       <main className="flex min-h-screen w-full flex-1 flex-col justify-center bg-canvas text-ink">
@@ -352,7 +352,7 @@ export const AppShell: React.FC<{ children: React.ReactNode }> = ({
 
   return (
     <div className="flex min-h-screen w-full bg-canvas">
-      {/* Desktop sidebar */}
+      {}
       <motion.aside
         animate={{ width: collapsed ? 68 : 244 }}
         transition={{ type: "spring", stiffness: 260, damping: 30 }}
@@ -402,7 +402,7 @@ export const AppShell: React.FC<{ children: React.ReactNode }> = ({
         </div>
       </motion.aside>
 
-      {/* Main column */}
+      {}
       <motion.div
         animate={{ paddingLeft: isMobile ? 0 : collapsed ? 68 : 244 }}
         transition={{ type: "spring", stiffness: 260, damping: 30 }}
@@ -446,7 +446,7 @@ export const AppShell: React.FC<{ children: React.ReactNode }> = ({
         </main>
       </motion.div>
 
-      {/* Mobile drawer */}
+      {}
       <AnimatePresence>
         {mobileMenuOpen && (
           <>
@@ -498,7 +498,7 @@ export const AppShell: React.FC<{ children: React.ReactNode }> = ({
   );
 };
 
-/* ------------------------------ Breadcrumb -------------------------------- */
+
 
 const titleMap: Record<string, string> = {
   admin: "Operations",

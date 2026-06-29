@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { Spinner } from "./Button";
 
-/** Full-area loading state with a quiet, branded feel. */
+
 export function LoadingState({
   label = "Loading",
   sublabel,

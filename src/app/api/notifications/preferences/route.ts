@@ -4,7 +4,7 @@ import path from 'path';
 
 const PREFERENCES_FILE = path.join(process.cwd(), 'src/app/api/notifications/preferences.json');
 
-// Helper to read preferences
+
 function readPreferences() {
   try {
     if (fs.existsSync(PREFERENCES_FILE)) {
@@ -25,7 +25,7 @@ function readPreferences() {
   };
 }
 
-// Helper to write preferences
+
 function writePreferences(data: any) {
   try {
     fs.writeFileSync(PREFERENCES_FILE, JSON.stringify(data, null, 2), 'utf-8');
@@ -34,7 +34,7 @@ function writePreferences(data: any) {
   }
 }
 
-// Session authentication check
+
 function isAuthenticated(request: Request): boolean {
   try {
     const cookieHeader = request.headers.get('cookie') || '';
@@ -67,7 +67,7 @@ export async function POST(request: Request) {
     }
     const body = await request.json();
     
-    // Read old preferences and merge new choices
+    
     const currentPrefs = readPreferences();
     const newPrefs = {
       ...currentPrefs,

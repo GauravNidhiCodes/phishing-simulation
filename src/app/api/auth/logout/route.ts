@@ -4,7 +4,7 @@ import path from 'path';
 
 const AUDIT_FILE = path.join(process.cwd(), 'src/app/api/auth/audit_logs.json');
 
-// Helper to read/write JSON
+
 function readJson(filePath: string, defaultVal: any) {
   try {
     if (fs.existsSync(filePath)) {
@@ -35,7 +35,7 @@ export async function POST(request: Request) {
       } catch (e) {}
     }
 
-    // Write audit event
+    
     const auditData = readJson(AUDIT_FILE, []);
     auditData.unshift({
       id: `AUDIT-${Math.floor(Math.random() * 9000) + 1000}`,
@@ -49,7 +49,7 @@ export async function POST(request: Request) {
 
     const response = NextResponse.json({ success: true });
     
-    // Clear cookie header
+    
     response.headers.set(
       'Set-Cookie',
       'pinkman_session=; Path=/; HttpOnly; SameSite=Lax; Expires=Thu, 01 Jan 1970 00:00:00 GMT;'

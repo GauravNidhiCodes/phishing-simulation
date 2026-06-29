@@ -11,7 +11,7 @@ export async function GET(request: Request) {
     const riskFilter = searchParams.get('riskLevel') || 'All';
     const format = searchParams.get('format') || 'csv';
 
-    // 1. Query metrics
+    
     const org = await prisma.organization.findFirst();
     const orgName = org ? org.name : 'Pinkman Protects Enterprise';
 
@@ -26,14 +26,14 @@ export async function GET(request: Request) {
     const campaigns = await prisma.campaign.findMany();
     const totalModules = await prisma.trainingModule.count() || 13;
 
-    // Apply filters
+    
     let filteredEmployees = [...employees];
     if (branchFilter !== 'All') filteredEmployees = filteredEmployees.filter(e => e.branch === branchFilter);
     if (deptFilter !== 'All') filteredEmployees = filteredEmployees.filter(e => e.department === deptFilter);
     if (employeeFilter !== 'All') filteredEmployees = filteredEmployees.filter(e => e.id === employeeFilter);
     if (riskFilter !== 'All') filteredEmployees = filteredEmployees.filter(e => e.riskCategory === riskFilter);
 
-    // Filter campaigns
+    
     let filteredCampaigns = [...campaigns];
     if (campaignFilter !== 'All') filteredCampaigns = filteredCampaigns.filter(c => c.id === campaignFilter);
 
@@ -49,7 +49,7 @@ export async function GET(request: Request) {
       filteredEmployeeIds.has(l.userId)
     );
 
-    // Stats
+    
     const totalEmployeesCount = filteredEmployees.length;
     const avgAwarenessScore = totalEmployeesCount > 0
       ? Math.round(filteredEmployees.reduce((sum, e) => sum + e.awarenessScore, 0) / totalEmployeesCount)
@@ -66,16 +66,16 @@ export async function GET(request: Request) {
     const totalAssignedQuizzesCount = totalModules * totalEmployeesCount || 1;
     const trainingCompletionRate = Math.min(100, Math.round((totalCompletedQuizzes / totalAssignedQuizzesCount) * 100));
 
-    // Phishing stats
+    
     const totalDelivered = filteredLogs.filter(l => l.deliveredAt).length;
     const totalClicked = filteredLogs.filter(l => l.clickedAt).length;
     const clickRate = totalDelivered > 0 ? Math.round((totalClicked / totalDelivered) * 100) : 0;
 
-    // Report Headers
+    
     const reportId = `REP-${Math.floor(100000 + Math.random() * 900000)}`;
     const nowIST = new Date().toLocaleString("en-US", { timeZone: "Asia/Kolkata" });
     
-    // Construct CSV String
+    
     let csvContent = "";
     csvContent += `==================================================\n`;
     csvContent += `PINKMAN PROTECTS - REPORTING & COMPLIANCE SUMMARY\n`;
@@ -101,7 +101,7 @@ export async function GET(request: Request) {
     csvContent += `Training Compliance Rate, ${trainingCompletionRate}%\n`;
     csvContent += `Simulation Phishing Click-through Rate, ${clickRate}%\n\n`;
 
-    // Branch Performance Breakdown
+    
     csvContent += `BRANCH PERFORMANCE AUDIT:\n`;
     csvContent += `Branch, Employees, Avg Awareness Score, Clicks Count, Training Completion %\n`;
     
@@ -121,7 +121,7 @@ export async function GET(request: Request) {
     });
     csvContent += `\n`;
 
-    // Department Performance Breakdown
+    
     csvContent += `DEPARTMENT PERFORMANCE AUDIT:\n`;
     csvContent += `Department, Employees, Avg Awareness Score, Clicks Count, Training Completion %\n`;
     
@@ -141,7 +141,7 @@ export async function GET(request: Request) {
     });
     csvContent += `\n`;
 
-    // High Risk Employees
+    
     csvContent += `HIGH RISK EMPLOYEES DETAILS:\n`;
     csvContent += `Name, Email, Score, Branch, Department\n`;
     const highRiskEmps = filteredEmployees.filter(e => e.riskCategory === 'HIGH');

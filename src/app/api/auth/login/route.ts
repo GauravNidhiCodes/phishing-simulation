@@ -6,7 +6,7 @@ import path from 'path';
 const PASSWORDS_FILE = path.join(process.cwd(), 'src/app/api/auth/passwords.json');
 const AUDIT_FILE = path.join(process.cwd(), 'src/app/api/auth/audit_logs.json');
 
-// Helper to read JSON
+
 function readJson(filePath: string, defaultVal: any) {
   try {
     if (fs.existsSync(filePath)) {
@@ -18,7 +18,7 @@ function readJson(filePath: string, defaultVal: any) {
   return defaultVal;
 }
 
-// Helper to write JSON
+
 function writeJson(filePath: string, data: any) {
   try {
     fs.writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf-8');
@@ -40,7 +40,7 @@ export async function POST(request: Request) {
     const passwordsData = readJson(PASSWORDS_FILE, {});
     const auditData = readJson(AUDIT_FILE, []);
 
-    // 1. Check lock status
+    
     const record = passwordsData[emailLower];
     const now = Date.now();
 
@@ -51,7 +51,7 @@ export async function POST(request: Request) {
       }, { status: 403 });
     }
 
-    // 2. Fetch or dynamically create user in DB
+    
     let user = await prisma.user.findUnique({
       where: { email: emailLower }
     });
@@ -72,7 +72,7 @@ export async function POST(request: Request) {
     }
 
     if (!user) {
-      // Dynamic creation of admin/role-based users for evaluation
+      
       if (emailLower === 'superadmin@company.in') {
         user = await prisma.user.create({
           data: {
@@ -122,7 +122,7 @@ export async function POST(request: Request) {
           }
         });
       } else {
-        // Create as default Employee if not found
+        
         user = await prisma.user.create({
           data: {
             email: emailLower,
@@ -137,14 +137,14 @@ export async function POST(request: Request) {
       }
     }
 
-    // 3. Verify Password credentials
+    
     const expectedPassword = record ? record.password : 'password123';
     if (password !== expectedPassword) {
-      // Failed login attempt
+      
       const attempts = record ? (record.failedAttempts || 0) + 1 : 1;
       let lockTime = 0;
       if (attempts >= 5) {
-        lockTime = now + 5 * 60 * 1000; // Lock for 5 mins
+        lockTime = now + 5 * 60 * 1000; 
       }
 
       passwordsData[emailLower] = {
@@ -154,7 +154,7 @@ export async function POST(request: Request) {
       };
       writeJson(PASSWORDS_FILE, passwordsData);
 
-      // Log audit fail event
+      
       auditData.unshift({
         id: `AUDIT-${Math.floor(Math.random() * 9000) + 1000}`,
         timestamp: new Date().toISOString(),
@@ -170,7 +170,7 @@ export async function POST(request: Request) {
       }, { status: 401 });
     }
 
-    // 4. Success logic - reset failure counters
+    
     passwordsData[emailLower] = {
       password: expectedPassword,
       failedAttempts: 0,
@@ -178,7 +178,7 @@ export async function POST(request: Request) {
     };
     writeJson(PASSWORDS_FILE, passwordsData);
 
-    // Write audit success event
+    
     auditData.unshift({
       id: `AUDIT-${Math.floor(Math.random() * 9000) + 1000}`,
       timestamp: new Date().toISOString(),
@@ -189,7 +189,7 @@ export async function POST(request: Request) {
     });
     writeJson(AUDIT_FILE, auditData);
 
-    // 5. Generate Cookie Session Payload
+    
     const sessionObj = {
       userId: user.id,
       email: user.email,
@@ -206,11 +206,11 @@ export async function POST(request: Request) {
 
     const sessionString = Buffer.from(JSON.stringify(sessionObj)).toString('base64');
     
-    // Set cookie headers
+    
     const response = NextResponse.json({ success: true, user: sessionObj });
     
     const expiry = rememberMe 
-      ? `Max-Age=${30 * 24 * 60 * 60};` // 30 days
+      ? `Max-Age=${30 * 24 * 60 * 60};` 
       : '';
 
     response.headers.set(

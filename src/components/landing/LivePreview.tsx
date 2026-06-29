@@ -45,9 +45,9 @@ import {
 } from "lucide-react";
 import { ChartTooltip, chartColors } from "@/components/ui/Chart";
 
-/* -------------------------------------------------------------------------- */
-/*  Believable data — names, teams, campaigns, subjects (never placeholders)   */
-/* -------------------------------------------------------------------------- */
+
+
+
 
 const NAMES = [
   "Rahul Sharma", "Priya Verma", "Ananya Singh", "Rohan Patel", "Sneha Nair",
@@ -73,11 +73,11 @@ const tonePill: Record<Tone, string> = {
   mute: "bg-inset text-ink-faint",
 };
 
-/* -------------------------------------------------------------------------- */
-/*  Small primitives                                                           */
-/* -------------------------------------------------------------------------- */
 
-/** A number that eases to its value — counts up on reveal, drifts on update. */
+
+
+
+
 function AnimatedNumber({
   value,
   decimals = 0,
@@ -105,7 +105,7 @@ function AnimatedNumber({
   return <motion.span>{text}</motion.span>;
 }
 
-/** A soft pulsing status dot. */
+
 function Pulse({ className = "bg-accent" }: { className?: string }) {
   return (
     <span className="relative flex h-1.5 w-1.5">
@@ -119,7 +119,7 @@ function Pulse({ className = "bg-accent" }: { className?: string }) {
   );
 }
 
-/** A physical card: lifts and catches light on hover. */
+
 function PCard({
   children,
   className = "",
@@ -141,9 +141,9 @@ function PCard({
   );
 }
 
-/* -------------------------------------------------------------------------- */
-/*  The live product preview                                                   */
-/* -------------------------------------------------------------------------- */
+
+
+
 
 const NAV = [
   { icon: LayoutGrid, label: "Overview" },
@@ -223,7 +223,7 @@ export default function LivePreview() {
   const inView = useInView(ref, { margin: "-12% 0px -12% 0px" });
   const active = inView && !reduce;
 
-  // cursor depth + lighting
+  
   const px = useMotionValue(0.5);
   const py = useMotionValue(0.5);
   const sx = useSpring(px, { stiffness: 110, damping: 20, mass: 0.6 });
@@ -234,7 +234,7 @@ export default function LivePreview() {
   const lightY = useTransform(sy, [0, 1], ["-5%", "105%"]);
   const light = useMotionTemplate`radial-gradient(680px circle at ${lightX} ${lightY}, rgba(255,255,255,0.05), transparent 55%)`;
 
-  // live state
+  
   const [area, setArea] = useState(INITIAL_AREA);
   const [teams, setTeams] = useState(INITIAL_TEAMS);
   const [risk, setRisk] = useState(INITIAL_RISK);
@@ -310,7 +310,7 @@ export default function LivePreview() {
     };
   }, [active]);
 
-  // toast cycle
+  
   useEffect(() => {
     if (!active) return;
     let hide: ReturnType<typeof setTimeout>;
@@ -330,7 +330,7 @@ export default function LivePreview() {
 
   return (
     <div ref={ref} className="relative mx-auto w-full max-w-[62rem] [perspective:1900px]">
-      {/* off-axis ambient light */}
+      {}
       <div className="pointer-events-none absolute -top-28 left-[16%] h-[360px] w-[660px] rounded-full bg-accent/[0.06] blur-[150px]" />
 
       <motion.div
@@ -350,7 +350,7 @@ export default function LivePreview() {
         style={{ rotateX, rotateY, transformPerspective: 1900 }}
         className="relative z-10 overflow-hidden rounded-[16px] border border-line bg-surface shadow-pop"
       >
-        {/* title bar */}
+        {}
         <div className="flex items-center gap-2 border-b border-line/80 bg-[#0b0b0c] px-4 py-2.5">
           <span className="h-2.5 w-2.5 rounded-full bg-[#26262a]" />
           <span className="h-2.5 w-2.5 rounded-full bg-[#26262a]" />
@@ -366,7 +366,7 @@ export default function LivePreview() {
         </div>
 
         <div className="flex">
-          {/* sidebar */}
+          {}
           <aside className="hidden w-[176px] shrink-0 flex-col border-r border-line/70 bg-[#0b0b0c] p-3 md:flex">
             <p className="px-2 pb-2 text-[10px] font-semibold uppercase tracking-[0.14em] text-ink-faint/70">
               Pinkman
@@ -397,9 +397,9 @@ export default function LivePreview() {
             </div>
           </aside>
 
-          {/* main */}
+          {}
           <div className="min-w-0 flex-1">
-            {/* top nav: search, filter, date, bell, avatar */}
+            {}
             <div className="flex items-center gap-2 border-b border-line/70 px-4 py-2.5">
               <div className="flex h-7 flex-1 items-center gap-2 rounded-[8px] border border-line bg-inset px-2.5 text-ink-faint">
                 <Search size={13} />
@@ -424,7 +424,7 @@ export default function LivePreview() {
             </div>
 
             <div className="space-y-3 p-4">
-              {/* campaign header */}
+              {}
               <div className="flex flex-wrap items-end justify-between gap-2">
                 <div>
                   <h4 className="text-[15px] font-semibold tracking-[-0.01em]">Vendor Payment Request</h4>
@@ -437,7 +437,7 @@ export default function LivePreview() {
                 </span>
               </div>
 
-              {/* KPI row */}
+              {}
               <div className="grid grid-cols-3 gap-3">
                 <PCard className="p-3.5">
                   <p className="text-[11.5px] text-ink-faint">Awareness score</p>
@@ -504,7 +504,7 @@ export default function LivePreview() {
                 </PCard>
               </div>
 
-              {/* charts: area (wide) + donut */}
+              {}
               <div className="grid grid-cols-1 gap-3 lg:grid-cols-3">
                 <PCard className="p-3.5 lg:col-span-2">
                   <div className="flex items-center justify-between">
@@ -570,7 +570,7 @@ export default function LivePreview() {
                 </PCard>
               </div>
 
-              {/* bar (clicks by team) + activity feed */}
+              {}
               <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
                 <PCard className="p-3.5">
                   <div className="flex items-center justify-between">
@@ -630,7 +630,7 @@ export default function LivePreview() {
                 </PCard>
               </div>
 
-              {/* employee risk table */}
+              {}
               <PCard className="p-3.5">
                 <p className="text-[12px] font-medium">Employees by risk</p>
                 <div className="mt-2">
@@ -673,7 +673,7 @@ export default function LivePreview() {
                 </div>
               </PCard>
 
-              {/* campaign list */}
+              {}
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
                 {CAMPAIGN_ROWS.map((c) => (
                   <PCard key={c.name} className="p-3.5">
@@ -695,14 +695,14 @@ export default function LivePreview() {
           </div>
         </div>
 
-        {/* cursor-driven lighting */}
+        {}
         <motion.span
           aria-hidden
           className="pointer-events-none absolute inset-0 z-20"
           style={{ background: light }}
         />
 
-        {/* live toast */}
+        {}
         <AnimatePresence>
           {toast && (
             <motion.div

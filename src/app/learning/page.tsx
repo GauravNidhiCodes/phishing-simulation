@@ -73,7 +73,7 @@ export default function LearningPage() {
         description="Sharpen your instincts. Finish your assigned courses to raise your awareness score and keep the team safe."
       />
 
-      {/* Hero */}
+      {}
       {user && stats && (
         <Card pad="lg" className="mb-6 grid items-center gap-8 md:grid-cols-3">
           <div className="md:col-span-2 space-y-5">
@@ -119,7 +119,7 @@ export default function LearningPage() {
         </Card>
       )}
 
-      {/* Recommended + weekly */}
+      {}
       <div className="mb-6 grid gap-6 md:grid-cols-3">
         <Card pad="lg" className="md:col-span-2">
           <CardHeader title="Recommended for you" description="Based on your role and recent simulations." />
@@ -159,7 +159,7 @@ export default function LearningPage() {
         </Card>
       </div>
 
-      {/* Mandatory + certificates */}
+      {}
       <div className="mb-8 grid gap-6 md:grid-cols-3">
         <Card pad="lg">
           <CardHeader title="Due soon" description="Mandatory updates." />
@@ -192,7 +192,7 @@ export default function LearningPage() {
         </Card>
       </div>
 
-      {/* Library */}
+      {}
       <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h2 className="text-[17px] font-semibold tracking-[-0.01em] text-ink">Course library</h2>
@@ -250,7 +250,7 @@ export default function LearningPage() {
         <EmptyState icon={<Search size={20} />} title="No courses found" description="Try a different search or category." />
       )}
 
-      {/* Certificate modal */}
+      {}
       {activeCertificate && (
         <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} onClick={() => setActiveCertificate(null)} className="absolute inset-0 bg-black/70 backdrop-blur-md print:hidden" />

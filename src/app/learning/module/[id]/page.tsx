@@ -120,7 +120,7 @@ export default function LessonPage({ params }: { params: Promise<{ id: string }>
         </div>
       </div>
 
-      {/* Header */}
+      {}
       <Card pad="lg" className="mb-6 flex flex-col items-start justify-between gap-5 lg:flex-row lg:items-center">
         <div>
           <div className="flex flex-wrap items-center gap-2.5 text-[12.5px] text-ink-faint">
@@ -142,7 +142,7 @@ export default function LessonPage({ params }: { params: Promise<{ id: string }>
       </Card>
 
       <div className="grid items-start gap-6 lg:grid-cols-12">
-        {/* Left: video + takeaways */}
+        {}
         <div className="space-y-6 lg:col-span-7">
           <Card pad="none" className="relative flex aspect-video flex-col justify-between overflow-hidden bg-canvas">
             <div className="pointer-events-none absolute inset-0 bg-grid opacity-40" />
@@ -190,7 +190,7 @@ export default function LessonPage({ params }: { params: Promise<{ id: string }>
           </Card>
         </div>
 
-        {/* Right: tabbed workspace */}
+        {}
         <div className="lg:col-span-5">
           <AnimatePresence mode="wait">
             {activeTab === "lesson" && (
@@ -303,7 +303,7 @@ export default function LessonPage({ params }: { params: Promise<{ id: string }>
         </div>
       </div>
 
-      {/* Results modal */}
+      {}
       <Modal open={resultsModalOpen} onClose={() => setResultsModalOpen(false)} size="sm">
         <ModalBody className="text-center">
           <span className={cn("mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-[16px] border", score >= 70 ? "border-accent/30 bg-accent-faint text-accent" : "border-danger/30 bg-danger-faint text-danger")}>

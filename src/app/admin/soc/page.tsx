@@ -126,7 +126,7 @@ export default function SocDashboard() {
       );
     }, 1000);
     return () => clearInterval(clock);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    
   }, []);
 
   useEffect(() => {
@@ -171,7 +171,7 @@ export default function SocDashboard() {
         }
       />
 
-      {/* Posture */}
+      {}
       {posture && (
         <div className="mb-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <Card pad="md" className="flex flex-col justify-between gap-5">
@@ -228,7 +228,7 @@ export default function SocDashboard() {
         </div>
       )}
 
-      {/* Live feed + timeline */}
+      {}
       <div className="mb-6 grid gap-6 lg:grid-cols-3">
         <Card pad="none" className="flex h-[420px] flex-col lg:col-span-2">
           <div className="flex items-center justify-between border-b border-line px-5 py-4">
@@ -297,7 +297,7 @@ export default function SocDashboard() {
         </Card>
       </div>
 
-      {/* Branch matrix */}
+      {}
       <Card pad="lg" className="mb-6">
         <div className="flex flex-col gap-4 border-b border-line pb-5 lg:flex-row lg:items-center lg:justify-between">
           <div className="flex items-center gap-2.5">
@@ -352,7 +352,7 @@ export default function SocDashboard() {
         </div>
       </Card>
 
-      {/* Threat intel + AI */}
+      {}
       {threatIntel && (
         <div className="grid gap-6 lg:grid-cols-3">
           <Card pad="lg" className="lg:col-span-2">

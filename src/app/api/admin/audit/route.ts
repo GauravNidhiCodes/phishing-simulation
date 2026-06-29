@@ -13,7 +13,7 @@ function readJson(filePath: string, defaultVal: any) {
   return defaultVal;
 }
 
-// User registry details for lookup in logs mapping
+
 const USER_REGISTRY: Record<string, { name: string; role: string; branch: string }> = {
   'superadmin@company.in': { name: 'Arjun Mehta', role: 'SUPERADMIN', branch: 'Pune' },
   'admin@company.in': { name: 'Rajesh Kumar', role: 'SECURITY_ADMIN', branch: 'Bengaluru' },
@@ -159,7 +159,7 @@ export async function GET() {
   try {
     const authLogs = readJson(AUDIT_FILE, []);
     
-    // Map existing authentication logs to match dashboard display format
+    
     const formattedAuthLogs = authLogs.map((log: any) => {
       const email = log.email || 'unknown@company.in';
       const registryEntry = USER_REGISTRY[email.toLowerCase()] || { name: 'Unknown User', role: 'EMPLOYEE', branch: 'Pune' };
@@ -187,7 +187,7 @@ export async function GET() {
       };
     });
 
-    // Combine logs and sort by timestamp in descending order
+    
     const allLogs = [...formattedAuthLogs, ...MOCK_ADMIN_ACTIVITIES];
     allLogs.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
 

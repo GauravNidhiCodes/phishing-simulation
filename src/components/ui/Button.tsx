@@ -13,15 +13,15 @@ const base =
   "disabled:opacity-45 disabled:pointer-events-none whitespace-nowrap";
 
 const variants: Record<Variant, string> = {
-  // White, high-emphasis — the single loudest action on a screen
+  
   primary:
     "bg-ink text-[#0a0a0a] hover:bg-white shadow-[0_1px_2px_rgba(0,0,0,0.35),inset_0_1px_0_rgba(255,255,255,0.2)]",
-  // Default surface button
+  
   secondary:
     "bg-card text-ink border border-line shadow-card hover:bg-card-hover hover:border-line-strong",
-  // Quiet, text-like
+  
   ghost: "text-ink-soft hover:text-ink hover:bg-white/[0.04]",
-  // The restrained green — reserved for confirm/launch moments
+  
   accent:
     "bg-accent text-[#04130c] font-semibold shadow-[0_1px_2px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.18)] hover:bg-[#4ad99a]",
   danger:

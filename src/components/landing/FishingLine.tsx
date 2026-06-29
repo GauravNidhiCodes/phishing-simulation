@@ -15,26 +15,17 @@ import {
 import { smoothPath, type Pt } from "@/lib/smoothPath";
 
 type Anchor = {
-  x: number; // resolved to px
-  y: number; // px from container top
+  x: number; 
+  y: number; 
   sway: number;
   ring: boolean;
-  i: number; // index in the built point list (for matching the wire's tremor phase)
+  i: number; 
 };
 
 const TREMOR_FREQ = 1.7;
 const TREMOR_AMP = 2.1;
 
-/**
- * ONE continuous fishing wire. A single global SVG, the height of the whole
- * document, routed through invisible `[data-fish-anchor]` markers that live
- * inside the real sections. The wire is always fully present from above the
- * fold to the hook at the very bottom — it never draws on, never breaks, never
- * disappears. It leans with scroll velocity like something with weight, settles
- * taut at rest, and carries a faint constant tremor. A travelling specular bead
- * runs along it as you scroll, and tiny metal guide rings sit on the sharpest
- * bends.
- */
+
 export default function FishingLine({
   containerRef,
 }: {
@@ -61,8 +52,8 @@ export default function FishingLine({
         );
         const next: Anchor[] = nodes.map((n, idx) => {
           const r = n.getBoundingClientRect();
-          // `data-x="auto"` pins the point to the marker's real position (used
-          // for the rod tip); otherwise x is a 0–1000 fraction of page width.
+          
+          
           const auto = n.dataset.x === "auto";
           return {
             x: auto
@@ -93,7 +84,7 @@ export default function FishingLine({
     };
   }, [containerRef]);
 
-  // Scroll velocity → a soft lateral lean with pendulum settle (gravity-ish).
+  
   const { scrollY, scrollYProgress } = useScroll();
   const velocity = useVelocity(scrollY);
   const leanTarget = useTransform(velocity, (v) =>
@@ -101,19 +92,19 @@ export default function FishingLine({
   );
   const lean = useSpring(leanTarget, { stiffness: 50, damping: 13, mass: 0.8 });
 
-  // Constant, almost-invisible tremor so the wire is never frozen.
+  
   const tremor = useMotionValue(0);
   useAnimationFrame((t) => {
     if (!reduce) tremor.set(t / 1000);
   });
 
-  // The single, continuous path string — recomputed from live motion values.
-  // It begins exactly at the first marker (the rod tip) and never breaks.
+  
+  
   const d = useTransform([lean, tremor] as MotionValue[], (latest: number[]) => {
     const [s, time] = latest;
     if (anchors.length < 2 || !size.w) return "";
     const pts: Pt[] = anchors.map((a) => {
-      const factor = Math.min(1, a.sway); // anchored points (sway 0) stay still
+      const factor = Math.min(1, a.sway); 
       const vib = reduce
         ? 0
         : Math.sin(time * TREMOR_FREQ + a.i * 0.85) * TREMOR_AMP * factor;
@@ -122,7 +113,7 @@ export default function FishingLine({
     return smoothPath(pts, 0.92);
   });
 
-  // A travelling specular bead, driven by scroll, kept smooth by a spring.
+  
   const glintRaw = useTransform(scrollYProgress, (p) => -p * 1.4);
   const glint = useSpring(glintRaw, { stiffness: 70, damping: 22, mass: 0.4 });
 
@@ -141,7 +132,7 @@ export default function FishingLine({
       fill="none"
     >
       <defs>
-        {/* barely-there lighting, not an obvious gradient */}
+        {}
         <linearGradient id="fl-graphite" x1="0" y1="0" x2="0.15" y2="1">
           <stop offset="0" stopColor="#8b9198" stopOpacity="0.42" />
           <stop offset="0.5" stopColor="#aab0b7" stopOpacity="0.6" />
@@ -154,7 +145,7 @@ export default function FishingLine({
         </radialGradient>
       </defs>
 
-      {/* depth twin — the wire slipping into shadow behind content */}
+      {}
       <motion.path
         d={d}
         stroke="#000000"
@@ -164,7 +155,7 @@ export default function FishingLine({
         style={{ filter: "blur(2.5px)", y: 6 }}
       />
 
-      {/* the wire */}
+      {}
       <motion.path
         d={d}
         stroke="url(#fl-graphite)"
@@ -172,7 +163,7 @@ export default function FishingLine({
         strokeLinecap="round"
       />
 
-      {/* travelling metallic reflections — soft silver beads, never bright white */}
+      {}
       <motion.path
         d={d}
         pathLength={1}
@@ -184,7 +175,7 @@ export default function FishingLine({
         style={{ strokeDashoffset: glint, filter: "blur(0.4px)" }}
       />
 
-      {/* guide rings where the wire changes direction */}
+      {}
       {rings.map((a) => (
         <GuideRing
           key={a.i}
@@ -218,7 +209,7 @@ function GuideRing({
   tremor: MotionValue<number>;
   reduce: boolean;
 }) {
-  // Track the wire exactly: same offset formula the path uses for this point.
+  
   const tx = useTransform([lean, tremor] as MotionValue[], (l: number[]) => {
     const [s, time] = l;
     const factor = Math.min(1, sway);
@@ -237,11 +228,7 @@ function GuideRing({
   );
 }
 
-/**
- * A zero-footprint marker the wire routes through. `x` is 0–1000 across the page
- * width (500 = centre); `sway` scales how much this point leans with scroll
- * velocity; `ring` drops a small metal guide ring on this bend.
- */
+
 export function LineAnchor({
   x,
   sway = 1,

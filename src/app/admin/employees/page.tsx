@@ -205,7 +205,7 @@ export default function EmployeesPage() {
         }
       />
 
-      {/* Domains */}
+      {}
       <section className="mb-8">
         <div className="mb-3 flex items-center gap-2">
           <Globe size={16} className="text-ink-faint" />
@@ -244,7 +244,7 @@ export default function EmployeesPage() {
         )}
       </section>
 
-      {/* Roster */}
+      {}
       <section>
         <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-2">
@@ -310,7 +310,7 @@ export default function EmployeesPage() {
         </Card>
       </section>
 
-      {/* Profile drawer */}
+      {}
       <AnimatePresence>
         {selectedEmpId && (
           <div className="fixed inset-0 z-[60] flex justify-end">
@@ -329,7 +329,7 @@ export default function EmployeesPage() {
                 <div className="flex flex-1 items-center justify-center"><LoadingState label="Loading profile" /></div>
               ) : employeeProfile ? (
                 <div className="scrollbar-thin flex-1 space-y-6 overflow-y-auto p-6">
-                  {/* Identity */}
+                  {}
                   <div className="flex items-start gap-4">
                     <span className="flex h-14 w-14 items-center justify-center rounded-[14px] border border-line bg-inset text-[18px] font-semibold text-ink">{initials(employeeProfile.employee.name)}</span>
                     <div className="flex-1">
@@ -342,7 +342,7 @@ export default function EmployeesPage() {
                     </div>
                   </div>
 
-                  {/* Meta */}
+                  {}
                   <div className="grid grid-cols-2 gap-3">
                     <MetaTile icon={<MapPin size={13} />} label="Branch" value={employeeProfile.employee.branch || "—"} />
                     <MetaTile icon={<Building2 size={13} />} label="Department" value={employeeProfile.employee.department || "—"} />
@@ -350,7 +350,7 @@ export default function EmployeesPage() {
                     <MetaTile icon={<Calendar size={13} />} label="Joined" value={employeeProfile.employee.joiningDate ? formatDate(employeeProfile.employee.joiningDate) : "—"} />
                   </div>
 
-                  {/* Trend */}
+                  {}
                   <Card pad="md">
                     <div className="mb-2 flex items-center gap-2">
                       <TrendingUp size={15} className="text-ink-faint" />
@@ -375,7 +375,7 @@ export default function EmployeesPage() {
                     </div>
                   </Card>
 
-                  {/* Badges */}
+                  {}
                   <div>
                     <h4 className="mb-3 flex items-center gap-2 text-[14px] font-semibold text-ink"><Award size={15} className="text-ink-faint" /> Earned badges</h4>
                     {employeeBadges.length > 0 ? (
@@ -395,7 +395,7 @@ export default function EmployeesPage() {
                     )}
                   </div>
 
-                  {/* Simulation history */}
+                  {}
                   <div>
                     <div className="mb-3 flex items-center justify-between">
                       <h4 className="flex items-center gap-2 text-[14px] font-semibold text-ink"><ShieldAlert size={15} className="text-ink-faint" /> Simulation history</h4>
@@ -430,7 +430,7 @@ export default function EmployeesPage() {
                     </Card>
                   </div>
 
-                  {/* Training */}
+                  {}
                   <div className="grid gap-5 sm:grid-cols-2">
                     <div>
                       <h4 className="mb-3 flex items-center gap-2 text-[14px] font-semibold text-ink"><CheckCircle2 size={15} className="text-accent" /> Completed</h4>
@@ -472,7 +472,7 @@ export default function EmployeesPage() {
         )}
       </AnimatePresence>
 
-      {/* Add employee */}
+      {}
       <Modal open={addEmpModalOpen} onClose={() => setAddEmpModalOpen(false)} size="md">
         <ModalHeader title="Add a person" description="They'll start at 100% awareness and low risk." icon={<Users size={17} />} onClose={() => setAddEmpModalOpen(false)} />
         <form onSubmit={handleAddEmployee}>
@@ -493,7 +493,7 @@ export default function EmployeesPage() {
         </form>
       </Modal>
 
-      {/* Add domain */}
+      {}
       <Modal open={addDomainModalOpen} onClose={() => setAddDomainModalOpen(false)} size="sm">
         <ModalHeader title="Add a domain" description="We'll generate a TXT record for you to verify." icon={<Globe size={17} />} onClose={() => setAddDomainModalOpen(false)} />
         <form onSubmit={handleAddDomain}>

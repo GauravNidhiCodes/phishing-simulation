@@ -98,12 +98,12 @@ export default function AnalyticsDashboard() {
   useEffect(() => {
     setMounted(true);
     fetchAnalytics();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    
   }, []);
 
   useEffect(() => {
     if (mounted) fetchAnalytics();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    
   }, [selectedDept, selectedBranch, selectedCampaign, selectedRisk, datePreset]);
 
   const handleReset = () => {
@@ -152,7 +152,7 @@ export default function AnalyticsDashboard() {
         }
       />
 
-      {/* Filters */}
+      {}
       <Card pad="md" className="mb-6">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           <Segmented value={datePreset} onChange={setDatePreset} options={datePresets} layoutId="datePreset" />
@@ -197,7 +197,7 @@ export default function AnalyticsDashboard() {
         />
       ) : (
         <motion.div variants={stagger} initial="hidden" animate="show" className="space-y-6">
-          {/* KPIs */}
+          {}
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             <StatCard label="Awareness score" value={<Counter value={data.metrics.avgScore} suffix="%" />} delta={{ value: `+${data.insights.awarenessImprovement}%`, positive: true }} hint="growth" icon={<ShieldCheck size={17} />} />
             <StatCard label="Avoidance rate" value={<Counter value={data.metrics.campaignSuccessRate} suffix="%" />} hint="bypassed the lure" icon={<ShieldOff size={17} />} />
@@ -205,7 +205,7 @@ export default function AnalyticsDashboard() {
             <StatCard label="People monitored" value={<Counter value={data.metrics.totalEmployees} />} hint="active accounts" icon={<Users size={17} />} />
           </div>
 
-          {/* Sub metrics */}
+          {}
           <Card pad="md">
             <div className="grid grid-cols-2 gap-x-4 gap-y-5 sm:grid-cols-4 lg:grid-cols-8">
               {[
@@ -226,7 +226,7 @@ export default function AnalyticsDashboard() {
             </div>
           </Card>
 
-          {/* AI insight strip */}
+          {}
           <Card pad="lg">
             <div className="flex items-center gap-2">
               <Sparkles size={16} className="text-accent" />
@@ -240,7 +240,7 @@ export default function AnalyticsDashboard() {
             </div>
           </Card>
 
-          {/* Growth + risk */}
+          {}
           <div className="grid gap-6 lg:grid-cols-3">
             <motion.div variants={rise} className="lg:col-span-2">
               <Card pad="lg">
@@ -295,7 +295,7 @@ export default function AnalyticsDashboard() {
             </motion.div>
           </div>
 
-          {/* Funnel + performance */}
+          {}
           <div className="grid gap-6 lg:grid-cols-2">
             <motion.div variants={rise}>
               <Card pad="lg">
@@ -339,7 +339,7 @@ export default function AnalyticsDashboard() {
             </motion.div>
           </div>
 
-          {/* Engagement + compliance */}
+          {}
           <div className="grid gap-6 lg:grid-cols-3">
             <motion.div variants={rise} className="lg:col-span-2">
               <Card pad="lg">
@@ -384,7 +384,7 @@ export default function AnalyticsDashboard() {
             </motion.div>
           </div>
 
-          {/* Dept + branch */}
+          {}
           <div className="grid gap-6 lg:grid-cols-2">
             <motion.div variants={rise}>
               <Card pad="lg">
@@ -424,7 +424,7 @@ export default function AnalyticsDashboard() {
             </motion.div>
           </div>
 
-          {/* Security trend */}
+          {}
           <motion.div variants={rise}>
             <Card pad="lg">
               <CardHeader title="Company security score" description="The overall safety index over time." />

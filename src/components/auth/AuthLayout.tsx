@@ -76,7 +76,7 @@ export function AuthAlert({
   );
 }
 
-/** Live, friendly password strength checklist. */
+
 export function PasswordChecklist({ password, confirm }: { password: string; confirm?: string }) {
   const rules = [
     { ok: password.length >= 8, label: "At least 8 characters" },

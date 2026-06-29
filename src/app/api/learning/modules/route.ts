@@ -291,13 +291,13 @@ const COURSE_METADATA: Record<string, {
 
 export async function GET() {
   try {
-    // 1. Fetch Tenant Organization
+    
     const org = await prisma.organization.findFirst();
     if (!org) {
       return NextResponse.json({ error: 'Tenant not initialized' }, { status: 500 });
     }
 
-    // 2. Query first employee in system to anchor dashboard data
+    
     const user = await prisma.user.findFirst({
       where: { role: 'EMPLOYEE', organizationId: org.id }
     });
@@ -306,7 +306,7 @@ export async function GET() {
       return NextResponse.json({ error: 'No employee users seeded in database.' }, { status: 404 });
     }
 
-    // 3. Auto-seed missing courses if count < 13
+    
     const databaseModulesCount = await prisma.trainingModule.count();
     if (databaseModulesCount < 13) {
       console.log(`Auto-seeding training modules (current count: ${databaseModulesCount})...`);
@@ -333,7 +333,7 @@ export async function GET() {
             }
           });
 
-          // Add default quizzes
+          
           await prisma.quizQuestion.createMany({
             data: [
               {
@@ -358,7 +358,7 @@ export async function GET() {
       }
     }
 
-    // 4. Fetch all modules and user progress logs
+    
     const modules = await prisma.trainingModule.findMany({
       include: {
         quizzes: true,
@@ -368,7 +368,7 @@ export async function GET() {
       }
     });
 
-    // Parse options field from JSON string for each question and inject metadata
+    
     const enrichedModules = modules.map(m => {
       const metadata = COURSE_METADATA[m.title] || {
         category: "General Security",
@@ -410,12 +410,12 @@ export async function GET() {
       };
     });
 
-    // 5. Calculate dashboard metrics
+    
     const completedCourses = enrichedModules.filter(m => m.progress && m.progress[0]?.completed).length;
     const inProgressCourses = enrichedModules.filter(m => m.progress && m.progress.length > 0 && !m.progress[0].completed).length;
     const learningProgress = enrichedModules.length > 0 ? Math.round((completedCourses / enrichedModules.length) * 100) : 0;
 
-    // Generate certificates
+    
     const certificates = enrichedModules
       .filter(m => m.progress && m.progress[0]?.completed)
       .map(m => ({
@@ -426,10 +426,10 @@ export async function GET() {
         completionDate: m.progress[0].updatedAt.toISOString().split('T')[0]
       }));
 
-    // Contextual Recommendations
-    // Rule: if score < 70, recommend Phishing Awareness and digital payments.
-    // If department IT, recommend MFA & passwords.
-    // Else, recommend social engineering.
+    
+    
+    
+    
     const completedSet = new Set(enrichedModules.filter(m => m.progress && m.progress[0]?.completed).map(m => m.title));
     const recommendedTitles: string[] = [];
 
@@ -444,7 +444,7 @@ export async function GET() {
       recommendedTitles.push("WhatsApp & SMS Scam Awareness", "Safe Internet Browsing");
     }
 
-    // Filter out completed ones, fallback to first 2 incomplete
+    
     let recommended = enrichedModules.filter(m => recommendedTitles.includes(m.title) && !completedSet.has(m.title));
     if (recommended.length === 0) {
       recommended = enrichedModules.filter(m => !completedSet.has(m.title)).slice(0, 2);
@@ -458,7 +458,7 @@ export async function GET() {
         completedCourses,
         inProgressCourses,
         certificatesEarned: certificates.length,
-        learningStreak: completedCourses > 0 ? 5 + (completedCourses * 2) : 0, // mock growing streak
+        learningStreak: completedCourses > 0 ? 5 + (completedCourses * 2) : 0, 
         weeklyProgress: [
           { day: 'Mon', value: completedCourses > 1 ? 1 : 0 },
           { day: 'Tue', value: completedCourses > 2 ? 1 : 0 },
@@ -492,7 +492,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Module ID and User ID are required' }, { status: 400 });
     }
 
-    // 1. Create or Update progress log
+    
     const existingProgress = await prisma.quizProgress.findFirst({
       where: { moduleId, userId }
     });
@@ -517,7 +517,7 @@ export async function POST(request: Request) {
       });
     }
 
-    // 2. Recalculate employee awareness score
+    
     const allProgress = await prisma.quizProgress.findMany({
       where: { userId }
     });
@@ -528,7 +528,7 @@ export async function POST(request: Request) {
       ? allProgress.reduce((sum, curr) => sum + curr.score, 0) / allProgress.length
       : 0;
 
-    // Calculate dynamic awareness score
+    
     const trainingFactor = (completedCount / totalModules) * 35;
     const quizFactor = (avgQuizScore / 100) * 65;
     const newAwarenessScore = Math.min(100, Math.round(trainingFactor + quizFactor));

@@ -1,6 +1,6 @@
 import type { Variants, Transition } from "framer-motion";
 
-/** Shared spring used for layout + interactive motion. Calm, no overshoot. */
+
 export const spring: Transition = {
   type: "spring",
   stiffness: 320,
@@ -13,7 +13,7 @@ export const easeOut: Transition = {
   ease: [0.22, 1, 0.36, 1],
 };
 
-/** Staggered container for lists/grids of cards. */
+
 export const stagger: Variants = {
   hidden: { opacity: 0 },
   show: {
@@ -22,7 +22,7 @@ export const stagger: Variants = {
   },
 };
 
-/** Individual item that rises gently into place. */
+
 export const rise: Variants = {
   hidden: { opacity: 0, y: 10 },
   show: {
@@ -32,7 +32,7 @@ export const rise: Variants = {
   },
 };
 
-/** For page-level fade. */
+
 export const fade: Variants = {
   hidden: { opacity: 0 },
   show: { opacity: 1, transition: { duration: 0.4, ease: [0.22, 1, 0.36, 1] } },

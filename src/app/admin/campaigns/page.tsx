@@ -197,7 +197,7 @@ export default function CampaignsPage() {
 
   useEffect(() => {
     if (step === 2) setSelectedUserIds(filteredEmployees.map((e) => e.id));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    
   }, [selectedDeptFilters, selectedBranchFilters, step]);
 
   const toggleDept = (d: string) =>
@@ -358,7 +358,7 @@ export default function CampaignsPage() {
         })}
       </div>
 
-      {/* Wizard */}
+      {}
       <Modal open={modalOpen} onClose={() => setModalOpen(false)} size="xl">
         <ModalHeader
           title="Create a campaign"
@@ -367,7 +367,7 @@ export default function CampaignsPage() {
           icon={<Plus size={17} />}
         />
 
-        {/* Stepper */}
+        {}
         <div className="border-b border-line px-6 py-4">
           <div className="flex items-center">
             {STEPS.map((s, i) => {
@@ -706,7 +706,6 @@ export default function CampaignsPage() {
         </ModalFooter>
       </Modal>
 
-      {/* Success */}
       <Modal open={successModalOpen} onClose={() => setSuccessModalOpen(false)} size="md">
         {createdCampaignDetails && (
           <div className="p-7 text-center">

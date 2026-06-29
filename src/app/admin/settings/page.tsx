@@ -152,7 +152,7 @@ export default function SettingsPage() {
         )}
       </AnimatePresence>
 
-      {/* Tabs */}
+      {}
       <div className="mb-6 flex gap-1 overflow-x-auto border-b border-line">
         {tabs.map((tab) => (
           <button
@@ -169,7 +169,7 @@ export default function SettingsPage() {
         ))}
       </div>
 
-      {/* Profile */}
+      {}
       {activeTab === "profile" && (
         <Card pad="lg" className="space-y-6">
           <div className="flex flex-col items-center gap-5 rounded-[14px] border border-line bg-inset p-5 sm:flex-row">
@@ -203,7 +203,7 @@ export default function SettingsPage() {
         </Card>
       )}
 
-      {/* Branches */}
+      {}
       {activeTab === "branches" && (
         <Card pad="lg">
           <div className="mb-5 flex items-center justify-between">
@@ -235,7 +235,7 @@ export default function SettingsPage() {
         </Card>
       )}
 
-      {/* Departments */}
+      {}
       {activeTab === "departments" && (
         <Card pad="lg">
           <div className="mb-5 flex items-center justify-between">
@@ -268,7 +268,7 @@ export default function SettingsPage() {
         </Card>
       )}
 
-      {/* Security */}
+      {}
       {activeTab === "security" && (
         <Card pad="lg" className="space-y-5">
           <div className="flex items-start gap-3 rounded-[12px] border border-warn/30 bg-warn-faint/30 p-4">
@@ -287,7 +287,7 @@ export default function SettingsPage() {
         </Card>
       )}
 
-      {/* Notifications */}
+      {}
       {activeTab === "notifications" && (
         <Card pad="lg">
           <h2 className="text-[15px] font-semibold text-ink">Notifications</h2>
@@ -313,7 +313,7 @@ export default function SettingsPage() {
         </Card>
       )}
 
-      {/* System */}
+      {}
       {activeTab === "system" && (
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
           <Card pad="lg" className="space-y-4">
@@ -379,7 +379,7 @@ export default function SettingsPage() {
         </div>
       )}
 
-      {/* Branch modal */}
+      {}
       <Modal open={showBranchModal} onClose={() => setShowBranchModal(false)} size="md">
         <ModalHeader title={isEditingBranch ? "Edit branch" : "Add branch"} icon={<MapPin size={17} />} onClose={() => setShowBranchModal(false)} />
         <ModalBody className="space-y-4">
@@ -401,7 +401,7 @@ export default function SettingsPage() {
         </ModalFooter>
       </Modal>
 
-      {/* Dept modal */}
+      {}
       <Modal open={showDeptModal} onClose={() => setShowDeptModal(false)} size="md">
         <ModalHeader title={isEditingDept ? "Edit department" : "Add department"} icon={<Briefcase size={17} />} onClose={() => setShowDeptModal(false)} />
         <ModalBody className="space-y-4">

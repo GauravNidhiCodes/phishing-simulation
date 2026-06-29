@@ -31,14 +31,14 @@ export async function POST(request: Request) {
 
     const emailLower = email.toLowerCase().trim();
 
-    // Verify token structure
+    
     if (!token.startsWith('RST-')) {
       return NextResponse.json({ error: 'Invalid or expired password reset token' }, { status: 400 });
     }
 
     const passwordsData = readJson(PASSWORDS_FILE, {});
 
-    // Save new password
+    
     passwordsData[emailLower] = {
       password: newPassword,
       failedAttempts: 0,
@@ -46,7 +46,7 @@ export async function POST(request: Request) {
     };
     writeJson(PASSWORDS_FILE, passwordsData);
 
-    // Log reset event
+    
     const auditData = readJson(AUDIT_FILE, []);
     auditData.unshift({
       id: `AUDIT-${Math.floor(Math.random() * 9000) + 1000}`,

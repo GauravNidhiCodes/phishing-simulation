@@ -149,7 +149,7 @@ export default function Dashboard() {
       />
 
       <motion.div variants={stagger} initial="hidden" animate="show" className="space-y-6">
-        {/* KPIs */}
+        {}
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <StatCard
             label="Awareness index"
@@ -184,7 +184,7 @@ export default function Dashboard() {
           />
         </div>
 
-        {/* Funnel + risk */}
+        {}
         <div className="grid gap-6 lg:grid-cols-3">
           <motion.div variants={rise} className="lg:col-span-2">
             <Card pad="lg">
@@ -255,7 +255,7 @@ export default function Dashboard() {
           </motion.div>
         </div>
 
-        {/* Trend + departments */}
+        {}
         <div className="grid gap-6 lg:grid-cols-3">
           <motion.div variants={rise} className="lg:col-span-2">
             <Card pad="lg">
@@ -329,7 +329,7 @@ export default function Dashboard() {
           </motion.div>
         </div>
 
-        {/* Campaigns */}
+        {}
         <motion.div variants={rise}>
           <Card pad="lg">
             <CardHeader

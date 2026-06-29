@@ -92,7 +92,7 @@ export default function ReportsPage() {
 
   useEffect(() => {
     loadReportData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    
   }, [selectedBranch, selectedDept, selectedCampaign, selectedEmployee, selectedRisk]);
 
   const handleExport = async (format: "csv" | "excel") => {
@@ -144,13 +144,13 @@ export default function ReportsPage() {
         />
       </div>
 
-      {/* Print header */}
+      {}
       <div className="hidden print:block border-b border-black/10 pb-4 mb-4">
         <h1 className="text-2xl font-bold text-black">Pinkman Protects — {activeCategory}</h1>
         <p className="text-xs text-gray-600 mt-1">{orgName} · Generated {new Date().toLocaleString("en-US", { timeZone: "Asia/Kolkata" })}</p>
       </div>
 
-      {/* Filters */}
+      {}
       <Card pad="md" className="mb-6 print:hidden">
         <div className="grid grid-cols-2 gap-3 md:grid-cols-5">
           <Field label="Branch"><Select value={selectedBranch} onChange={(e) => setSelectedBranch(e.target.value)}><option value="All">All</option>{BRANCHES.map((b) => <option key={b} value={b}>{b}</option>)}</Select></Field>
@@ -161,7 +161,7 @@ export default function ReportsPage() {
         </div>
       </Card>
 
-      {/* KPIs */}
+      {}
       {stats && (
         <div className="mb-6 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-6 print:grid-cols-3">
           <KpiTile label="Awareness" value={`${stats.avgAwarenessScore}%`} bar={stats.avgAwarenessScore} />
@@ -174,7 +174,7 @@ export default function ReportsPage() {
       )}
 
       <div className="grid gap-6 lg:grid-cols-12">
-        {/* Category nav */}
+        {}
         <div className="lg:col-span-3 print:hidden">
           <p className="eyebrow mb-3">Report types</p>
           <div className="space-y-1">
@@ -196,7 +196,7 @@ export default function ReportsPage() {
           </div>
         </div>
 
-        {/* Content pane */}
+        {}
         <div className="lg:col-span-9 print:col-span-12">
           <Card pad="lg" className="print:border-0 print:bg-white print:p-0">
             <div className="mb-5 flex items-center justify-between border-b border-line pb-4 print:border-black/10">
@@ -207,7 +207,7 @@ export default function ReportsPage() {
               <span className="font-mono text-[12px] text-ink-faint">PR-{activeCategory.slice(0, 4).toUpperCase()}</span>
             </div>
 
-            {/* Executive Summary */}
+            {}
             {activeCategory === "Executive Summary" && (
               <div className="space-y-6">
                 <div className="grid gap-5 md:grid-cols-2">
@@ -268,7 +268,7 @@ export default function ReportsPage() {
               </div>
             )}
 
-            {/* Campaign Performance */}
+            {}
             {activeCategory === "Campaign Performance" && stats && (
               <div className="space-y-5">
                 <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
@@ -289,7 +289,7 @@ export default function ReportsPage() {
               </div>
             )}
 
-            {/* Employee Awareness */}
+            {}
             {activeCategory === "Employee Awareness" && (
               <Table>
                 <THead><TH>Name</TH><TH>Email</TH><TH>Department</TH><TH>Branch</TH><TH align="center">Score</TH><TH align="center">Risk</TH></THead>
@@ -305,7 +305,7 @@ export default function ReportsPage() {
               </Table>
             )}
 
-            {/* Department Performance */}
+            {}
             {activeCategory === "Department Performance" && (
               <Table>
                 <THead><TH>Department</TH><TH align="center">People</TH><TH align="center">Score</TH><TH align="center">Click rate</TH><TH align="center">Training</TH></THead>
@@ -320,7 +320,7 @@ export default function ReportsPage() {
               </Table>
             )}
 
-            {/* Branch Performance */}
+            {}
             {activeCategory === "Branch Performance" && (
               <Table>
                 <THead><TH>Branch</TH><TH align="center">People</TH><TH align="center">Score</TH><TH align="center">Click rate</TH><TH align="center">Training</TH></THead>
@@ -335,7 +335,7 @@ export default function ReportsPage() {
               </Table>
             )}
 
-            {/* Learning Progress */}
+            {}
             {activeCategory === "Learning Progress" && (
               <Table>
                 <THead><TH>Name</TH><TH>Email</TH><TH>Department</TH><TH align="center">Done</TH><TH align="center">Pending</TH><TH align="center">Status</TH></THead>
@@ -351,7 +351,7 @@ export default function ReportsPage() {
               </Table>
             )}
 
-            {/* Risk Assessment */}
+            {}
             {activeCategory === "Risk Assessment" && (
               <div className="space-y-5">
                 <div className="rounded-[12px] border border-danger/30 bg-danger-faint/30 p-4">
@@ -371,7 +371,7 @@ export default function ReportsPage() {
               </div>
             )}
 
-            {/* Compliance Status */}
+            {}
             {activeCategory === "Compliance Status" && stats && (
               <div className="space-y-5">
                 <div className="grid gap-4 sm:grid-cols-3">
@@ -390,7 +390,7 @@ export default function ReportsPage() {
         </div>
       </div>
 
-      {/* Schedules + history */}
+      {}
       <div className="mt-6 grid gap-6 md:grid-cols-2 print:hidden">
         <Card pad="lg">
           <CardHeader title="Scheduled reports" description="Recurring deliveries." />
@@ -424,7 +424,7 @@ export default function ReportsPage() {
         </Card>
       </div>
 
-      {/* Schedule modal */}
+      {}
       <Modal open={scheduleModalOpen} onClose={() => setScheduleModalOpen(false)} size="md">
         <ModalHeader title="Schedule a report" description="We'll deliver it on a recurring basis." icon={<Clock size={17} />} onClose={() => setScheduleModalOpen(false)} />
         <form onSubmit={handleScheduleSubmit}>

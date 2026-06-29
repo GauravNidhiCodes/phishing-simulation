@@ -3,7 +3,7 @@ import { prisma } from '@/lib/db';
 
 export async function GET(request: Request) {
   try {
-    // 1. Session authentication check
+    
     const cookieHeader = request.headers.get('cookie') || '';
     const sessionCookie = cookieHeader
       .split(';')
@@ -21,7 +21,7 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
 
-    // 2. Fetch base data
+    
     const employees = await prisma.user.findMany({
       where: { role: 'EMPLOYEE' }
     });
@@ -55,23 +55,23 @@ export async function GET(request: Request) {
     const totalEmployees = employees.length;
     const activeCampaignsCount = campaigns.filter(c => c.status === 'ACTIVE').length;
 
-    // Calculate Health Score (average employee score)
+    
     const avgScore = totalEmployees > 0 
       ? Math.round(employees.reduce((acc, curr) => acc + curr.awarenessScore, 0) / totalEmployees) 
       : 100;
 
     const highRiskCount = employees.filter(e => e.riskCategory === 'HIGH').length;
 
-    // Calculate Training Completion rate
+    
     const totalQuizzes = quizProgress.length;
     const completedQuizzes = quizProgress.filter(qp => qp.completed).length;
     const trainingCompletionRate = totalQuizzes > 0 ? Math.round((completedQuizzes / totalQuizzes) * 100) : 0;
 
-    // Posture and Index
+    
     const maturityLevel = avgScore >= 80 ? "Level 4 - Managed" : avgScore >= 70 ? "Level 3 - Defined" : avgScore >= 60 ? "Level 2 - Repeatable" : "Level 1 - Initial";
     const riskIndex = avgScore >= 75 ? "LOW RISK" : avgScore >= 60 ? "MEDIUM RISK" : "HIGH RISK";
 
-    // 3. Indian Branches Aggregation
+    
     const indianBranches = ['Pune', 'Bengaluru', 'Hyderabad', 'Mumbai', 'Delhi', 'Chennai', 'Kolkata'];
     const branchStats = indianBranches.map(branchName => {
       const branchEmps = employees.filter(e => e.branch === branchName);
@@ -80,17 +80,17 @@ export async function GET(request: Request) {
       const empCount = branchEmps.length;
       const avgBranchScore = empCount > 0 
         ? Math.round(branchEmps.reduce((acc, curr) => acc + curr.awarenessScore, 0) / empCount) 
-        : 80; // default baseline
+        : 80; 
 
       const branchRiskCount = branchEmps.filter(e => e.riskCategory === 'HIGH').length;
       const branchRiskScore = empCount > 0 ? Math.round((branchRiskCount / empCount) * 100) : 0;
 
-      // Quiz progress inside branch
+      
       const branchQuizzes = quizProgress.filter(qp => branchEmpIds.includes(qp.userId));
       const branchCompleted = branchQuizzes.filter(qp => qp.completed).length;
       const branchTrainingRate = branchQuizzes.length > 0 ? Math.round((branchCompleted / branchQuizzes.length) * 100) : 0;
 
-      // Check if branch targeted in active campaigns
+      
       const isTargeted = campaigns.some(c => c.status === 'ACTIVE' && c.branches?.includes(branchName));
 
       return {
@@ -103,8 +103,8 @@ export async function GET(request: Request) {
       };
     });
 
-    // 4. Threat Intelligence Calculations
-    // Most Clicked Simulation
+    
+    
     const templateClicks: Record<string, { count: number; name: string }> = {};
     logs.forEach(log => {
       if (log.clickedAt) {
@@ -119,7 +119,7 @@ export async function GET(request: Request) {
     const sortedClicks = Object.values(templateClicks).sort((a, b) => b.count - a.count);
     const mostClickedSimulation = sortedClicks.length > 0 ? sortedClicks[0].name : "EPFO Aadhaar Linking Alert";
 
-    // Most Vulnerable Department
+    
     const depts = Array.from(new Set(employees.map(e => e.department).filter(Boolean)));
     const deptStats = depts.map(dName => {
       const dEmps = employees.filter(e => e.department === dName);
@@ -129,16 +129,16 @@ export async function GET(request: Request) {
 
     const mostVulnerableDept = deptStats.length > 0 ? deptStats[0].name : "Finance";
 
-    // Fastest Improving Branch (highest average branch score)
+    
     const sortedBranches = [...branchStats].sort((a, b) => b.awarenessScore - a.awarenessScore);
     const fastestImprovingBranch = sortedBranches.length > 0 ? sortedBranches[0].name : "Bengaluru";
 
-    // Top AI Recommendation
+    
     const topAIRecommendation = avgScore < 75 
       ? `Configure MFA enforcement drills for ${mostVulnerableDept} department employees immediately.` 
       : "Maintain current simulation frequency; launch festival bonus templates to test payroll teams.";
 
-    // 5. Timeline Generation (Chronological event log)
+    
     const timelineEvents = logs.slice(0, 15).map((log, index) => {
       let eventType = 'DELIVERED';
       let title = 'Email Delivered';
@@ -171,7 +171,7 @@ export async function GET(request: Request) {
       };
     });
 
-    // 6. Mock Live Ticker feeds
+    
     const mockLiveFeeds = [
       { type: 'CAMPAIGN_LAUNCHED', title: 'Campaign Started', message: 'Phishing exercise "Income Tax Refund Notice" launched corporate-wide.' },
       { type: 'CAMPAIGN_COMPLETED', title: 'Campaign Completed', message: 'Simulation "Vendor Invoice Renewal" successfully finalized.' },

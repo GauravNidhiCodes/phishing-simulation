@@ -213,7 +213,7 @@ export default function TemplatesWorkspace() {
         setEditorTab("raw_html");
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    
   }, [selectedTemplate]);
 
   const getCompiledHtml = () => {
@@ -449,7 +449,7 @@ export default function TemplatesWorkspace() {
         }
       />
 
-      {/* Filters */}
+      {}
       <div className="mb-6 flex flex-col gap-3 rounded-[14px] border border-line bg-card p-4 lg:flex-row lg:items-center">
         <div className="flex-1">
           <Input icon={<Search size={15} />} placeholder="Search templates" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
@@ -492,7 +492,7 @@ export default function TemplatesWorkspace() {
         </div>
       </div>
 
-      {/* Display */}
+      {}
       {sortedTemplates.length === 0 ? (
         <EmptyState
           icon={<Mail size={18} />}
@@ -582,7 +582,7 @@ export default function TemplatesWorkspace() {
         </div>
       )}
 
-      {/* Editor */}
+      {}
       <AnimatePresence>
         {isEditorOpen && (
           <motion.div
@@ -617,7 +617,7 @@ export default function TemplatesWorkspace() {
             </div>
 
             <div className="flex flex-1 flex-col overflow-hidden lg:flex-row">
-              {/* Form pane */}
+              {}
               <div className="scrollbar-thin w-full space-y-6 overflow-y-auto border-r border-line p-6 lg:w-1/2">
                 {isCreateMode && (
                   <div className="rounded-[12px] border border-line bg-card p-4">
@@ -766,7 +766,7 @@ export default function TemplatesWorkspace() {
                 </div>
               </div>
 
-              {/* Preview pane */}
+              {}
               <div className="flex w-full flex-col overflow-hidden bg-surface lg:w-1/2">
                 <div className="flex shrink-0 items-center justify-between border-b border-line px-6 py-3.5">
                   <Segmented

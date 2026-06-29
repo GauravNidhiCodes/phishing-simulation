@@ -135,7 +135,7 @@ export default function NotificationsPage() {
       />
 
       <div className="grid gap-6 lg:grid-cols-3">
-        {/* Left: list */}
+        {}
         <div className="space-y-5 lg:col-span-2">
           <Card pad="md" className="space-y-4">
             <div className="grid gap-3 sm:grid-cols-3">
@@ -227,7 +227,7 @@ export default function NotificationsPage() {
           )}
         </div>
 
-        {/* Right: preferences */}
+        {}
         <div className="space-y-5">
           <PreferencesPanel />
           <Card pad="lg" className="space-y-2.5">

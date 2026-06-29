@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getSecurityInsights, getEmployeeSecurityDetails } from './insights';
 
-// Local knowledge base data
+
 const KNOWLEDGE_BASE = [
   {
     topic: 'phishing',
@@ -74,7 +74,7 @@ const KNOWLEDGE_BASE = [
 
 export async function POST(request: Request) {
   try {
-    // 1. Authenticate session
+    
     const cookieHeader = request.headers.get('cookie') || '';
     const sessionCookie = cookieHeader
       .split(';')
@@ -99,7 +99,7 @@ export async function POST(request: Request) {
 
     let responseText = '';
 
-    // Search Knowledge Base first if it matches specific key terms
+    
     const kbMatch = KNOWLEDGE_BASE.find(kb => 
       query.includes(kb.topic) || 
       (kb.topic === 'mfa' && query.includes('multi-factor')) ||
@@ -112,7 +112,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ response: responseText });
     }
 
-    // Role-based Intent Routing
+    
     if (isAdmin) {
       const stats = await getSecurityInsights();
 
@@ -195,7 +195,7 @@ Generated on: ${new Date().toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata
       } 
       
       else {
-        // Default Admin response
+        
         responseText = `Hello! I am your **Pinkman Protects AI Assistant**. I analyze real-time platform data to help secure your organization. 
 
 **Here are some suggested topics you can ask me:**
@@ -208,7 +208,7 @@ Generated on: ${new Date().toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata
       }
 
     } else {
-      // Employee Specific queries
+      
       const details = await getEmployeeSecurityDetails(email);
       if (!details) {
         return NextResponse.json({ error: 'Employee details not found' }, { status: 404 });

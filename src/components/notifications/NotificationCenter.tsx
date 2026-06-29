@@ -160,7 +160,7 @@ export default function NotificationCenter() {
         </AnimatePresence>
       </button>
 
-      {/* Live toast */}
+      {}
       <AnimatePresence>
         {toastAlert && (
           <motion.div
@@ -184,7 +184,7 @@ export default function NotificationCenter() {
         )}
       </AnimatePresence>
 
-      {/* Drawer */}
+      {}
       <AnimatePresence>
         {isOpen && (
           <>
@@ -195,7 +195,7 @@ export default function NotificationCenter() {
               transition={{ type: "spring", damping: 30, stiffness: 280 }}
               className="fixed inset-y-0 right-0 z-[65] flex w-full flex-col border-l border-line bg-card shadow-2xl sm:w-[420px]"
             >
-              {/* Header */}
+              {}
               <div className="flex items-center justify-between border-b border-line px-5 py-4">
                 <div className="flex items-center gap-2.5">
                   <h3 className="text-[15px] font-semibold tracking-[-0.01em] text-ink">Notifications</h3>
@@ -207,7 +207,7 @@ export default function NotificationCenter() {
                 </div>
               </div>
 
-              {/* Filters */}
+              {}
               <div className="space-y-3 border-b border-line px-4 py-3.5">
                 <div className="flex h-9 items-center gap-2 rounded-[10px] border border-line bg-inset px-3 text-[13px]">
                   <Search size={14} className="text-ink-faint" />
@@ -231,7 +231,7 @@ export default function NotificationCenter() {
                 </div>
               </div>
 
-              {/* List */}
+              {}
               <div className="scrollbar-thin flex-1 space-y-2 overflow-y-auto p-4">
                 {loading ? (
                   <div className="flex flex-col items-center justify-center gap-3 py-16"><span className="text-accent"><Spinner size={18} /></span><span className="text-[12.5px] text-ink-faint">Loading…</span></div>
@@ -273,7 +273,7 @@ export default function NotificationCenter() {
                 )}
               </div>
 
-              {/* Footer */}
+              {}
               <div className="space-y-3 border-t border-line px-5 py-4">
                 {totalPages > 1 && (
                   <div className="flex items-center justify-between text-[12px] text-ink-faint">

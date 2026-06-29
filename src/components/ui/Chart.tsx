@@ -2,7 +2,7 @@
 
 import React from "react";
 
-/** Shared palette for charts — green accent + restrained neutrals only. */
+
 export const chartColors = {
   accent: "#3ecf8e",
   accentDim: "#2fb87c",
@@ -21,7 +21,7 @@ export const axisProps = {
   axisLine: false,
 } as const;
 
-/** A calm, consistent tooltip used across every chart. */
+
 export function ChartTooltip({
   active,
   payload,

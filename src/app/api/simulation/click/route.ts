@@ -19,14 +19,14 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Simulation log reference not found' }, { status: 404 });
     }
 
-    // Only update if it hasn't been clicked yet
+    
     if (!log.clickedAt) {
       await prisma.campaignLog.update({
         where: { id: logId },
         data: { clickedAt: new Date() }
       });
 
-      // Deduct score for failing a simulation click
+      
       const newScore = Math.max(0, log.user.awarenessScore - 15);
       let newRisk = 'HIGH';
       if (newScore >= 80) newRisk = 'LOW';

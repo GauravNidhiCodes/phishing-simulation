@@ -5,7 +5,7 @@ import path from 'path';
 
 const DATA_FILE_PATH = path.join(process.cwd(), 'src/app/api/admin/reports/reports_data.json');
 
-// Helper to read data from JSON file
+
 function readDataFile() {
   try {
     if (fs.existsSync(DATA_FILE_PATH)) {
@@ -18,7 +18,7 @@ function readDataFile() {
   return { schedules: [], history: [] };
 }
 
-// Helper to write data to JSON file
+
 function writeDataFile(data: any) {
   try {
     fs.writeFileSync(DATA_FILE_PATH, JSON.stringify(data, null, 2), 'utf-8');
@@ -31,7 +31,7 @@ function writeDataFile(data: any) {
 
 export async function GET(request: Request) {
   try {
-    // 1. Parse filter params
+    
     const { searchParams } = new URL(request.url);
     const branchFilter = searchParams.get('branch') || 'All';
     const deptFilter = searchParams.get('department') || 'All';
@@ -39,7 +39,7 @@ export async function GET(request: Request) {
     const employeeFilter = searchParams.get('employee') || 'All';
     const riskFilter = searchParams.get('riskLevel') || 'All';
     
-    // 2. Fetch primary DB elements
+    
     const org = await prisma.organization.findFirst();
     const orgName = org ? org.name : 'Pinkman Protects Enterprise';
 
@@ -59,7 +59,7 @@ export async function GET(request: Request) {
 
     const totalModules = await prisma.trainingModule.count() || 13;
 
-    // 3. Apply Filters to Employee records
+    
     let filteredEmployees = [...employees];
     if (branchFilter !== 'All') {
       filteredEmployees = filteredEmployees.filter(e => e.branch === branchFilter);
@@ -74,13 +74,13 @@ export async function GET(request: Request) {
       filteredEmployees = filteredEmployees.filter(e => e.riskCategory === riskFilter);
     }
 
-    // 4. Apply Filters to Campaigns and logs
+    
     let filteredCampaigns = [...campaigns];
     if (campaignFilter !== 'All') {
       filteredCampaigns = filteredCampaigns.filter(c => c.id === campaignFilter);
     }
 
-    // Accumulate filtered logs
+    
     const filteredCampaignIds = new Set(filteredCampaigns.map(c => c.id));
     const filteredEmployeeIds = new Set(filteredEmployees.map(e => e.id));
 
@@ -96,7 +96,7 @@ export async function GET(request: Request) {
       filteredEmployeeIds.has(l.userId)
     );
 
-    // 5. Aggregate KPI Summary Metrics
+    
     const totalEmployeesCount = filteredEmployees.length;
     
     const avgAwarenessScore = totalEmployeesCount > 0
@@ -107,7 +107,7 @@ export async function GET(request: Request) {
     const completedCampaignsCount = filteredCampaigns.filter(c => c.status === 'COMPLETED').length;
     const highRiskEmployeesCount = filteredEmployees.filter(e => e.riskCategory === 'HIGH').length;
 
-    // Calculate training completion rate: completed progresses / (total modules * total employees)
+    
     let totalCompletedQuizzes = 0;
     filteredEmployees.forEach(e => {
       totalCompletedQuizzes += e.quizProgress.filter(qp => qp.completed).length;
@@ -116,7 +116,7 @@ export async function GET(request: Request) {
     const totalAssignedQuizzesCount = totalModules * totalEmployeesCount || 1;
     const trainingCompletionRate = Math.min(100, Math.round((totalCompletedQuizzes / totalAssignedQuizzesCount) * 100));
 
-    // Phishing campaign logs
+    
     const totalDelivered = filteredLogs.filter(l => l.deliveredAt).length;
     const totalOpened = filteredLogs.filter(l => l.openedAt).length;
     const totalClicked = filteredLogs.filter(l => l.clickedAt).length;
@@ -126,7 +126,7 @@ export async function GET(request: Request) {
     const clickRate = totalDelivered > 0 ? Math.round((totalClicked / totalDelivered) * 100) : 0;
     const submitRate = totalDelivered > 0 ? Math.round((totalSubmitted / totalDelivered) * 100) : 0;
 
-    // 6. Branch-wise Performance (for 7 Indian cities)
+    
     const branches = ['Pune', 'Bengaluru', 'Hyderabad', 'Mumbai', 'Delhi', 'Chennai', 'Kolkata'];
     const branchStats = branches.map(brName => {
       const brEmps = employees.filter(e => e.branch === brName);
@@ -148,7 +148,7 @@ export async function GET(request: Request) {
       };
     });
 
-    // 7. Department-wise Performance (for 7 departments)
+    
     const depts = ['Engineering', 'HR', 'Finance', 'Sales', 'Marketing', 'IT Support', 'Operations'];
     const departmentStats = depts.map(dName => {
       const dEmps = employees.filter(e => e.department === dName);
@@ -170,7 +170,7 @@ export async function GET(request: Request) {
       };
     });
 
-    // 8. Employees Pending Training & High-Risk Lists
+    
     const pendingEmployees = employees.filter(e => {
       const completedCount = e.quizProgress.filter(qp => qp.completed).length;
       return completedCount < totalModules;
@@ -198,12 +198,12 @@ export async function GET(request: Request) {
         score: e.awarenessScore
       })).sort((a, b) => a.score - b.score);
 
-    // 9. AI Insights engine
-    // Highest Risk Branch = lowest average score or highest click rate
+    
+    
     const sortedBranchesByScore = [...branchStats].filter(b => b.employeesCount > 0).sort((a, b) => a.averageScore - b.averageScore);
     const highestRiskBranch = sortedBranchesByScore.length > 0 ? sortedBranchesByScore[0].name : 'Mumbai';
 
-    // Most Improved Department = department with highest completion rate
+    
     const sortedDeptsByCompletion = [...departmentStats].filter(d => d.employeesCount > 0).sort((a, b) => b.trainingCompletionRate - a.trainingCompletionRate);
     const mostImprovedDept = sortedDeptsByCompletion.length > 0 ? sortedDeptsByCompletion[0].name : 'Engineering';
 
@@ -224,7 +224,7 @@ export async function GET(request: Request) {
       ]
     };
 
-    // 10. Load schedule and history lists
+    
     const fileData = readDataFile();
 
     return NextResponse.json({

@@ -6,7 +6,7 @@ export async function POST(request: Request) {
     const body = await request.json();
     const { logId } = body;
 
-    // Reject password data payloads explicitly if sent
+    
     if (body.password || body.credentials) {
       console.warn("Security Alert: Credential payload rejected from simulation log submission");
     }
@@ -24,14 +24,14 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Simulation log reference not found' }, { status: 404 });
     }
 
-    // Only update if it hasn't been submitted yet
+    
     if (!log.submittedAt) {
       await prisma.campaignLog.update({
         where: { id: logId },
         data: { submittedAt: new Date() }
       });
 
-      // Deduct score for failing credential entry (heavy penalty)
+      
       const newScore = Math.max(0, log.user.awarenessScore - 30);
       let newRisk = 'HIGH';
       if (newScore >= 80) newRisk = 'LOW';

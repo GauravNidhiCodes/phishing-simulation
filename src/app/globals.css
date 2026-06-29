@@ -1,56 +1,52 @@
 @import "tailwindcss";
 
-/* ============================================================
-   Pinkman Protects — Design System
-   A calm, editorial, enterprise-grade dark surface.
-   Near-black canvas, neutral grays, a single restrained green.
-   ============================================================ */
+
 
 @theme {
-  /* Surfaces ------------------------------------------------ */
-  --color-canvas: #0a0a0a;        /* page background, almost black */
-  --color-surface: #0c0c0d;       /* sidebar / chrome */
-  --color-card: #131314;          /* default card */
-  --color-card-hover: #18181a;    /* card on hover */
-  --color-elevated: #1c1c1f;      /* popovers, menus, tooltips */
-  --color-inset: #0e0e0f;         /* inputs, wells */
+  
+  --color-canvas: #0a0a0a;        
+  --color-surface: #0c0c0d;       
+  --color-card: #131314;          
+  --color-card-hover: #18181a;    
+  --color-elevated: #1c1c1f;      
+  --color-inset: #0e0e0f;         
 
-  /* Lines -------------------------------------------------- */
-  --color-line: #1f1f22;          /* hairline borders */
-  --color-line-strong: #2b2b30;   /* hover / emphasised borders */
+  
+  --color-line: #1f1f22;          
+  --color-line-strong: #2b2b30;   
 
-  /* Ink ---------------------------------------------------- */
-  --color-ink: #f4f4f5;           /* primary text */
-  --color-ink-soft: #a1a1aa;      /* secondary text */
-  --color-ink-faint: #6b6b73;     /* tertiary / labels */
+  
+  --color-ink: #f4f4f5;           
+  --color-ink-soft: #a1a1aa;      
+  --color-ink-faint: #6b6b73;     
 
-  /* Accent — used sparingly -------------------------------- */
+  
   --color-accent: #3ecf8e;
   --color-accent-strong: #2fb87c;
   --color-accent-faint: #16291f;
 
-  /* Functional (quiet, not neon) --------------------------- */
+  
   --color-danger: #f06b6b;
   --color-danger-faint: #2a1717;
   --color-warn: #e0b341;
   --color-warn-faint: #2a2414;
   --color-info: #6b9bf0;
 
-  /* Type --------------------------------------------------- */
+  
   --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, "SF Mono", Menlo, monospace;
 
-  /* Radius ------------------------------------------------- */
+  
   --radius-xs: 6px;
   --radius-sm: 8px;
   --radius-md: 10px;
   --radius-lg: 14px;
   --radius-xl: 18px;
 
-  /* Easing ------------------------------------------------- */
+  
   --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
 
-  /* Elevation — restrained, layered, never heavy ----------- */
+  
   --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.02);
   --shadow-float: 0 2px 6px -2px rgba(0, 0, 0, 0.4), 0 14px 36px -16px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.03);
   --shadow-pop: 0 8px 24px -8px rgba(0, 0, 0, 0.5), 0 24px 64px -20px rgba(0, 0, 0, 0.7);
@@ -81,7 +77,7 @@ body {
   overflow-x: hidden;
 }
 
-/* Headings wrap gracefully, never leaving a lonely orphan --- */
+
 h1, h2, h3 {
   text-wrap: balance;
 }
@@ -89,13 +85,13 @@ p {
   text-wrap: pretty;
 }
 
-/* Selection ------------------------------------------------ */
+
 ::selection {
   background: rgba(62, 207, 142, 0.22);
   color: #ffffff;
 }
 
-/* Scrollbar ------------------------------------------------ */
+
 ::-webkit-scrollbar {
   width: 10px;
   height: 10px;
@@ -119,7 +115,7 @@ p {
   border-width: 1px;
 }
 
-/* Focus ring ----------------------------------------------- */
+
 .focus-ring:focus-visible,
 input:focus-visible,
 textarea:focus-visible,
@@ -132,7 +128,7 @@ a:focus-visible {
   box-shadow: 0 0 0 1.5px var(--color-canvas), 0 0 0 3px rgba(62, 207, 142, 0.5);
 }
 
-/* Eyebrow label (replaces the old all-mono shouting) ------- */
+
 .eyebrow {
   font-size: 11px;
   font-weight: 600;
@@ -141,13 +137,13 @@ a:focus-visible {
   color: var(--color-ink-faint);
 }
 
-/* Numeric / tabular figures -------------------------------- */
+
 .tnum {
   font-variant-numeric: tabular-nums;
   letter-spacing: -0.02em;
 }
 
-/* Hairline grid background for hero / empty canvases ------- */
+
 .bg-grid {
   background-image:
     linear-gradient(to right, rgba(255, 255, 255, 0.025) 1px, transparent 1px),
@@ -159,13 +155,13 @@ a:focus-visible {
   background-size: 22px 22px;
 }
 
-/* Radial fade mask helper ---------------------------------- */
+
 .mask-fade-b {
   -webkit-mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
   mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
 }
 
-/* Skeleton shimmer ----------------------------------------- */
+
 @keyframes pp-shimmer {
   0% { background-position: -200% 0; }
   100% { background-position: 200% 0; }
@@ -176,7 +172,7 @@ a:focus-visible {
   animation: pp-shimmer 1.6s ease-in-out infinite;
 }
 
-/* Subtle entrance for non-Framer content ------------------- */
+
 @keyframes pp-rise {
   from { opacity: 0; transform: translateY(6px); }
   to { opacity: 1; transform: translateY(0); }
@@ -185,7 +181,7 @@ a:focus-visible {
   animation: pp-rise 0.5s var(--ease-out-soft) both;
 }
 
-/* Respect reduced motion ----------------------------------- */
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

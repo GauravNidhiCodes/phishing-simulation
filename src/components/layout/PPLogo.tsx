@@ -4,15 +4,11 @@ import { cn } from "@/lib/utils";
 interface PPLogoProps {
   size?: number;
   className?: string;
-  /** Render only the white monogram with no tile (for bare contexts). */
+  
   bare?: boolean;
 }
 
-/**
- * Pinkman Protects — the PP monogram.
- * Two upright P's fused through a ligature (the first bowl meets the second
- * stem) into one balanced, geometric mark with a single consistent weight.
- */
+
 export const PPLogo: React.FC<PPLogoProps> = ({
   size = 24,
   className = "",

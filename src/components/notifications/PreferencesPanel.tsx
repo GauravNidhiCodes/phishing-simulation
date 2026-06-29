@@ -74,7 +74,7 @@ export default function PreferencesPanel() {
       <form onSubmit={handleSave} className="space-y-6">
         <CardHeader title="Notification preferences" description="Decide what reaches you and where." />
 
-        {/* Channels */}
+        {}
         <div className="space-y-3">
           <p className="eyebrow">How you hear from us</p>
           <div className="grid gap-3 sm:grid-cols-2">
@@ -83,7 +83,7 @@ export default function PreferencesPanel() {
           </div>
         </div>
 
-        {/* Categories */}
+        {}
         <div className="space-y-3">
           <p className="eyebrow">What you want to know about</p>
           <div className="divide-y divide-line overflow-hidden rounded-[12px] border border-line">

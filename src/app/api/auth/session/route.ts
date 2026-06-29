@@ -59,18 +59,18 @@ export async function POST(request: Request) {
     const body = await request.json();
     const { actionType } = body;
 
-    // Switch Organization
+    
     if (actionType === 'switchOrg') {
       const { targetOrgName } = body;
       if (!targetOrgName) {
         return NextResponse.json({ error: 'Organization name is required' }, { status: 400 });
       }
 
-      // Update session organization details
+      
       userSession.orgName = targetOrgName;
       const sessionString = Buffer.from(JSON.stringify(userSession)).toString('base64');
 
-      // Log organization switch event
+      
       const auditData = readJson(AUDIT_FILE, []);
       auditData.unshift({
         id: `AUDIT-${Math.floor(Math.random() * 9000) + 1000}`,
@@ -91,7 +91,7 @@ export async function POST(request: Request) {
       return response;
     }
 
-    // Change Password
+    
     if (actionType === 'changePassword') {
       const { currentPassword, newPassword } = body;
       if (!currentPassword || !newPassword) {
@@ -106,7 +106,7 @@ export async function POST(request: Request) {
         return NextResponse.json({ error: 'Incorrect current password' }, { status: 400 });
       }
 
-      // Update password
+      
       passwordsData[emailLower] = {
         password: newPassword,
         failedAttempts: 0,
@@ -114,7 +114,7 @@ export async function POST(request: Request) {
       };
       writeJson(PASSWORDS_FILE, passwordsData);
 
-      // Log password change event
+      
       const auditData = readJson(AUDIT_FILE, []);
       auditData.unshift({
         id: `AUDIT-${Math.floor(Math.random() * 9000) + 1000}`,

@@ -16,9 +16,9 @@ import Tilt from "@/components/landing/Tilt";
 import Magnetic from "@/components/landing/Magnetic";
 import LivePreview from "@/components/landing/LivePreview";
 
-/* -------------------------------------------------------------------------- */
-/*  Motion primitives                                                          */
-/* -------------------------------------------------------------------------- */
+
+
+
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
@@ -46,7 +46,7 @@ function Reveal({
   );
 }
 
-/** Wraps a visual and drifts it against the scroll for gentle parallax. */
+
 function Parallax({
   children,
   className,
@@ -69,11 +69,11 @@ function Parallax({
   );
 }
 
-/* -------------------------------------------------------------------------- */
-/*  Original product illustrations                                            */
-/* -------------------------------------------------------------------------- */
 
-/** A real-looking message in a reading pane, with the tells called out. */
+
+
+
+
 function PhishingScene() {
   return (
     <div className="relative [perspective:1600px]">
@@ -86,7 +86,7 @@ function PhishingScene() {
         whileHover={{ y: -4 }}
         className="group relative overflow-hidden rounded-[16px] border border-line bg-surface/85 shadow-pop backdrop-blur-xl transition-shadow duration-300 hover:shadow-[0_34px_90px_-32px_rgba(0,0,0,0.85)]"
       >
-        {/* action bar */}
+        {}
         <div className="flex items-center gap-3.5 border-b border-line/60 px-4 py-2.5 text-ink-faint">
           <ArrowLeft size={15} className="transition-colors group-hover:text-ink-soft" />
           <span className="h-4 w-px bg-line/70" />
@@ -97,7 +97,7 @@ function PhishingScene() {
           </span>
         </div>
 
-        {/* subject + labels */}
+        {}
         <div className="px-5 pt-5">
           <h4 className="text-[17px] font-semibold leading-snug tracking-[-0.01em] text-ink">
             Pending invoice approval — confirm by 6:00 PM today
@@ -108,7 +108,7 @@ function PhishingScene() {
           </div>
         </div>
 
-        {/* sender row */}
+        {}
         <div className="mt-4 flex items-center gap-3 px-5">
           <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-[#3a2a16] to-[#241808] text-[14px] font-semibold text-warn ring-1 ring-warn/20">
             A
@@ -128,7 +128,7 @@ function PhishingScene() {
           </div>
         </div>
 
-        {/* body */}
+        {}
         <div className="mt-5 space-y-4 px-5 pb-5">
           <p className="text-[13.5px] leading-relaxed text-ink-soft">
             Hi, a vendor payment of <span className="text-ink">₹2,48,500</span> is
@@ -140,7 +140,7 @@ function PhishingScene() {
             <ArrowRight size={13} />
           </span>
 
-          {/* attachment */}
+          {}
           <div className="flex items-center gap-3 rounded-[10px] border border-line/70 bg-inset/60 px-3 py-2.5 transition-colors hover:border-line-strong hover:bg-inset">
             <div className="flex h-9 w-9 items-center justify-center rounded-[7px] bg-danger-faint text-danger">
               <FileText size={16} />
@@ -157,7 +157,7 @@ function PhishingScene() {
           </p>
         </div>
 
-        {/* annotations — placed off-grid, overlapping content */}
+        {}
         <motion.div
           initial={{ opacity: 0, x: 14, y: -4 }}
           whileInView={{ opacity: 1, x: 0, y: 0 }}
@@ -181,7 +181,7 @@ function PhishingScene() {
   );
 }
 
-/** The lesson someone sees the moment after they click. */
+
 function LessonScene() {
   return (
     <div className="relative [perspective:1600px]">
@@ -193,7 +193,7 @@ function LessonScene() {
         transition={{ duration: 1, ease: EASE }}
         className="relative overflow-hidden rounded-[14px] border border-line bg-surface shadow-pop"
       >
-        {/* lesson chrome with progress */}
+        {}
         <div className="flex items-center justify-between border-b border-line/70 px-5 py-3">
           <span className="text-[11.5px] font-medium text-ink-soft">Quick lesson</span>
           <div className="flex items-center gap-2">
@@ -207,7 +207,7 @@ function LessonScene() {
         </div>
 
         <div className="px-5 py-5">
-          {/* the lure they just clicked, quoted back */}
+          {}
           <div className="rounded-[9px] border-l-2 border-danger/60 bg-[#161011] px-3.5 py-2.5">
             <p className="text-[11px] uppercase tracking-[0.08em] text-ink-faint">
               The email you opened
@@ -255,7 +255,7 @@ function LessonScene() {
   );
 }
 
-/** A risk report — by team, with the trend and a short table. */
+
 function AnalyticsScene() {
   const bars = [38, 54, 47, 66, 59, 74, 71, 88, 84, 93];
   const teams = [
@@ -309,7 +309,7 @@ function AnalyticsScene() {
           ))}
         </div>
 
-        {/* the table — by team, real columns */}
+        {}
         <div className="mt-4 border-t border-line/70">
           <div className="flex items-center gap-3 px-5 py-2 text-[10.5px] uppercase tracking-[0.08em] text-ink-faint">
             <span className="flex-1">Team</span>
@@ -340,9 +340,9 @@ function AnalyticsScene() {
   );
 }
 
-/* -------------------------------------------------------------------------- */
-/*  Section scaffolds                                                          */
-/* -------------------------------------------------------------------------- */
+
+
+
 
 const acts = [
   {
@@ -455,9 +455,9 @@ const plans = [
   },
 ];
 
-/* -------------------------------------------------------------------------- */
-/*  Page                                                                       */
-/* -------------------------------------------------------------------------- */
+
+
+
 
 export default function Home() {
   const rootRef = useRef<HTMLDivElement>(null);
@@ -470,11 +470,11 @@ export default function Home() {
     >
       <SmoothScroll />
 
-      {/* One continuous wire, threaded through the whole page */}
+      {}
       <FishingLine containerRef={rootRef} />
 
       <div className="relative z-10">
-      {/* Nav */}
+      {}
       <motion.header
         initial={{ y: -16, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
@@ -508,9 +508,9 @@ export default function Home() {
         </div>
       </motion.header>
 
-      {/* Hero */}
+      {}
       <section ref={heroRef} className="relative px-6 pt-44 sm:pt-52">
-        {/* the rod the wire is cast from — its tip is the wire's origin */}
+        {}
         <FishingRod />
         <div className="bg-grid pointer-events-none absolute inset-x-0 top-0 h-[820px] opacity-[0.35] [mask-image:radial-gradient(ellipse_at_top,black,transparent_70%)]" />
         <div className="relative mx-auto max-w-5xl text-center">
@@ -546,7 +546,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Built for — honest segments and cities, no fabricated logos */}
+      {}
       <section className="px-6 py-24 sm:py-32">
         <LineAnchor x={470} sway={1} />
         <Reveal>
@@ -572,7 +572,7 @@ export default function Home() {
         </Reveal>
       </section>
 
-      {/* Statement — break rhythm, big centered editorial */}
+      {}
       <section className="relative px-6 py-12 sm:py-24">
         <LineAnchor x={250} sway={1.3} />
         <div className="mx-auto max-w-4xl text-center">
@@ -591,7 +591,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* How it works — broken grid, uneven spans, offset visuals */}
+      {}
       <section id="how" className="px-6 py-16 sm:py-24">
         <div className="mx-auto flex max-w-6xl flex-col gap-28 sm:gap-y-44">
           {acts.map((act, idx) => {
@@ -626,7 +626,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Platform capabilities — heading anchored left, uneven column of details */}
+      {}
       <section id="platform" className="px-6 py-24 sm:py-32">
         <LineAnchor x={360} sway={1.2} />
         <div className="mx-auto grid max-w-6xl gap-x-10 gap-y-14 lg:grid-cols-12">
@@ -673,7 +673,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Metrics — three numbers that mean something, divided cleanly */}
+      {}
       <section className="px-6 py-24 sm:py-32">
         <LineAnchor x={630} sway={1.2} ring />
         <div className="mx-auto grid max-w-5xl grid-cols-1 gap-y-12 sm:grid-cols-3 sm:gap-y-0">
@@ -698,7 +698,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Pricing */}
+      {}
       <section id="pricing" className="px-6 py-24 sm:py-28">
         <LineAnchor x={430} sway={1} />
         <div className="mx-auto max-w-6xl">
@@ -776,7 +776,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Closing CTA */}
+      {}
       <section className="relative px-6 py-32 sm:py-44">
         <div className="pointer-events-none absolute left-1/2 top-1/2 h-[460px] w-[860px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent/[0.07] blur-[160px]" />
         <div className="relative mx-auto max-w-3xl text-center">
@@ -805,12 +805,12 @@ export default function Home() {
         </div>
       </section>
 
-      {/* The end of the line */}
+      {}
       <section className="relative flex min-h-[90vh] flex-col items-center justify-start px-6 pb-44 pt-16">
         <HookedFish />
       </section>
 
-      {/* Footer */}
+      {}
       <footer className="border-t border-line px-6 py-14">
         <div className="mx-auto flex max-w-6xl flex-col gap-10 sm:flex-row sm:items-start sm:justify-between">
           <div className="max-w-xs">

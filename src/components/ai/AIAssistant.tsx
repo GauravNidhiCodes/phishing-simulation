@@ -186,7 +186,7 @@ export default function AIAssistant() {
 
   return (
     <>
-      {/* Floating toggle */}
+      {}
       <div className="fixed bottom-6 right-6 z-[55]">
         <motion.button
           whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
@@ -217,7 +217,7 @@ export default function AIAssistant() {
               isMaximized ? "h-[80vh] w-[85vw] md:w-[60vw]" : "h-[70vh] w-[92vw] sm:h-[600px] sm:w-[420px]"
             )}
           >
-            {/* Header */}
+            {}
             <div className="flex items-center justify-between border-b border-line px-5 py-4">
               <div className="flex items-center gap-3">
                 <span className="flex h-9 w-9 items-center justify-center rounded-[10px] border border-accent/25 bg-accent-faint text-accent"><Sparkles size={16} /></span>
@@ -232,7 +232,7 @@ export default function AIAssistant() {
               </div>
             </div>
 
-            {/* Tabs */}
+            {}
             <div className="flex border-b border-line px-2">
               {([["chat", "Chat"], ["knowledge_base", "Threat library"]] as const).map(([id, label]) => (
                 <button key={id} onClick={() => { setActiveTab(id); if (id === "chat") setSelectedKbTopic(null); }} className={cn("relative px-4 py-3 text-[13px] font-medium transition-colors", activeTab === id ? "text-ink" : "text-ink-faint hover:text-ink-soft")}>
@@ -244,7 +244,7 @@ export default function AIAssistant() {
 
             {activeTab === "chat" && (
               <>
-                {/* Quick actions */}
+                {}
                 <div className="scrollbar-none flex gap-2 overflow-x-auto border-b border-line px-4 py-2.5">
                   {quickActions.map((qa, idx) => (
                     <button key={idx} onClick={qa.action} className="flex shrink-0 items-center gap-1.5 rounded-full border border-line bg-inset px-3 py-1.5 text-[12px] font-medium text-ink-soft transition-colors hover:border-line-strong hover:text-ink">
@@ -253,7 +253,7 @@ export default function AIAssistant() {
                   ))}
                 </div>
 
-                {/* Messages */}
+                {}
                 <div className="scrollbar-thin flex-1 space-y-4 overflow-y-auto p-4">
                   {messages.map((msg) => (
                     <motion.div key={msg.id} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className={cn("flex", msg.sender === "user" ? "justify-end" : "justify-start")}>
@@ -272,7 +272,7 @@ export default function AIAssistant() {
                   <div ref={messagesEndRef} />
                 </div>
 
-                {/* Suggestions */}
+                {}
                 <div className="space-y-2 border-t border-line px-4 py-2.5">
                   <div className="flex items-center justify-between text-[11px] uppercase tracking-[0.06em] text-ink-faint">
                     <span>Try asking</span>
@@ -285,7 +285,7 @@ export default function AIAssistant() {
                   </div>
                 </div>
 
-                {/* Input */}
+                {}
                 <form onSubmit={(e) => { e.preventDefault(); handleSend(input); }} className="flex gap-2 border-t border-line p-3">
                   <input type="text" value={input} onChange={(e) => setInput(e.target.value)} placeholder="Ask the assistant…" className="focus-ring h-10 flex-1 rounded-[10px] border border-line bg-inset px-3.5 text-[13px] text-ink placeholder:text-ink-faint" />
                   <button type="submit" disabled={!input.trim()} className="focus-ring flex h-10 w-10 items-center justify-center rounded-[10px] bg-accent text-black transition-opacity hover:opacity-90 disabled:opacity-40"><Send size={15} /></button>

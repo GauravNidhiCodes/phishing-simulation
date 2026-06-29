@@ -10,13 +10,7 @@ import {
   useReducedMotion,
 } from "framer-motion";
 
-/**
- * Turns a flat element into a physical object: it sits on a perspective plane
- * and rotates a few degrees toward the cursor, with a soft specular highlight
- * that slides across its surface as it moves. Rotation is capped low (default
- * 3°) so it reads as weight and presence, never a gimmick. Falls back to a
- * plain container for reduced motion and touch.
- */
+
 export default function Tilt({
   children,
   className,
@@ -28,7 +22,7 @@ export default function Tilt({
   className?: string;
   max?: number;
   glare?: boolean;
-  lift?: number; // px of translateZ-style lift on hover
+  lift?: number; 
 }) {
   const reduce = useReducedMotion();
   const ref = useRef<HTMLDivElement>(null);

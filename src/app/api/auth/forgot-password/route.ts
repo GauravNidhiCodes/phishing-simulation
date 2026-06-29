@@ -31,7 +31,7 @@ export async function POST(request: Request) {
 
     const emailLower = email.toLowerCase().trim();
 
-    // Check if user exists in SQLite DB
+    
     const user = await prisma.user.findUnique({
       where: { email: emailLower }
     });
@@ -42,7 +42,7 @@ export async function POST(request: Request) {
 
     const mockToken = `RST-${Math.random().toString(36).substring(2, 10).toUpperCase()}`;
 
-    // Write audit event
+    
     const auditData = readJson(AUDIT_FILE, []);
     auditData.unshift({
       id: `AUDIT-${Math.floor(Math.random() * 9000) + 1000}`,

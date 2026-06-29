@@ -20,7 +20,7 @@ model Organization {
 model VerifiedDomain {
   id             String       @id @default(uuid())
   domain         String       @unique
-  txtRecordKey   String       // key that must be set in DNS
+  txtRecordKey   String       
   isVerified     Boolean      @default(false)
   organizationId String
   organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
@@ -31,33 +31,33 @@ model User {
   id             String         @id @default(uuid())
   email          String         @unique
   name           String?
-  role           String         @default("EMPLOYEE") // SUPERADMIN, ORG_ADMIN, EMPLOYEE
+  role           String         @default("EMPLOYEE") 
   department     String?
-  branch         String?        // e.g. Pune, Bengaluru, Hyderabad, Mumbai, Delhi, Chennai, Kolkata
+  branch         String?        
   managerName    String?
   joiningDate    DateTime?
   organizationId String
   organization   Organization   @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   campaignLogs   CampaignLog[]
   quizProgress   QuizProgress[]
-  awarenessScore Int            @default(100) // 0 - 100 rating
-  riskCategory   String         @default("LOW") // LOW, MEDIUM, HIGH
+  awarenessScore Int            @default(100) 
+  riskCategory   String         @default("LOW") 
   createdAt      DateTime       @default(now())
 }
 
 model Campaign {
   id               String         @id @default(uuid())
   name             String
-  status           String         @default("DRAFT") // DRAFT, SCHEDULED, ACTIVE, COMPLETED
+  status           String         @default("DRAFT") 
   templateId       String
   template         EmailTemplate  @relation(fields: [templateId], references: [id])
   organizationId   String
   organization     Organization   @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   description      String?
-  category         String?        // Password Reset, HR Notice, IT Support, Finance, Compliance, Festival Awareness
-  riskLevel        String?        @default("MEDIUM") // LOW, MEDIUM, HIGH
-  branches         String?        // serialized JSON of branches targeted
-  departments      String?        // serialized JSON of departments targeted
+  category         String?        
+  riskLevel        String?        @default("MEDIUM") 
+  branches         String?        
+  departments      String?        
   organizationName String?
   scheduledStart   DateTime?
   startedAt        DateTime?
@@ -71,9 +71,9 @@ model EmailTemplate {
   name           String
   subject        String
   bodyHtml       String
-  indicators     String        // serialized JSON of security indicators
+  indicators     String        
   campaigns      Campaign[]
-  organizationId String?       // Null for global pre-built library templates
+  organizationId String?       
   organization   Organization? @relation(fields: [organizationId], references: [id])
   createdAt      DateTime      @default(now())
 }
@@ -87,7 +87,7 @@ model CampaignLog {
   deliveredAt DateTime?
   openedAt    DateTime?
   clickedAt   DateTime?
-  submittedAt DateTime? // form interaction tracking (no credentials recorded)
+  submittedAt DateTime? 
   createdAt   DateTime  @default(now())
 }
 
@@ -106,8 +106,8 @@ model QuizQuestion {
   moduleId  String
   module    TrainingModule @relation(fields: [moduleId], references: [id], onDelete: Cascade)
   question  String
-  options   String         // serialized JSON array of choices
-  correct   Int            // Index of correct option
+  options   String         
+  correct   Int            
 }
 
 model QuizProgress {

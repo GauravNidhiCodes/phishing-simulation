@@ -7,11 +7,7 @@ export type ClassValue =
   | undefined
   | ClassValue[];
 
-/**
- * Minimal, dependency-free className joiner.
- * Later classes win naturally because they appear later in the string,
- * which is sufficient for our controlled component API.
- */
+
 export function cn(...inputs: ClassValue[]): string {
   const out: string[] = [];
   const walk = (v: ClassValue) => {
@@ -37,7 +33,7 @@ export function initials(name?: string | null): string {
     .toUpperCase();
 }
 
-/** Compact relative time, e.g. "2m ago", "3h ago", "Apr 12". */
+
 export function timeAgo(input: string | number | Date): string {
   const date = new Date(input);
   const diff = Date.now() - date.getTime();

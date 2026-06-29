@@ -57,7 +57,7 @@ export async function DELETE(
   try {
     const { id } = await params;
 
-    // Check if template is used by any campaign
+    
     const campaignCount = await prisma.campaign.count({
       where: { templateId: id }
     });

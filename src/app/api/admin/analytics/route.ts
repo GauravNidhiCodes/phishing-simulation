@@ -11,13 +11,13 @@ export async function GET(request: Request) {
     const campaignId = searchParams.get('campaignId') || 'ALL';
     const riskLevel = searchParams.get('riskLevel') || 'ALL';
 
-    // 1. Fetch organization
+    
     const org = await prisma.organization.findFirst();
     if (!org) {
       return NextResponse.json({ error: 'Organization not found' }, { status: 404 });
     }
 
-    // 2. Fetch all collections
+    
     const users = await prisma.user.findMany({
       where: { role: 'EMPLOYEE', organizationId: org.id }
     });
@@ -39,7 +39,7 @@ export async function GET(request: Request) {
     const quizProgress = await prisma.quizProgress.findMany({});
     const trainingModules = await prisma.trainingModule.findMany({});
 
-    // 3. Filter employees (Users) based on criteria
+    
     let filteredUsers = users;
     if (department !== 'ALL') {
       filteredUsers = filteredUsers.filter(u => u.department === department);
@@ -59,7 +59,7 @@ export async function GET(request: Request) {
 
     const filteredUserIds = new Set(filteredUsers.map(u => u.id));
 
-    // 4. Filter Logs
+    
     let filteredLogs = campaignLogs.filter(log => filteredUserIds.has(log.userId));
     if (campaignId !== 'ALL') {
       filteredLogs = filteredLogs.filter(log => log.campaignId === campaignId);
@@ -77,17 +77,17 @@ export async function GET(request: Request) {
       }
     }
 
-    // 5. Aggregate 12 Executive KPIs
+    
     const totalEmployees = filteredUsers.length;
     
-    // Overall security awareness score
+    
     const avgScore = totalEmployees > 0
       ? Math.round(filteredUsers.reduce((sum, u) => sum + u.awarenessScore, 0) / totalEmployees)
       : 100;
 
     const activeCampaigns = campaigns.filter(c => c.status === 'ACTIVE').length;
 
-    // Rates calculations
+    
     const totalDelivered = filteredLogs.filter(l => l.deliveredAt).length;
     const totalOpened = filteredLogs.filter(l => l.openedAt).length;
     const totalClicked = filteredLogs.filter(l => l.clickedAt).length;
@@ -113,7 +113,7 @@ export async function GET(request: Request) {
       ? Math.round((totalSubmitted / totalDelivered) * 100)
       : 0;
 
-    // Training completion rate
+    
     const totalModulesCount = trainingModules.length || 1;
     const completedQuizCount = quizProgress.filter(qp => filteredUserIds.has(qp.userId) && qp.completed).length;
     const trainingCompletionRate = totalEmployees > 0
@@ -124,7 +124,7 @@ export async function GET(request: Request) {
     const mediumRiskEmployees = filteredUsers.filter(u => u.riskCategory === 'MEDIUM').length;
     const lowRiskEmployees = filteredUsers.filter(u => u.riskCategory === 'LOW').length;
 
-    // 6. Generate 6-month historical window datasets
+    
     const months = [];
     const currentDate = new Date();
     for (let i = 5; i >= 0; i--) {
@@ -136,9 +136,9 @@ export async function GET(request: Request) {
       });
     }
 
-    // Monthly Awareness Growth
+    
     const monthlyAwarenessGrowth = months.map((m, idx) => {
-      // Create growing trend ending at current avgScore
+      
       const growthOffset = (5 - idx) * 2.8;
       const scoreVal = Math.min(100, Math.max(30, Math.round(avgScore - growthOffset + (idx * 0.4))));
       return {
@@ -147,7 +147,7 @@ export async function GET(request: Request) {
       };
     });
 
-    // Campaign Performance Trend
+    
     const campaignPerformanceTrend = campaigns
       .filter(c => c.status === 'COMPLETED' || c.status === 'ACTIVE')
       .map(c => {
@@ -169,7 +169,7 @@ export async function GET(request: Request) {
         };
       });
 
-    // Employee Engagement Trend
+    
     const employeeEngagementTrend = months.map(m => {
       const monthLogs = filteredLogs.filter(log => {
         const logDate = new Date(log.createdAt);
@@ -184,7 +184,7 @@ export async function GET(request: Request) {
       };
     });
 
-    // Department Comparison
+    
     const departmentsList = ['Engineering', 'HR', 'Finance', 'Sales', 'Marketing', 'IT Support', 'Operations'];
     const departmentComparison = departmentsList.map(dept => {
       const deptUsers = filteredUsers.filter(u => u.department === dept);
@@ -212,7 +212,7 @@ export async function GET(request: Request) {
       };
     });
 
-    // Branch Comparison
+    
     const branchesList = ['Pune', 'Bengaluru', 'Hyderabad', 'Mumbai', 'Delhi', 'Chennai', 'Kolkata'];
     const branchComparison = branchesList.map(br => {
       const brUsers = filteredUsers.filter(u => u.branch === br);
@@ -240,17 +240,17 @@ export async function GET(request: Request) {
       };
     });
 
-    // Risk Distribution
+    
     const riskDistribution = [
       { name: 'Low Risk', value: lowRiskEmployees, color: '#00D26A' },
       { name: 'Medium Risk', value: mediumRiskEmployees, color: '#2ECC71' },
       { name: 'High Risk', value: highRiskEmployees, color: '#00FF88' },
     ];
 
-    // Security Score Trend
+    
     const securityScoreTrend = monthlyAwarenessGrowth;
 
-    // Campaign Funnel
+    
     const campaignFunnel = [
       { stage: 'Delivered', count: totalDelivered, fill: '#ffffff' },
       { stage: 'Opened', count: totalOpened, fill: '#a8a8a8' },
@@ -258,7 +258,7 @@ export async function GET(request: Request) {
       { stage: 'Form Submitted', count: totalSubmitted, fill: '#00FF88' },
     ];
 
-    // Monthly Compliance Trend
+    
     const monthlyComplianceTrend = months.map((m, idx) => {
       const baseComp = 65 + (idx * 4.5);
       return {
@@ -267,7 +267,7 @@ export async function GET(request: Request) {
       };
     });
 
-    // 7. Calculate Dynamic AI insights
+    
     const activeDepts = departmentComparison.filter(d => d.employees > 0);
     const highestRiskDeptObj = activeDepts.length > 0
       ? [...activeDepts].sort((a, b) => a.awarenessScore - b.awarenessScore || b.clickRate - a.clickRate)[0]
@@ -280,7 +280,7 @@ export async function GET(request: Request) {
       : null;
     const bestPerformingBranch = bestPerformingBranchObj ? bestPerformingBranchObj.name : 'N/A';
 
-    // Calculate awareness improvement comparing last month vs first month in growth trend
+    
     const awarenessImprovement = monthlyAwarenessGrowth.length > 1
       ? Math.max(0.1, Number((monthlyAwarenessGrowth[monthlyAwarenessGrowth.length - 1].score - monthlyAwarenessGrowth[0].score).toFixed(1)))
       : 0;

@@ -3,11 +3,7 @@
 import React, { useRef } from "react";
 import { motion, useMotionValue, useSpring, useReducedMotion } from "framer-motion";
 
-/**
- * A quiet magnetic pull. The wrapped element eases toward the cursor while
- * hovered and springs back on leave — smooth interpolation, no snapping. Used
- * on navigation so it feels like premium hardware responding to your hand.
- */
+
 export default function Magnetic({
   children,
   strength = 0.35,

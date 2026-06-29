@@ -1,13 +1,6 @@
 export type Pt = { x: number; y: number };
 
-/**
- * Builds a smooth, continuous SVG path through a set of waypoints using a
- * Catmull-Rom spline converted to cubic béziers. Unlike a mechanical sine
- * wave, the curve only bends where the waypoints ask it to — so the line reads
- * as something hand-routed down the page rather than a templated animation.
- *
- * `tension` controls how relaxed the curve is between points (1 = natural).
- */
+
 export function smoothPath(points: Pt[], tension = 1): string {
   if (points.length < 2) return "";
 

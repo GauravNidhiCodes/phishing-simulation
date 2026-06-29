@@ -25,7 +25,7 @@ function writeJson(filePath: string, data: any) {
   }
 }
 
-// Helper to decode user session from cookie
+
 function getSessionUser(request: Request) {
   try {
     const cookieHeader = request.headers.get('cookie') || '';
@@ -46,7 +46,7 @@ export async function GET(request: Request) {
   try {
     const settings = readJson(SETTINGS_FILE, {});
     
-    // Sync organization name from DB if available
+    
     const dbOrg = await prisma.organization.findFirst();
     if (dbOrg && settings.profile) {
       settings.profile.name = dbOrg.name;
@@ -63,10 +63,10 @@ export async function POST(request: Request) {
     const userSession = getSessionUser(request);
     const body = await request.json();
     
-    // Write new settings to JSON
+    
     writeJson(SETTINGS_FILE, body);
 
-    // Sync organization name to database
+    
     if (body.profile && body.profile.name) {
       const dbOrg = await prisma.organization.findFirst();
       if (dbOrg) {
@@ -81,7 +81,7 @@ export async function POST(request: Request) {
       }
     }
 
-    // Add Audit Log entry
+    
     const userEmail = userSession?.email || 'superadmin@company.in';
     const userBranch = userSession?.branch || 'Pune';
     const auditData = readJson(AUDIT_FILE, []);

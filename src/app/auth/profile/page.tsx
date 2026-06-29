@@ -243,7 +243,7 @@ export default function ProfilePage() {
 
         <div className="grid items-start gap-6 md:grid-cols-12">
           <div className="space-y-6 md:col-span-7">
-            {/* Identity */}
+            {}
             <div className="rounded-[14px] border border-line bg-card p-6">
               <div className="flex items-center gap-4">
                 <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-[12px] border border-line bg-elevated text-[18px] font-semibold text-ink">
@@ -275,7 +275,7 @@ export default function ProfilePage() {
               </div>
             </div>
 
-            {/* Org switcher */}
+            {}
             <Panel icon={<Building2 size={16} />} title="Active organization">
               <p className="mb-4 text-[13px] leading-relaxed text-ink-soft">
                 Switch the tenant you're working in. Useful for super admins
@@ -325,7 +325,6 @@ export default function ProfilePage() {
               </div>
             </Panel>
 
-            {/* Audit log */}
             <Panel icon={<History size={16} />} title="Recent account activity">
               <div className="scrollbar-thin max-h-[280px] space-y-2 overflow-y-auto pr-1">
                 {auditLogs.length === 0 && (
@@ -362,7 +361,6 @@ export default function ProfilePage() {
             </Panel>
           </div>
 
-          {/* Right column */}
           <div className="space-y-6 md:col-span-5">
             <Panel icon={<Key size={16} />} title="Change password">
               <form onSubmit={handleChangePassword} className="space-y-4">

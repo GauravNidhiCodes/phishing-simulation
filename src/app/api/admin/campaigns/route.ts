@@ -35,12 +35,12 @@ export async function POST(request: Request) {
       organizationName,
       templateId, 
       scheduledStart, 
-      targetDepartments, // array of strings
-      targetBranches,    // array of strings
-      targetUserIds      // array of strings
+      targetDepartments, 
+      targetBranches,    
+      targetUserIds      
     } = body;
 
-    // Required fields validation
+    
     if (!name || !name.trim()) {
       return NextResponse.json({ error: 'Campaign Name is required' }, { status: 400 });
     }
@@ -65,7 +65,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'No organization tenant initialized' }, { status: 500 });
     }
 
-    // Duplicate campaign name check
+    
     const duplicate = await prisma.campaign.findFirst({
       where: {
         name: name.trim(),
@@ -76,7 +76,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'A campaign with this name already exists in your organization' }, { status: 400 });
     }
 
-    // Date/time validation
+    
     let scheduledDate: Date | null = null;
     if (scheduledStart) {
       scheduledDate = new Date(scheduledStart);
@@ -90,9 +90,9 @@ export async function POST(request: Request) {
       }
     }
 
-    // Resolve targeted employees
-    // If targetUserIds is specified explicitly, use it.
-    // Otherwise, filter dynamically by selected targetDepartments and/or targetBranches
+    
+    
+    
     const targetEmployees = await prisma.user.findMany({
       where: {
         role: 'EMPLOYEE',
@@ -111,12 +111,12 @@ export async function POST(request: Request) {
       }
     });
 
-    // Employee selection validation
+    
     if (targetEmployees.length === 0) {
       return NextResponse.json({ error: 'Employee selection validation failed: No matching active employees found for the selected targets' }, { status: 400 });
     }
 
-    // Create the campaign in DRAFT or SCHEDULED
+    
     const initialStatus = scheduledDate ? 'SCHEDULED' : 'DRAFT';
 
     const campaign = await prisma.campaign.create({
@@ -138,7 +138,7 @@ export async function POST(request: Request) {
       }
     });
 
-    // Initialize logs for targeted users
+    
     for (const emp of targetEmployees) {
       await prisma.campaignLog.create({
         data: {
@@ -154,7 +154,7 @@ export async function POST(request: Request) {
   }
 }
 
-// Support updating campaign status (e.g. starting a draft, completing it)
+
 export async function PATCH(request: Request) {
   try {
     const body = await request.json();
@@ -180,7 +180,7 @@ export async function PATCH(request: Request) {
       }
     });
 
-    // If starting a campaign, let's populate deliveredAt stamps for the initialized logs
+    
     if (status === 'ACTIVE') {
       await prisma.campaignLog.updateMany({
         where: { campaignId: id },

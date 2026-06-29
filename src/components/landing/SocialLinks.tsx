@@ -51,10 +51,7 @@ const links = [
   { label: "Instagram", href: "https://instagram.com/_jesse_pinkman09", Icon: InstagramIcon },
 ];
 
-/**
- * Minimal, monochrome social row. Icons rest in muted grey and warm to white on
- * hover with a restrained scale and a soft (opacity-only) glow — never neon.
- */
+
 export default function SocialLinks({
   compact = false,
   className = "",
@@ -82,7 +79,7 @@ export default function SocialLinks({
             transition={{ duration: 0.25, ease: EASE }}
             className={`group relative flex ${sizing} cursor-pointer items-center justify-center rounded-full text-ink-faint transition-colors duration-[250ms] ease-out hover:text-ink focus-visible:text-ink focus-visible:outline-none`}
           >
-            {/* soft glow — opacity only */}
+            {}
             <span className="pointer-events-none absolute inset-0 rounded-full bg-white/10 opacity-0 blur-md transition-opacity duration-[250ms] group-hover:opacity-100 group-focus-visible:opacity-100" />
             <Icon className="relative" />
           </motion.a>

@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { motion, useInView } from "framer-motion";
 import { cn } from "@/lib/utils";
 
-/** Counts up to a number once it scrolls into view. Eased, no jitter. */
+
 export function Counter({
   value,
   decimals = 0,

@@ -5,9 +5,9 @@ import { motion, type HTMLMotionProps } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 interface CardProps extends HTMLMotionProps<"div"> {
-  /** Adds a gentle lift + border brighten on hover. */
+  
   interactive?: boolean;
-  /** Inset padding preset. */
+  
   pad?: "none" | "sm" | "md" | "lg";
 }
 

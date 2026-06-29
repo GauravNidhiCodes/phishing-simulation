@@ -12,7 +12,7 @@ export async function GET(request: Request) {
     }
 
     if (id) {
-      // Single employee details
+      
       const employee = await prisma.user.findUnique({
         where: { id, role: 'EMPLOYEE', organizationId: org.id }
       });
@@ -21,7 +21,7 @@ export async function GET(request: Request) {
         return NextResponse.json({ error: 'Employee not found' }, { status: 404 });
       }
 
-      // Simulation history logs
+      
       const campaignLogs = await prisma.campaignLog.findMany({
         where: { userId: id },
         include: {
@@ -34,7 +34,7 @@ export async function GET(request: Request) {
         orderBy: { createdAt: 'desc' }
       });
 
-      // Training progress logs
+      
       const quizProgress = await prisma.quizProgress.findMany({
         where: { userId: id },
         include: {
@@ -43,7 +43,7 @@ export async function GET(request: Request) {
         orderBy: { updatedAt: 'desc' }
       });
 
-      // All available modules (to build recommendation rules)
+      
       const allModules = await prisma.trainingModule.findMany();
 
       return NextResponse.json({
@@ -54,7 +54,7 @@ export async function GET(request: Request) {
       });
     }
 
-    // Default: list all employees and authorized domains
+    
     const employees = await prisma.user.findMany({
       where: { role: 'EMPLOYEE', organizationId: org.id },
       orderBy: { name: 'asc' }
@@ -86,7 +86,7 @@ export async function POST(request: Request) {
         return NextResponse.json({ error: 'Name and Email are required' }, { status: 400 });
       }
 
-      // Check if domain of email is verified
+      
       const emailDomain = email.split('@')[1];
       const verifiedDomain = await prisma.verifiedDomain.findFirst({
         where: { domain: emailDomain, isVerified: true, organizationId: org.id }
@@ -138,7 +138,7 @@ export async function POST(request: Request) {
   }
 }
 
-// Verification process
+
 export async function PATCH(request: Request) {
   try {
     const body = await request.json();
