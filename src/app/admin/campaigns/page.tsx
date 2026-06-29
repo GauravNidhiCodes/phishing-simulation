@@ -591,7 +591,7 @@ export default function CampaignsPage() {
 
               {/* Error Message */}
               {errorMsg && (
-                <div className="mb-4 p-3 rounded-xl bg-brand-rose/10 border border-brand-rose/20 text-[10px] text-brand-rose flex items-center gap-2 font-mono shrink-0">
+                <div className="mb-4 p-3 rounded-lg bg-[#0A0A0A] border border-[#1F1F1F] text-[10px] text-[#EF4444] flex items-center gap-2 font-mono shrink-0">
                   <AlertTriangle size={14} className="shrink-0" />
                   <span>{errorMsg}</span>
                 </div>
@@ -609,7 +609,7 @@ export default function CampaignsPage() {
                   >
                     <div className="space-y-2">
                       <h3 className="text-sm font-bold text-white tracking-tight flex items-center gap-2">
-                        <Folder size={14} className="text-brand-cyan" /> Campaign Details & Scope
+                        <Folder size={14} className="text-white" /> Campaign Details & Scope
                       </h3>
                       <p className="text-[10px] text-zinc-400 font-mono">STEP 1: Define baseline parameters and regulatory contexts for the simulation exercise.</p>
                     </div>
@@ -624,7 +624,7 @@ export default function CampaignsPage() {
                             placeholder="e.g. OP-DESI-SHIELD-349"
                             value={campaignName}
                             onChange={(e) => setCampaignName(e.target.value)}
-                            className="w-full px-4 py-2.5 rounded-xl glass-input text-xs font-mono"
+                            className="w-full px-4 py-2.5 rounded-lg border border-[#1F1F1F] bg-black text-white focus:outline-none focus:border-zinc-700 text-xs font-mono"
                           />
                         </div>
 
@@ -636,7 +636,7 @@ export default function CampaignsPage() {
                             placeholder="Describe the goals and compliance scope of this campaign..."
                             value={campaignDescription}
                             onChange={(e) => setCampaignDescription(e.target.value)}
-                            className="w-full px-4 py-2.5 rounded-xl glass-input text-xs font-mono"
+                            className="w-full px-4 py-2.5 rounded-lg border border-[#1F1F1F] bg-black text-white focus:outline-none focus:border-zinc-700 text-xs font-mono"
                           />
                         </div>
                       </div>
@@ -648,7 +648,7 @@ export default function CampaignsPage() {
                             <select
                               value={businessUnit}
                               onChange={(e) => setBusinessUnit(e.target.value)}
-                              className="w-full px-4 py-2.5 rounded-xl glass-input text-xs font-mono"
+                              className="w-full px-4 py-2.5 rounded-lg border border-[#1F1F1F] bg-black text-white focus:outline-none focus:border-zinc-700 text-xs font-mono"
                             >
                               {DEPARTMENTS.map(d => (
                                 <option key={d} value={d}>{d}</option>
@@ -664,7 +664,7 @@ export default function CampaignsPage() {
                               placeholder="e.g. Acme India Ltd"
                               value={organizationName}
                               onChange={(e) => setOrganizationName(e.target.value)}
-                              className="w-full px-4 py-2.5 rounded-xl glass-input text-xs font-mono"
+                              className="w-full px-4 py-2.5 rounded-lg border border-[#1F1F1F] bg-black text-white focus:outline-none focus:border-zinc-700 text-xs font-mono"
                             />
                           </div>
                         </div>
@@ -675,7 +675,7 @@ export default function CampaignsPage() {
                             <select
                               value={campaignCategory}
                               onChange={(e) => setCampaignCategory(e.target.value)}
-                              className="w-full px-4 py-2.5 rounded-xl glass-input text-xs font-mono"
+                              className="w-full px-4 py-2.5 rounded-lg border border-[#1F1F1F] bg-black text-white focus:outline-none focus:border-zinc-700 text-xs font-mono"
                             >
                               {CATEGORIES.map(c => (
                                 <option key={c} value={c}>{c}</option>
@@ -685,17 +685,17 @@ export default function CampaignsPage() {
 
                           <div>
                             <label className="block text-[9px] font-mono uppercase tracking-wider text-zinc-400 mb-1.5 font-semibold">Risk Level</label>
-                            <div className="flex items-center gap-1.5 bg-white/[0.01] border border-white/[0.03] p-1 rounded-xl">
+                            <div className="flex items-center gap-1.5 bg-[#0A0A0A] border border-[#1F1F1F] p-1 rounded-lg">
                               {(['LOW', 'MEDIUM', 'HIGH'] as const).map((r) => (
                                 <button
                                   key={r}
                                   type="button"
                                   onClick={() => setRiskLevel(r)}
-                                  className={`flex-1 py-1 rounded-lg text-[9px] font-mono font-bold transition-all cursor-pointer ${
+                                  className={`flex-1 py-1 rounded text-[9px] font-mono font-bold transition-all cursor-pointer ${
                                     riskLevel === r 
-                                      ? r === 'HIGH' ? 'bg-brand-rose/10 border border-brand-rose/25 text-brand-rose' :
-                                        r === 'MEDIUM' ? 'bg-brand-amber/10 border border-brand-amber/25 text-brand-amber' :
-                                        'bg-brand-emerald/10 border border-brand-emerald/25 text-brand-emerald'
+                                      ? r === 'HIGH' ? 'bg-red-500/10 border border-red-500/20 text-[#EF4444]' :
+                                        r === 'MEDIUM' ? 'bg-amber-500/10 border border-amber-500/20 text-[#F59E0B]' :
+                                        'bg-emerald-500/10 border border-emerald-500/20 text-[#22C55E]'
                                       : 'bg-transparent border border-transparent text-zinc-500 hover:text-zinc-300'
                                   }`}
                                 >
@@ -720,13 +720,13 @@ export default function CampaignsPage() {
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                       <div className="space-y-1">
                         <h3 className="text-sm font-bold text-white tracking-tight flex items-center gap-2">
-                          <UserCheck size={14} className="text-brand-cyan" /> Define Target Audience
+                          <UserCheck size={14} className="text-white" /> Define Target Audience
                         </h3>
                         <p className="text-[10px] text-zinc-400 font-mono">STEP 2: Filter targeted employee nodes dynamically by branches and divisions.</p>
                       </div>
-                      <div className="text-right shrink-0 p-3 rounded-2xl bg-brand-cyan/5 border border-brand-cyan/15">
-                        <span className="text-[9px] uppercase font-mono text-zinc-400 block font-bold">Target Employee Preview</span>
-                        <span className="text-xl font-black font-mono text-brand-cyan">
+                      <div className="text-right shrink-0 p-3 rounded-lg bg-[#0A0A0A] border border-[#1F1F1F]">
+                        <span className="text-[9px] uppercase font-mono text-zinc-500 block font-bold">Target Employee Preview</span>
+                        <span className="text-sm font-bold font-mono text-white">
                           {selectedUserIds.length} employees selected
                         </span>
                       </div>
@@ -735,9 +735,9 @@ export default function CampaignsPage() {
                     <div className="grid md:grid-cols-3 gap-6">
                       {/* Left: Department & Branch Filters */}
                       <div className="space-y-5 md:col-span-1">
-                        <div className="space-y-3 p-4 rounded-2xl bg-white/[0.01] border border-white/[0.03]">
+                        <div className="space-y-3 p-4 rounded-lg bg-[#0A0A0A] border border-[#1F1F1F]">
                           <div className="flex items-center gap-1.5 text-zinc-300 font-mono text-[9px] font-bold">
-                            <Building size={11} className="text-brand-cyan" /> SELECT DEPARTMENTS
+                            <Building size={11} className="text-white" /> SELECT DEPARTMENTS
                           </div>
                           <div className="space-y-2 max-h-[140px] overflow-y-auto pr-1 scrollbar-thin">
                             {DEPARTMENTS.map(d => {
@@ -748,7 +748,7 @@ export default function CampaignsPage() {
                                     type="checkbox"
                                     checked={isChecked}
                                     onChange={() => handleToggleDeptFilter(d)}
-                                    className="peer shrink-0 appearance-none w-3.5 h-3.5 rounded border border-white/10 bg-black/40 checked:bg-brand-cyan checked:border-brand-cyan focus:outline-none transition-all cursor-pointer"
+                                    className="peer shrink-0 appearance-none w-3.5 h-3.5 rounded border border-white/10 bg-black/40 checked:bg-white checked:border-white focus:outline-none transition-all cursor-pointer"
                                   />
                                   <span>{d}</span>
                                 </label>
@@ -757,9 +757,9 @@ export default function CampaignsPage() {
                           </div>
                         </div>
 
-                        <div className="space-y-3 p-4 rounded-2xl bg-white/[0.01] border border-white/[0.03]">
+                        <div className="space-y-3 p-4 rounded-lg bg-[#0A0A0A] border border-[#1F1F1F]">
                           <div className="flex items-center gap-1.5 text-zinc-300 font-mono text-[9px] font-bold">
-                            <MapPin size={11} className="text-brand-purple" /> SELECT BRANCHES
+                            <MapPin size={11} className="text-white" /> SELECT BRANCHES
                           </div>
                           <div className="space-y-2 max-h-[140px] overflow-y-auto pr-1 scrollbar-thin">
                             {INDIAN_BRANCHES.map(b => {
@@ -770,7 +770,7 @@ export default function CampaignsPage() {
                                     type="checkbox"
                                     checked={isChecked}
                                     onChange={() => handleToggleBranchFilter(b)}
-                                    className="peer shrink-0 appearance-none w-3.5 h-3.5 rounded border border-white/10 bg-black/40 checked:bg-brand-purple checked:border-brand-purple focus:outline-none transition-all cursor-pointer"
+                                    className="peer shrink-0 appearance-none w-3.5 h-3.5 rounded border border-white/10 bg-black/40 checked:bg-white checked:border-white focus:outline-none transition-all cursor-pointer"
                                   />
                                   <span>{b}</span>
                                 </label>
@@ -789,18 +789,18 @@ export default function CampaignsPage() {
                             placeholder="Filter matching employees by name or email..."
                             value={employeeSearchTerm}
                             onChange={(e) => setEmployeeSearchTerm(e.target.value)}
-                            className="w-full pl-9 pr-4 py-2 rounded-xl glass-input text-xs font-mono placeholder:text-zinc-600"
+                            className="w-full pl-9 pr-4 py-2 rounded-lg border border-[#1F1F1F] bg-black text-white focus:outline-none focus:border-zinc-700 text-xs font-mono placeholder:text-zinc-600"
                           />
                         </div>
 
-                        <div className="border border-white/[0.04] rounded-2xl overflow-hidden bg-white/[0.005]">
-                          <div className="grid grid-cols-12 gap-2 px-3 py-2 bg-white/[0.02] border-b border-white/[0.04] font-mono text-[8px] text-zinc-500 font-bold items-center">
+                        <div className="border border-[#1F1F1F] rounded-lg overflow-hidden bg-white/[0.005]">
+                          <div className="grid grid-cols-12 gap-2 px-3 py-2 bg-white/[0.02] border-b border-[#1F1F1F] font-mono text-[8px] text-zinc-500 font-bold items-center">
                             <div className="col-span-1">
                               <input
                                 type="checkbox"
                                 checked={filteredEmployees.length > 0 && filteredEmployees.every(e => selectedUserIds.includes(e.id))}
                                 onChange={handleSelectAllFiltered}
-                                className="peer shrink-0 appearance-none w-3.5 h-3.5 rounded border border-white/10 bg-black/40 checked:bg-brand-cyan checked:border-brand-cyan focus:outline-none transition-all cursor-pointer"
+                                className="peer shrink-0 appearance-none w-3.5 h-3.5 rounded border border-white/10 bg-black/40 checked:bg-white checked:border-white focus:outline-none transition-all cursor-pointer"
                               />
                             </div>
                             <div className="col-span-4">NAME</div>
@@ -809,7 +809,7 @@ export default function CampaignsPage() {
                             <div className="col-span-1 text-right">RISK</div>
                           </div>
 
-                          <div className="max-h-[220px] overflow-y-auto divide-y divide-white/[0.03] scrollbar-thin">
+                          <div className="max-h-[220px] overflow-y-auto divide-y divide-white/[0.03] scrollbar-thin bg-black">
                             {filteredEmployees.length > 0 ? (
                               filteredEmployees.map((emp) => {
                                 const isSelected = selectedUserIds.includes(emp.id);
@@ -818,7 +818,7 @@ export default function CampaignsPage() {
                                     key={emp.id}
                                     onClick={() => handleToggleUserSelect(emp.id)}
                                     className={`grid grid-cols-12 gap-2 px-3 py-2 items-center cursor-pointer transition-all hover:bg-white/[0.02] text-[10px] ${
-                                      isSelected ? 'bg-brand-blue/5' : ''
+                                      isSelected ? 'bg-white/5' : ''
                                     }`}
                                   >
                                     <div className="col-span-1 flex items-center" onClick={(e) => e.stopPropagation()}>
@@ -826,7 +826,7 @@ export default function CampaignsPage() {
                                         type="checkbox"
                                         checked={isSelected}
                                         onChange={() => handleToggleUserSelect(emp.id)}
-                                        className="peer shrink-0 appearance-none w-3.5 h-3.5 rounded border border-white/10 bg-black/40 checked:bg-brand-cyan checked:border-brand-cyan focus:outline-none transition-all cursor-pointer"
+                                        className="peer shrink-0 appearance-none w-3.5 h-3.5 rounded border border-white/10 bg-black/40 checked:bg-white checked:border-white focus:outline-none transition-all cursor-pointer"
                                       />
                                     </div>
                                     <div className="col-span-4 font-extrabold text-white truncate">{emp.name || 'Anonymous Target'}</div>
@@ -834,9 +834,9 @@ export default function CampaignsPage() {
                                     <div className="col-span-2 font-mono text-zinc-500 uppercase">{emp.branch || 'N/A'}</div>
                                     <div className="col-span-1 text-right">
                                       <span className={`px-1 py-0.5 rounded text-[8px] font-mono font-bold ${
-                                        emp.riskCategory === 'HIGH' ? 'bg-brand-rose/10 text-brand-rose' :
-                                        emp.riskCategory === 'MEDIUM' ? 'bg-brand-amber/10 text-brand-amber' :
-                                        'bg-brand-emerald/10 text-brand-emerald'
+                                        emp.riskCategory === 'HIGH' ? 'bg-red-500/10 text-[#EF4444]' :
+                                        emp.riskCategory === 'MEDIUM' ? 'bg-amber-500/10 text-[#F59E0B]' :
+                                        'bg-emerald-500/10 text-[#22C55E]'
                                       }`}>
                                         {emp.riskCategory.substring(0, 3)}
                                       </span>
@@ -867,7 +867,7 @@ export default function CampaignsPage() {
                     <div className="space-y-4 flex flex-col min-h-0">
                       <div className="space-y-1">
                         <h3 className="text-sm font-bold text-white tracking-tight flex items-center gap-2">
-                          <Compass size={14} className="text-brand-cyan" /> Indian Corporate Scenarios
+                          <Compass size={14} className="text-white" /> Indian Corporate Scenarios
                         </h3>
                         <p className="text-[10px] text-zinc-400 font-mono">STEP 3: Select the phishing simulation template to test validation skills.</p>
                       </div>
@@ -879,11 +879,11 @@ export default function CampaignsPage() {
                           placeholder="Search Indian scenarios..."
                           value={templateSearchTerm}
                           onChange={(e) => setTemplateSearchTerm(e.target.value)}
-                          className="w-full pl-9 pr-4 py-2 rounded-xl glass-input text-xs font-mono placeholder:text-zinc-600"
+                          className="w-full pl-9 pr-4 py-2 rounded-lg border border-[#1F1F1F] bg-black text-white focus:outline-none focus:border-zinc-700 text-xs font-mono placeholder:text-zinc-600"
                         />
                       </div>
 
-                      <div className="overflow-y-auto space-y-2 max-h-[240px] pr-1 scrollbar-thin flex-1">
+                      <div className="overflow-y-auto space-y-2 max-h-[240px] pr-1 scrollbar-thin flex-1 bg-black">
                         {templates
                           .filter(t => !templateSearchTerm.trim() || t.name.toLowerCase().includes(templateSearchTerm.toLowerCase()))
                           .map((t) => {
@@ -895,10 +895,10 @@ export default function CampaignsPage() {
                                   setSelectedTemplate(t.id);
                                   setPreviewTemplate(t);
                                 }}
-                                className={`p-3 rounded-xl border transition-all duration-300 cursor-pointer flex justify-between items-center text-left ${
+                                className={`p-3 rounded-lg border transition duration-150 cursor-pointer flex justify-between items-center text-left ${
                                   isSelected 
-                                    ? 'bg-brand-cyan/5 border-brand-cyan text-white shadow-[0_0_15px_rgba(6,182,212,0.06)]' 
-                                    : 'bg-white/[0.01] border-white/[0.04] text-zinc-400 hover:border-white/10 hover:bg-white/[0.02]'
+                                    ? 'bg-[#121212] border-white text-white' 
+                                    : 'bg-[#0A0A0A] border-[#1F1F1F] text-zinc-400 hover:border-zinc-700 hover:bg-[#1C1C1C]'
                                 }`}
                               >
                                 <div className="space-y-0.5 select-none pr-3 truncate">
@@ -906,14 +906,14 @@ export default function CampaignsPage() {
                                   <span className="text-[9px] font-mono text-zinc-500 block truncate">SUBJECT: {t.subject}</span>
                                 </div>
                                 <div className="shrink-0">
-                                  {isSelected && <span className="p-0.5 rounded-full bg-brand-cyan text-black"><Check size={8} className="stroke-[3]" /></span>}
+                                  {isSelected && <span className="p-0.5 rounded-full bg-white text-black"><Check size={8} className="stroke-[3]" /></span>}
                                 </div>
                               </div>
                             );
                           })}
                       </div>
 
-                      <div className="p-3 rounded-xl bg-brand-cyan/5 border border-brand-cyan/20 text-[9px] font-mono text-brand-cyan flex items-start gap-2 leading-relaxed">
+                      <div className="p-3 rounded-lg bg-[#0A0A0A] border border-[#1F1F1F] text-[9px] font-mono text-zinc-400 flex items-start gap-2 leading-relaxed">
                         <Info size={12} className="shrink-0 mt-0.5" />
                         <div>
                           <strong>Domain spoofing telemetry enabled.</strong> This campaign will test employee verification by using simulated corporate domains such as <strong>@company.co.in</strong> and <strong>@company.in</strong>.
@@ -922,7 +922,7 @@ export default function CampaignsPage() {
                     </div>
 
                     {/* Preview Box */}
-                    <div className="glass-panel p-4.5 rounded-2xl border border-white/[0.04] flex flex-col h-full min-h-[300px] overflow-hidden bg-black/40">
+                    <div className="p-4.5 rounded-lg border border-[#1F1F1F] flex flex-col h-full min-h-[300px] overflow-hidden bg-[#121212]">
                       <div className="flex items-center justify-between border-b border-white/[0.04] pb-2 mb-3 shrink-0">
                         <span className="text-[9px] font-mono text-zinc-400 font-bold uppercase tracking-wider">Mail Sandbox Sandbox</span>
                         <div className="flex gap-1">
@@ -965,7 +965,7 @@ export default function CampaignsPage() {
                   >
                     <div className="space-y-2">
                       <h3 className="text-sm font-bold text-white tracking-tight flex items-center gap-2">
-                        <Calendar size={14} className="text-brand-cyan" /> Scheduling & Delivery Options
+                        <Calendar size={14} className="text-white" /> Scheduling & Delivery Options
                       </h3>
                       <p className="text-[10px] text-zinc-400 font-mono">STEP 4: Set the campaign dispatch details. Timing is aligned with Asia/Kolkata (IST).</p>
                     </div>
@@ -974,13 +974,13 @@ export default function CampaignsPage() {
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div
                           onClick={() => setDispatchType('IMMEDIATE')}
-                          className={`p-4.5 rounded-xl border transition-all duration-300 cursor-pointer flex items-start gap-3.5 text-left ${
+                          className={`p-4.5 rounded-lg border transition duration-150 cursor-pointer flex items-start gap-3.5 text-left ${
                             dispatchType === 'IMMEDIATE' 
-                              ? 'bg-brand-cyan/5 border-brand-cyan text-white shadow-[0_0_15px_rgba(6,182,212,0.06)]' 
-                              : 'bg-white/[0.01] border-white/[0.04] text-zinc-400 hover:border-white/10 hover:bg-white/[0.02]'
+                              ? 'bg-[#121212] border-white text-white' 
+                              : 'bg-[#0A0A0A] border-[#1F1F1F] text-zinc-400 hover:border-zinc-700 hover:bg-[#1C1C1C]'
                           }`}
                         >
-                          <div className={`p-2 rounded-lg ${dispatchType === 'IMMEDIATE' ? 'bg-brand-cyan/20 text-brand-cyan' : 'bg-white/5 text-zinc-500'} shrink-0 mt-0.5`}>
+                          <div className={`p-2 rounded-lg ${dispatchType === 'IMMEDIATE' ? 'bg-white/10 text-white' : 'bg-white/5 text-zinc-500'} shrink-0 mt-0.5`}>
                             <Play size={14} className="fill-current" />
                           </div>
                           <div className="space-y-1">
@@ -991,13 +991,13 @@ export default function CampaignsPage() {
 
                         <div
                           onClick={() => setDispatchType('SCHEDULED')}
-                          className={`p-4.5 rounded-xl border transition-all duration-300 cursor-pointer flex items-start gap-3.5 text-left ${
+                          className={`p-4.5 rounded-lg border transition duration-150 cursor-pointer flex items-start gap-3.5 text-left ${
                             dispatchType === 'SCHEDULED' 
-                              ? 'bg-brand-cyan/5 border-brand-cyan text-white shadow-[0_0_15px_rgba(6,182,212,0.06)]' 
-                              : 'bg-white/[0.01] border-white/[0.04] text-zinc-400 hover:border-white/10 hover:bg-white/[0.02]'
+                              ? 'bg-[#121212] border-white text-white' 
+                              : 'bg-[#0A0A0A] border-[#1F1F1F] text-zinc-400 hover:border-zinc-700 hover:bg-[#1C1C1C]'
                           }`}
                         >
-                          <div className={`p-2 rounded-lg ${dispatchType === 'SCHEDULED' ? 'bg-brand-cyan/20 text-brand-cyan' : 'bg-white/5 text-zinc-500'} shrink-0 mt-0.5`}>
+                          <div className={`p-2 rounded-lg ${dispatchType === 'SCHEDULED' ? 'bg-white/10 text-white' : 'bg-white/5 text-zinc-500'} shrink-0 mt-0.5`}>
                             <Clock size={14} />
                           </div>
                           <div className="space-y-1">
@@ -1011,7 +1011,7 @@ export default function CampaignsPage() {
                         <motion.div
                           initial={{ opacity: 0, y: -10 }}
                           animate={{ opacity: 1, y: 0 }}
-                          className="p-5 rounded-2xl bg-white/[0.01] border border-white/[0.03] grid sm:grid-cols-2 gap-4"
+                          className="p-5 rounded-lg bg-[#0A0A0A] border border-[#1F1F1F] grid sm:grid-cols-2 gap-4"
                         >
                           <div>
                             <label className="block text-[9px] font-mono uppercase tracking-wider text-zinc-400 mb-1.5 font-semibold">Scheduled Date (IST)</label>
@@ -1020,7 +1020,7 @@ export default function CampaignsPage() {
                               required
                               value={scheduleDate}
                               onChange={(e) => setScheduleDate(e.target.value)}
-                              className="w-full px-4 py-2.5 rounded-xl glass-input text-xs font-mono"
+                              className="w-full px-4 py-2.5 rounded-lg border border-[#1F1F1F] bg-black text-white focus:outline-none focus:border-zinc-700 text-xs font-mono"
                             />
                           </div>
 
@@ -1031,16 +1031,16 @@ export default function CampaignsPage() {
                               required
                               value={scheduleTime}
                               onChange={(e) => setScheduleTime(e.target.value)}
-                              className="w-full px-4 py-2.5 rounded-xl glass-input text-xs font-mono"
+                              className="w-full px-4 py-2.5 rounded-lg border border-[#1F1F1F] bg-black text-white focus:outline-none focus:border-zinc-700 text-xs font-mono"
                             />
                           </div>
                         </motion.div>
                       )}
 
-                      <div className="p-4 rounded-xl bg-white/[0.01] border border-white/[0.03] flex items-center justify-between text-xs font-mono">
+                      <div className="p-4 rounded-lg bg-[#0A0A0A] border border-[#1F1F1F] flex items-center justify-between text-xs font-mono">
                         <span className="text-zinc-500 uppercase tracking-widest text-[9px] font-bold">Standard Time Zone</span>
                         <span className="text-white font-extrabold flex items-center gap-1.5">
-                          <GlobeIndia size={12} className="text-brand-cyan" /> Asia/Kolkata (IST)
+                          <GlobeIndia size={12} className="text-white" /> Asia/Kolkata (IST)
                         </span>
                       </div>
                     </div>
@@ -1056,7 +1056,7 @@ export default function CampaignsPage() {
                   >
                     <div className="space-y-2">
                       <h3 className="text-sm font-bold text-white tracking-tight flex items-center gap-2">
-                        <ShieldAlert size={14} className="text-brand-rose" /> Final Audit & Launch Approval
+                        <ShieldAlert size={14} className="text-[#EF4444]" /> Final Audit & Launch Approval
                       </h3>
                       <p className="text-[10px] text-zinc-400 font-mono">STEP 5: Validate campaign configuration details prior to execution.</p>
                     </div>
@@ -1064,10 +1064,9 @@ export default function CampaignsPage() {
                     <div className="grid md:grid-cols-2 gap-5">
                       
                       {/* Configuration Sheet */}
-                      <div className="p-4.5 rounded-2xl bg-white/[0.01] border border-white/[0.04] space-y-3 relative overflow-hidden font-mono text-[9px]">
-                        <div className="absolute top-0 right-0 w-24 h-24 bg-brand-cyan/2 rounded-full blur-xl pointer-events-none" />
+                      <div className="p-4.5 rounded-lg bg-[#0A0A0A] border border-[#1F1F1F] space-y-3 relative overflow-hidden font-mono text-[9px]">
                         <h4 className="text-[10px] font-bold text-white/90 uppercase tracking-widest flex items-center gap-1.5">
-                          <Info size={12} className="text-brand-cyan" /> SIMULATION SUMMARY
+                          <Info size={12} className="text-white" /> SIMULATION SUMMARY
                         </h4>
                         
                         <div className="space-y-2 divide-y divide-white/[0.03] pt-1">
@@ -1085,7 +1084,7 @@ export default function CampaignsPage() {
                           </div>
                           <div className="flex justify-between py-1">
                             <span className="text-zinc-500">CATEGORY:</span>
-                            <span className="text-brand-cyan font-black">{campaignCategory}</span>
+                            <span className="text-white font-black">{campaignCategory}</span>
                           </div>
                           <div className="flex justify-between py-1">
                             <span className="text-zinc-500">RISK THRESHOLD:</span>
@@ -1103,7 +1102,7 @@ export default function CampaignsPage() {
                           </div>
                           <div className="flex justify-between py-1">
                             <span className="text-zinc-500">DISPATCH (IST):</span>
-                            <span className="text-brand-cyan font-extrabold">
+                            <span className="text-white font-extrabold">
                               {dispatchType === 'IMMEDIATE' ? 'LAUNCH IMMEDIATELY' : `${scheduleDate} ${scheduleTime}`}
                             </span>
                           </div>
@@ -1111,12 +1110,11 @@ export default function CampaignsPage() {
                       </div>
 
                       {/* Consent Checkbox */}
-                      <div className="p-4.5 rounded-2xl bg-brand-rose/5 border border-brand-rose/20 space-y-3.5 relative overflow-hidden text-[9px] font-mono text-zinc-300 flex flex-col justify-between">
-                        <div className="absolute top-0 right-0 w-24 h-24 bg-brand-rose/2 rounded-full blur-xl pointer-events-none" />
+                      <div className="p-4.5 rounded-lg bg-[#0A0A0A] border border-[#1F1F1F] space-y-3.5 relative overflow-hidden text-[9px] font-mono text-zinc-300 flex flex-col justify-between">
                         <div className="space-y-3">
                           <div className="flex gap-2 items-center">
-                            <ShieldAlert size={14} className="text-brand-rose shrink-0" />
-                            <p className="text-[10px] text-brand-rose font-bold uppercase tracking-wider">Ethics & compliance Authorization</p>
+                            <ShieldAlert size={14} className="text-[#EF4444] shrink-0" />
+                            <p className="text-[10px] text-[#EF4444] font-bold uppercase tracking-wider">Ethics & compliance Authorization</p>
                           </div>
                           <p className="leading-relaxed">
                             Under organized security drills, you certify targeted domains and employees have consented to receive mock phishing exercises. <strong>Real password strings and inputs are client-intercepted and not cached.</strong>
@@ -1129,7 +1127,7 @@ export default function CampaignsPage() {
                               type="checkbox"
                               checked={ethicsAcknowledge}
                               onChange={(e) => setEthicsAcknowledge(e.target.checked)}
-                              className="peer shrink-0 appearance-none w-4.5 h-4.5 rounded border border-white/10 bg-black/40 checked:bg-brand-rose checked:border-brand-rose focus:outline-none transition-all cursor-pointer"
+                              className="peer shrink-0 appearance-none w-4.5 h-4.5 rounded border border-white/10 bg-black/40 checked:bg-white checked:border-white focus:outline-none transition-all cursor-pointer"
                             />
                             <CheckCircle className="absolute w-3.5 h-3.5 text-black pointer-events-none scale-0 peer-checked:scale-100 transition-transform left-[2px] top-[2px]" />
                           </div>
@@ -1146,12 +1144,12 @@ export default function CampaignsPage() {
               </div>
 
               {/* Wizard Footer controls */}
-              <div className="flex gap-4 border-t border-white/[0.04] pt-5 mt-6 shrink-0 font-mono">
+              <div className="flex gap-4 border-t border-[#1F1F1F] pt-5 mt-6 shrink-0 font-mono">
                 {step > 1 && (
                   <button
                     type="button"
                     onClick={() => setStep(prev => prev - 1)}
-                    className="px-4 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/5 text-zinc-300 hover:text-white font-bold transition text-xs flex items-center gap-1.5 cursor-pointer"
+                    className="px-4 py-2.5 rounded-lg bg-[#121212] border border-[#1F1F1F] hover:border-zinc-700 text-zinc-300 hover:text-white font-bold transition text-xs flex items-center gap-1.5 cursor-pointer"
                   >
                     <ChevronLeft size={14} /> Back
                   </button>
@@ -1160,7 +1158,7 @@ export default function CampaignsPage() {
                 <button
                   type="button"
                   onClick={() => setModalOpen(false)}
-                  className="px-4 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/5 text-zinc-500 hover:text-zinc-300 font-bold transition text-xs uppercase tracking-wider cursor-pointer"
+                  className="px-4 py-2.5 rounded-lg bg-[#121212] border border-[#1F1F1F] hover:border-zinc-700 text-zinc-500 hover:text-zinc-300 font-bold transition text-xs uppercase tracking-wider cursor-pointer"
                 >
                   Cancel
                 </button>
@@ -1171,7 +1169,7 @@ export default function CampaignsPage() {
                   <button
                     type="button"
                     onClick={handleNextStep}
-                    className="px-5 py-2.5 rounded-xl bg-white/10 hover:bg-brand-cyan hover:text-black border border-white/5 text-white font-bold transition-all text-xs flex items-center gap-1.5 uppercase tracking-wider cursor-pointer"
+                    className="px-5 py-2.5 rounded-lg bg-white hover:bg-zinc-200 text-black font-bold transition text-xs flex items-center gap-1.5 uppercase tracking-wider cursor-pointer"
                   >
                     Continue <ChevronRight size={14} />
                   </button>
@@ -1180,7 +1178,7 @@ export default function CampaignsPage() {
                     type="button"
                     onClick={handleCreateCampaign}
                     disabled={!ethicsAcknowledge || submitting}
-                    className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-brand-cyan via-brand-blue to-brand-purple disabled:from-zinc-700 disabled:to-zinc-800 disabled:opacity-50 hover:brightness-110 active:scale-[0.98] text-white font-bold transition-all text-xs uppercase tracking-wider border border-white/10 cursor-pointer"
+                    className="px-5 py-2.5 rounded-lg bg-white hover:bg-zinc-200 text-black font-bold transition text-xs uppercase tracking-wider disabled:opacity-50 cursor-pointer"
                   >
                     {submitting ? 'Deploying...' : 'Launch Simulation'}
                   </button>
@@ -1206,13 +1204,12 @@ export default function CampaignsPage() {
               initial={{ opacity: 0, scale: 0.9, y: 30 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 30 }}
-              className="glass-panel p-8 rounded-[32px] max-w-lg w-full relative z-10 border border-brand-emerald/20 overflow-hidden bg-zinc-950 shadow-[0_0_50px_rgba(16,185,129,0.1)] text-center space-y-6"
+              className="p-8 rounded-lg max-w-lg w-full relative z-10 border border-[#1F1F1F] overflow-hidden bg-[#121212] shadow-2xl text-center space-y-6"
             >
-              <div className="absolute top-0 right-0 w-48 h-48 bg-brand-emerald/2 rounded-full blur-3xl pointer-events-none" />
               
               {/* Success Mark */}
-              <div className="w-16 h-16 rounded-full bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center mx-auto text-emerald-400 shadow-[0_0_20px_rgba(16,185,129,0.2)]">
-                <CheckCircle2 size={36} className="animate-bounce" />
+              <div className="w-12 h-12 rounded-full bg-[#0A0A0A] border border-[#1F1F1F] flex items-center justify-center mx-auto text-[#00D26A]">
+                <CheckCircle2 size={24} />
               </div>
 
               <div className="space-y-1.5">
@@ -1221,14 +1218,14 @@ export default function CampaignsPage() {
               </div>
 
               {/* Specs box styled like a security terminal log */}
-              <div className="p-5 rounded-2xl border border-white/[0.04] bg-white/[0.01] text-left font-mono text-[10px] leading-relaxed text-zinc-400 space-y-2">
+              <div className="p-5 rounded-lg border border-[#1F1F1F] bg-[#0A0A0A] text-left font-mono text-[10px] leading-relaxed text-zinc-400 space-y-2">
                 <div className="flex justify-between border-b border-white/[0.03] pb-1.5">
                   <span className="text-zinc-500">CAMPAIGN ID:</span>
                   <span className="text-white font-extrabold">{createdCampaignDetails.id}</span>
                 </div>
                 <div className="flex justify-between border-b border-white/[0.03] pb-1.5">
                   <span className="text-zinc-500">CODE NAME:</span>
-                  <span className="text-brand-cyan font-bold">{createdCampaignDetails.name}</span>
+                  <span className="text-white font-bold">{createdCampaignDetails.name}</span>
                 </div>
                 <div className="flex justify-between border-b border-white/[0.03] pb-1.5">
                   <span className="text-zinc-500">DISPATCH SCHEDULE (IST):</span>
@@ -1236,7 +1233,7 @@ export default function CampaignsPage() {
                 </div>
                 <div className="flex justify-between border-b border-white/[0.03] pb-1.5">
                   <span className="text-zinc-500">TARGET ROSTER:</span>
-                  <span className="text-brand-emerald font-extrabold">{createdCampaignDetails.targetCount} employees</span>
+                  <span className="text-[#00D26A] font-extrabold">{createdCampaignDetails.targetCount} employees</span>
                 </div>
                 <div className="flex justify-between border-b border-white/[0.03] pb-1.5">
                   <span className="text-zinc-500">ATTACK CATEGORY:</span>
@@ -1244,7 +1241,7 @@ export default function CampaignsPage() {
                 </div>
                 <div className="flex justify-between border-b border-white/[0.03] pb-1.5">
                   <span className="text-zinc-500">RISK LEVEL:</span>
-                  <span className="text-brand-amber font-bold">{createdCampaignDetails.riskLevel}</span>
+                  <span className="text-[#F59E0B] font-bold">{createdCampaignDetails.riskLevel}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-zinc-500">EMAIL TEMPLATE:</span>
@@ -1256,7 +1253,7 @@ export default function CampaignsPage() {
 
               <button
                 onClick={() => setSuccessModalOpen(false)}
-                className="w-full px-5 py-3 rounded-xl bg-gradient-to-r from-brand-emerald to-emerald-600 hover:brightness-110 active:scale-[0.98] text-black font-extrabold transition-all text-xs font-mono uppercase tracking-wider border border-white/10 cursor-pointer"
+                className="w-full px-5 py-3 rounded-lg bg-white hover:bg-zinc-200 text-black font-bold transition text-xs font-mono uppercase tracking-wider cursor-pointer"
               >
                 Close Console
               </button>
@@ -1276,10 +1273,10 @@ const CampaignCard: React.FC<{
 }> = ({ campaign, onToggleStatus }) => {
   const itemTransition = { type: 'spring' as const, damping: 22, stiffness: 200 };
   
-  let statusGlow = "bg-zinc-500 shadow-[0_0_8px_rgba(255,255,255,0.15)]";
-  if (campaign.status === 'ACTIVE') statusGlow = "bg-brand-cyan shadow-[0_0_10px_#06b6d4] animate-pulse";
-  else if (campaign.status === 'SCHEDULED') statusGlow = "bg-brand-purple shadow-[0_0_10px_#8b5cf6]";
-  else if (campaign.status === 'COMPLETED') statusGlow = "bg-brand-emerald shadow-[0_0_10px_#10b981]";
+  let statusGlow = "bg-zinc-500";
+  if (campaign.status === 'ACTIVE') statusGlow = "bg-[#00D26A]";
+  else if (campaign.status === 'SCHEDULED') statusGlow = "bg-zinc-600";
+  else if (campaign.status === 'COMPLETED') statusGlow = "bg-zinc-700";
 
   return (
     <motion.div 
@@ -1290,11 +1287,11 @@ const CampaignCard: React.FC<{
       }}
       exit={{ opacity: 0, scale: 0.95 }}
       transition={itemTransition}
-      className="glass-panel p-5 rounded-2xl border border-white/[0.04] space-y-4 hover:border-white/10 hover:shadow-[0_10px_30px_rgba(0,0,0,0.4)] relative group"
+      className="p-5 rounded-lg border border-[#1F1F1F] bg-[#121212] space-y-4 hover:border-zinc-700 relative group"
     >
       <div className="space-y-2">
         <div className="flex items-start justify-between gap-3">
-          <h4 className="font-extrabold text-white text-xs tracking-tight leading-snug group-hover:text-brand-cyan transition duration-300">{campaign.name}</h4>
+          <h4 className="font-extrabold text-white text-xs tracking-tight leading-snug group-hover:text-white transition duration-300">{campaign.name}</h4>
           <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${statusGlow}`} />
         </div>
         
@@ -1316,7 +1313,7 @@ const CampaignCard: React.FC<{
         </div>
       </div>
 
-      <div className="border-t border-white/[0.04] pt-3 flex items-center justify-between text-[10px] text-zinc-400">
+      <div className="border-t border-[#1F1F1F] pt-3 flex items-center justify-between text-[10px] text-zinc-400">
         {campaign.status === 'DRAFT' && (
           <>
             <span className="font-mono text-zinc-500 uppercase tracking-wider text-[9px] flex items-center gap-1">
@@ -1324,7 +1321,7 @@ const CampaignCard: React.FC<{
             </span>
             <button
               onClick={() => onToggleStatus(campaign.id, 'ACTIVE')}
-              className="flex items-center gap-1.5 text-brand-cyan hover:brightness-110 font-bold font-mono uppercase text-[9px] px-2 py-1 rounded bg-brand-cyan/10 border border-brand-cyan/20 hover:bg-brand-cyan/20 transition-all cursor-pointer"
+              className="flex items-center gap-1.5 text-white hover:border-zinc-700 font-bold font-mono uppercase text-[9px] px-2 py-1 rounded bg-[#121212] border border-[#1F1F1F] hover:bg-[#1C1C1C] transition cursor-pointer"
             >
               <Play size={8} className="fill-current" /> Launch
             </button>
@@ -1337,7 +1334,7 @@ const CampaignCard: React.FC<{
             </span>
             <button
               onClick={() => onToggleStatus(campaign.id, 'ACTIVE')}
-              className="flex items-center gap-1.5 text-brand-cyan hover:brightness-110 font-bold font-mono uppercase text-[9px] px-2 py-1 rounded bg-brand-cyan/10 border border-brand-cyan/20 hover:bg-brand-cyan/20 transition-all animate-pulse cursor-pointer"
+              className="flex items-center gap-1.5 text-white hover:border-zinc-700 font-bold font-mono uppercase text-[9px] px-2 py-1 rounded bg-[#121212] border border-[#1F1F1F] hover:bg-[#1C1C1C] transition cursor-pointer"
             >
               <Play size={8} className="fill-current" /> Launch
             </button>
@@ -1345,19 +1342,19 @@ const CampaignCard: React.FC<{
         )}
         {campaign.status === 'ACTIVE' && (
           <>
-            <span className="text-brand-cyan font-bold flex items-center gap-1.5 font-mono uppercase tracking-wider text-[9px]">
-              <span className="w-1 h-1 rounded-full bg-brand-cyan animate-ping" /> Scanning
+            <span className="text-white font-bold flex items-center gap-1.5 font-mono uppercase tracking-wider text-[9px]">
+              <span className="w-1 h-1 rounded-full bg-[#00D26A]" /> Scanning
             </span>
             <button
               onClick={() => onToggleStatus(campaign.id, 'COMPLETED')}
-              className="flex items-center gap-1 text-brand-rose hover:brightness-110 font-bold font-mono uppercase text-[9px] px-2 py-1 rounded bg-brand-rose/10 border border-brand-rose/20 hover:bg-brand-rose/20 transition-all cursor-pointer"
+              className="flex items-center gap-1 text-[#EF4444] hover:border-zinc-700 font-bold font-mono uppercase text-[9px] px-2 py-1 rounded bg-[#121212] border border-[#1F1F1F] hover:bg-[#1C1C1C] transition cursor-pointer"
             >
               <Square size={8} className="fill-current" /> Terminate
             </button>
           </>
         )}
         {campaign.status === 'COMPLETED' && (
-          <div className="flex items-center gap-1.5 text-brand-emerald font-mono uppercase tracking-widest text-[9px] w-full font-bold">
+          <div className="flex items-center gap-1.5 text-[#00D26A] font-mono uppercase tracking-widest text-[9px] w-full font-bold">
             <CheckCircle2 size={11} /> TERMINATED {campaign.completedAt ? new Date(campaign.completedAt).toLocaleDateString() : ''}
           </div>
         )}
@@ -1367,7 +1364,7 @@ const CampaignCard: React.FC<{
 };
 
 const EmptyLaneMessage = () => (
-  <div className="border border-dashed border-white/[0.05] rounded-2xl p-8 text-center text-[9px] font-mono text-zinc-600 uppercase tracking-widest bg-white/[0.005]">
+  <div className="border border-dashed border-[#1F1F1F] rounded-lg p-8 text-center text-[9px] font-mono text-zinc-600 uppercase tracking-widest bg-[#0A0A0A]">
     No campaigns in lane
   </div>
 );
