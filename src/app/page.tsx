@@ -4,18 +4,14 @@ import React from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { 
-  ShieldCheck, 
   ArrowRight, 
   Lock, 
   Zap, 
   Check, 
-  Users, 
-  Activity, 
   Target, 
-  Server,
-  Database,
   Terminal,
-  MousePointerClick
+  Activity,
+  Award
 } from 'lucide-react';
 import { TopoBackground } from '@/components/ui/TopoBackground';
 import PPLogo from '@/components/layout/PPLogo';
@@ -23,218 +19,185 @@ import PPLogo from '@/components/layout/PPLogo';
 export default function Home() {
   const features = [
     {
-      title: 'Consent-Verified Delivery',
-      desc: 'Automatic DNS verification ensures campaigns target only corporate-owned, authorized domains. Zero bypass configurations required.',
-      icon: <Target className="text-brand-blue" size={18} />
+      title: 'CONSENT-VERIFIED ROUTING',
+      desc: 'Automatic DNS loop check ensures simulations only launch against verified corporate domains.',
+      icon: <Target className="text-[#00FF88]" size={16} />
     },
     {
-      title: 'Ethical Intercept Mechanism',
-      desc: 'Form templates log user click funnel actions but immediately intercept inputs on the client side. No password is ever stored or transmitted.',
-      icon: <Lock className="text-brand-cyan" size={18} />
+      title: 'ETHICAL INTERCEPT FILTER',
+      desc: 'Form fields process clicks and interactions but discard credentials locally in the browser.',
+      icon: <Lock className="text-[#00FF88]" size={16} />
     },
     {
-      title: 'Adaptive Learning Tracks',
-      desc: 'Cybersecurity training modules match individual performance. Poor simulation actions trigger immediate indicators and short micro-quizzes.',
-      icon: <Zap className="text-brand-purple" size={18} />
+      title: 'ADAPTIVE COMPLIANCE TRAILS',
+      desc: 'Poor campaign behaviors trigger instant indicators and custom quiz tracks.',
+      icon: <Zap className="text-[#00FF88]" size={16} />
     }
   ];
 
   const stats = [
-    { metric: '3.2%', label: 'Average Target Click Rate', sub: 'Reduced from 12.8% within 90 days of continuous evaluation cycles' },
-    { metric: '94%', label: 'Training Course Completion', sub: 'Voluntary attendance driven by bite-sized modular curricula' },
-    { metric: '0', label: 'Stored Credentials', sub: 'Zero passwords saved across millions of authorized simulation exercises' }
+    { metric: '3.2%', label: 'FAILURE POSTURE', sub: 'Average click rate decreased from 12.8% globally.' },
+    { metric: '94%', label: 'COMPLIANCE RATIO', sub: 'Employees completing assigned training tracks.' },
+    { metric: '0', label: 'DATABASE CREDENTIALS', sub: 'Zero passwords stored during authorized test cycles.' }
   ];
 
   return (
     <div className="min-h-screen bg-[#050505] text-slate-100 font-sans relative overflow-hidden flex flex-col justify-between">
       
-      {/* ASCII Topography heightmap background */}
+      {/* Background topography grid lines */}
       <TopoBackground />
 
-      {/* Capsule Navbar */}
+      {/* Glassmorphic Navbar */}
       <div className="fixed top-6 inset-x-0 z-50 flex justify-center px-4">
         <motion.div 
           initial={{ y: -20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          className="inline-flex items-center bg-black/80 border border-cyber-border rounded-full px-5 py-2.5 backdrop-blur-xl shadow-2xl gap-8"
+          className="inline-flex items-center bg-black/85 border border-[#232323] rounded-full px-5 py-2 backdrop-blur-xl shadow-2xl gap-8"
         >
-          <Link href="/" className="flex items-center gap-2 pr-6 border-r border-cyber-border/40 shrink-0">
-            <PPLogo size={22} />
-            <span className="font-extrabold text-white text-xs tracking-tight uppercase">Pinkman Protects</span>
+          <Link href="/" className="flex items-center gap-2 pr-6 border-r border-[#232323] shrink-0">
+            <PPLogo size={20} />
+            <span className="font-bold text-white text-[10px] tracking-[0.1em] uppercase font-mono">PINKMAN PROTECTS</span>
           </Link>
           
-          <nav className="hidden sm:flex items-center gap-6 text-[9px] font-mono font-bold uppercase tracking-wider text-gray-400">
+          <nav className="hidden sm:flex items-center gap-6 text-[9px] font-mono uppercase tracking-[0.15em] text-gray-500">
             <a href="#features" className="hover:text-white transition">Approach</a>
-            <a href="#statistics" className="hover:text-white transition">Performance</a>
-            <a href="#pricing" className="hover:text-white transition">Subscriptions</a>
+            <a href="#statistics" className="hover:text-white transition">Telemetry</a>
+            <a href="#pricing" className="hover:text-white transition">Pricing</a>
           </nav>
 
           <Link 
             href="/admin/dashboard" 
-            className="px-4 py-1.5 rounded-full bg-white text-black font-extrabold text-[9px] uppercase tracking-wider hover:bg-gray-200 transition shrink-0 font-mono"
+            className="px-4 py-1.5 rounded-full bg-white text-black font-bold text-[9px] uppercase tracking-wider hover:bg-gray-200 transition shrink-0 font-mono"
           >
             Launch console
           </Link>
         </motion.div>
       </div>
 
-      {/* Hero Section */}
-      <section className="pt-40 pb-20 px-6 max-w-5xl mx-auto text-center space-y-6 z-10 relative">
-        {/* Subtitle badge */}
-        <motion.div 
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5 }}
-          className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/5 border border-cyber-border text-[9px] font-mono uppercase tracking-widest text-gray-400"
-        >
-          <span className="w-1.5 h-1.5 rounded-full bg-brand-blue animate-pulse" /> Consent Security Suite
-        </motion.div>
-
-        {/* Headline */}
-        <motion.h1 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.1 }}
-          className="text-5xl sm:text-7xl font-black text-white tracking-tight leading-[1.05] max-w-4xl mx-auto font-sans"
-        >
-          Assess. Train. Secure.
-        </motion.h1>
-        
-        {/* Paragraph */}
-        <motion.p 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="text-gray-400 text-xs sm:text-sm max-w-xl mx-auto leading-relaxed"
-        >
-          Build authorized phishing simulation campaigns and adaptive cybersecurity learning tracks. Measure company vulnerability scores transparently with zero credential storage.
-        </motion.p>
-
-        {/* Actions */}
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          className="flex flex-wrap justify-center gap-4 pt-4"
-        >
-          <Link 
-            href="/admin/dashboard" 
-            className="px-6 py-3 rounded-full bg-white text-black font-extrabold text-[10px] uppercase tracking-wider hover:bg-gray-200 transition flex items-center gap-1.5 shadow-2xl font-mono"
+      {/* Editorial Hero Layout */}
+      <section className="pt-36 pb-16 px-6 max-w-5xl mx-auto grid md:grid-cols-2 gap-12 items-center z-10 relative">
+        <div className="space-y-6 text-left">
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-green-950/15 border border-[#00FF88]/20 text-[9px] font-mono uppercase tracking-widest text-[#00FF88]"
           >
-            Launch Sandbox console <ArrowRight size={12} />
-          </Link>
-          <a 
-            href="#features" 
-            className="px-6 py-3 rounded-full bg-white/5 border border-cyber-border hover:bg-white/10 text-gray-300 hover:text-white font-extrabold text-[10px] uppercase tracking-wider transition font-mono"
-          >
-            Explore features
-          </a>
-        </motion.div>
-      </section>
+            <span className="w-1.5 h-1.5 rounded-full bg-[#00FF88] animate-pulse" /> Consent Security Suite
+          </motion.div>
 
-      {/* Visual Dashboard Mockup (Linear Style) */}
-      <section className="px-6 pb-24 max-w-5xl mx-auto relative z-10">
-        <motion.div 
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-          className="w-full glass-panel rounded-3xl border border-cyber-border overflow-hidden p-1.5 bg-black/40 shadow-2xl relative"
-        >
-          {/* Animated corner border light */}
-          <div className="absolute top-0 right-1/4 w-32 h-[1px] bg-gradient-to-r from-transparent via-brand-blue to-transparent animate-pulse" />
+          <motion.h1 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="text-4xl sm:text-6xl font-black text-white tracking-tight leading-[0.95] uppercase font-mono"
+          >
+            HUMAN RISK.<br />
+            <span className="text-[#00FF88] text-glow-cyan">MEASURED.</span><br />
+            REDUCED.
+          </motion.h1>
           
-          <div className="border border-white/5 rounded-2.5xl overflow-hidden bg-zinc-950/80 flex flex-col">
-            {/* Header control buttons */}
-            <div className="flex items-center justify-between px-6 py-4 border-b border-cyber-border/60 bg-black/20 text-[10px] font-mono text-gray-500">
-              <div className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-brand-blue animate-pulse" />
-                <span className="text-white font-semibold">CONSOLE_AUDIT_FUNNEL</span>
-              </div>
-              <div className="flex items-center gap-4">
-                <span>VERIFIED_TENANT: OK</span>
-                <span>DB: SQLITE</span>
-              </div>
-            </div>
+          <motion.p 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="text-gray-400 text-xs leading-relaxed max-w-sm"
+          >
+            Build authorized phishing simulation campaigns and adaptive cybersecurity learning tracks. Measure company vulnerability scores transparently with zero credential storage.
+          </motion.p>
 
-            {/* Simulated Grid layout */}
-            <div className="grid md:grid-cols-3 gap-6 p-6">
-              
-              {/* Stat Card 1 */}
-              <div className="p-5 rounded-2xl bg-white/2 border border-cyber-border/40 space-y-2">
-                <span className="text-[9px] font-mono uppercase tracking-wider text-gray-500">Global Scorecard</span>
-                <h4 className="text-3xl font-extrabold font-mono text-white">85%</h4>
-                <div className="flex items-center gap-1 mt-2 text-[10px] text-emerald-400 font-mono">
-                  <span>+4.2% awareness increase</span>
-                </div>
-              </div>
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+            className="flex flex-wrap gap-3 pt-2"
+          >
+            <Link 
+              href="/admin/dashboard" 
+              className="px-5 py-2.5 rounded-xl bg-white text-black font-bold text-[9px] uppercase tracking-[0.1em] hover:bg-gray-200 transition flex items-center gap-1.5 font-mono"
+            >
+              LAUNCH CONSOLE <ArrowRight size={10} />
+            </Link>
+            <a 
+              href="#features" 
+              className="px-5 py-2.5 rounded-xl bg-transparent border border-[#232323] hover:bg-white/5 text-gray-400 hover:text-white font-bold text-[9px] uppercase tracking-[0.1em] transition font-mono"
+            >
+              EXPLORE TECH
+            </a>
+          </motion.div>
+        </div>
 
-              {/* Stat Card 2 */}
-              <div className="p-5 rounded-2xl bg-white/2 border border-cyber-border/40 space-y-2">
-                <span className="text-[9px] font-mono uppercase tracking-wider text-gray-500">Active range</span>
-                <h4 className="text-lg font-bold truncate text-white">acme.com</h4>
-                <div className="flex items-center gap-1 mt-2 text-[10px] text-gray-500 font-mono">
-                  <span>DNS records authenticated</span>
-                </div>
-              </div>
+        {/* Mockup Layout inspired by the Sahil Mane reference */}
+        <motion.div 
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="border border-[#232323] bg-[#0E0E0E]/95 p-6 rounded-2xl space-y-4 font-mono shadow-2xl relative"
+        >
+          <div className="absolute top-3 right-3 flex items-center gap-1.5 text-[8px] text-gray-500 uppercase">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#00FF88] animate-pulse" /> Live POSTURE: STABLE
+          </div>
 
-              {/* Stat Card 3 */}
-              <div className="p-5 rounded-2xl bg-white/2 border border-cyber-border/40 space-y-2">
-                <span className="text-[9px] font-mono uppercase tracking-wider text-gray-500">Current status</span>
-                <span className="px-2 py-0.5 rounded-full bg-brand-blue/10 border border-brand-blue/20 text-brand-blue font-mono text-[9px] font-bold inline-block w-fit">
-                  MONITORING_ON
-                </span>
-                <p className="text-[10px] text-gray-500 font-mono mt-1">Campaign log queries OK</p>
-              </div>
+          <div className="space-y-1.5 border-b border-[#232323] pb-4">
+            <span className="text-[9px] uppercase text-gray-500 tracking-[0.2em] block">WHAT WE BUILT</span>
+            <ul className="text-[10px] text-gray-300 space-y-1">
+              <li>/ Phishing Simulation Engine</li>
+              <li>/ Learning Management System</li>
+              <li>/ Real-Time Threat Alerts</li>
+              <li>/ AI Security Advisories</li>
+              <li>/ Posture SOC Dashboard</li>
+              <li>/ Organization Audit Logs</li>
+            </ul>
+          </div>
 
-            </div>
+          <div className="p-3.5 rounded-xl border border-[#232323] bg-[#141414] text-[10px] leading-relaxed text-[#B5B5B5]">
+            "A complete end-to-end platform to improve security awareness and reduce <strong className="text-[#00FF88]">human risk</strong>."
           </div>
         </motion.div>
       </section>
 
-      {/* Features Grid Section (Stripe Style) */}
-      <section id="features" className="px-6 pb-24 max-w-5xl mx-auto relative z-10 border-t border-cyber-border/20 pt-16">
-        <div className="grid md:grid-cols-3 gap-8">
+      {/* Features Grid Section (Minimal Spacing) */}
+      <section id="features" className="px-6 pb-20 max-w-5xl mx-auto relative z-10 border-t border-[#232323] pt-12">
+        <div className="grid md:grid-cols-3 gap-6">
           {features.map((feat, idx) => (
             <motion.div 
               key={feat.title}
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 15 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: idx * 0.1 }}
-              className="glass-panel p-6 sm:p-8 rounded-3xl border border-cyber-border flex flex-col justify-between items-start"
+              transition={{ duration: 0.4, delay: idx * 0.1 }}
+              className="p-5 border border-[#232323] bg-[#141414] rounded-2xl flex flex-col justify-between items-start hover:border-[#00FF88]/30 transition"
             >
-              <div className="space-y-4">
-                <div className="w-8 h-8 rounded-lg bg-white/5 border border-cyber-border flex items-center justify-center">
+              <div className="space-y-3">
+                <div className="w-8 h-8 rounded-lg bg-black/40 border border-[#232323] flex items-center justify-center">
                   {feat.icon}
                 </div>
-                <h3 className="font-bold text-white text-sm tracking-tight">{feat.title}</h3>
-                <p className="text-xs text-gray-400 leading-relaxed">{feat.desc}</p>
+                <h3 className="font-bold text-white text-[11px] font-mono tracking-wider uppercase">{feat.title}</h3>
+                <p className="text-[10px] text-gray-400 leading-relaxed font-sans">{feat.desc}</p>
               </div>
             </motion.div>
           ))}
         </div>
       </section>
 
-      {/* Statistics Section (Future of Finance Style) */}
-      <section id="statistics" className="px-6 pb-24 max-w-5xl mx-auto relative z-10 border-t border-cyber-border/20 pt-16">
-        <div className="grid md:grid-cols-3 gap-12 text-center md:text-left">
+      {/* Telemetry Stats Section */}
+      <section id="statistics" className="px-6 pb-20 max-w-5xl mx-auto relative z-10 border-t border-[#232323] pt-12">
+        <div className="grid md:grid-cols-3 gap-8 text-left">
           {stats.map((st, idx) => (
             <motion.div 
               key={st.label}
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 15 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: idx * 0.1 }}
-              className="space-y-2"
+              transition={{ duration: 0.4, delay: idx * 0.1 }}
+              className="space-y-1"
             >
-              <span className="text-4xl sm:text-5xl font-black text-white font-mono tracking-tight block">
+              <span className="text-4xl font-extrabold text-[#00FF88] font-mono tracking-tighter block text-glow-cyan">
                 {st.metric}
               </span>
-              <h4 className="text-xs font-bold text-white uppercase font-mono tracking-wider">
+              <h4 className="text-[9px] font-bold text-white uppercase font-mono tracking-[0.15em]">
                 {st.label}
               </h4>
-              <p className="text-[11px] text-gray-500 leading-normal">
+              <p className="text-[10px] text-gray-400 leading-normal font-sans">
                 {st.sub}
               </p>
             </motion.div>
@@ -243,68 +206,68 @@ export default function Home() {
       </section>
 
       {/* Pricing / Subscriptions Section */}
-      <section id="pricing" className="px-6 pb-24 max-w-5xl mx-auto relative z-10 border-t border-cyber-border/20 pt-16">
-        <div className="text-center space-y-2 mb-12">
-          <h2 className="text-2xl font-bold text-white tracking-tight">Flexible Plans</h2>
-          <p className="text-xs text-gray-400">Select the plan matching your organization scale.</p>
+      <section id="pricing" className="px-6 pb-20 max-w-5xl mx-auto relative z-10 border-t border-[#232323] pt-12">
+        <div className="text-center space-y-1 mb-10">
+          <h2 className="text-sm font-bold text-white font-mono uppercase tracking-[0.2em]">MEMBERSHIP PLAN TIERING</h2>
+          <p className="text-[10px] text-gray-500 font-mono">Select the scope suited for your corporate infrastructure.</p>
         </div>
 
         <div className="grid md:grid-cols-3 gap-6">
           
           {/* Plan 1 */}
-          <div className="glass-panel p-6 rounded-2.5xl flex flex-col justify-between border border-cyber-border">
+          <div className="p-5 border border-[#232323] bg-[#141414] rounded-2xl flex flex-col justify-between hover:border-[#00FF88]/30 transition">
             <div className="space-y-4">
               <div>
-                <h3 className="font-bold text-white text-xs uppercase font-mono tracking-wider text-gray-500">Starter Guard</h3>
+                <h3 className="font-bold text-gray-500 text-[10px] uppercase font-mono tracking-wider">Starter Posture</h3>
                 <span className="text-2xl font-extrabold text-white font-mono mt-1 block">$49/mo</span>
               </div>
-              <p className="text-[11px] text-gray-400 min-h-[40px]">Up to 50 employees, 2 domains, and standard simulation templates.</p>
-              <div className="h-px bg-cyber-border/40" />
-              <ul className="space-y-2 text-[10px] text-gray-500 font-mono">
-                <li className="flex items-center gap-1.5"><Check size={12} className="text-brand-blue" /> Monthly campaigns</li>
-                <li className="flex items-center gap-1.5"><Check size={12} className="text-brand-blue" /> Standard quiz widgets</li>
+              <p className="text-[10px] text-gray-400 leading-relaxed">Up to 50 employees, 2 domains, and standard simulation templates.</p>
+              <div className="h-px bg-[#232323]" />
+              <ul className="space-y-2 text-[9px] text-gray-500 font-mono">
+                <li className="flex items-center gap-1.5"><Check size={10} className="text-[#00FF88]" /> Monthly campaigns</li>
+                <li className="flex items-center gap-1.5"><Check size={10} className="text-[#00FF88]" /> Standard quiz widgets</li>
               </ul>
             </div>
-            <Link href="/admin/dashboard" className="w-full text-center mt-6 py-2 rounded-full bg-white/5 border border-cyber-border hover:border-brand-blue text-xs font-mono font-semibold transition">
+            <Link href="/admin/dashboard" className="w-full text-center mt-6 py-2 rounded-lg border border-[#232323] bg-black/40 hover:border-[#00FF88]/30 text-[10px] font-mono font-bold uppercase tracking-wider transition">
               Get Started
             </Link>
           </div>
 
           {/* Plan 2 */}
-          <div className="glass-panel p-6 rounded-2.5xl flex flex-col justify-between border border-brand-blue/60 bg-brand-blue/2">
+          <div className="p-5 border border-[#00FF88]/40 bg-[#141414]/90 rounded-2xl flex flex-col justify-between hover:border-[#00FF88]/60 transition shadow-[0_0_15px_rgba(0,255,136,0.02)]">
             <div className="space-y-4">
               <div>
-                <h3 className="font-bold text-white text-xs uppercase font-mono tracking-wider text-brand-blue">Growth Shield</h3>
+                <h3 className="font-bold text-[#00FF88] text-[10px] uppercase font-mono tracking-wider">Growth Shield</h3>
                 <span className="text-2xl font-extrabold text-white font-mono mt-1 block">$189/mo</span>
               </div>
-              <p className="text-[11px] text-gray-400 min-h-[40px]">Up to 500 employees, unlimited domain authing, custom email cues.</p>
-              <div className="h-px bg-cyber-border/40" />
-              <ul className="space-y-2 text-[10px] text-gray-500 font-mono">
-                <li className="flex items-center gap-1.5"><Check size={12} className="text-brand-blue" /> Custom cue editors</li>
-                <li className="flex items-center gap-1.5"><Check size={12} className="text-brand-blue" /> Real-time funnel audits</li>
-                <li className="flex items-center gap-1.5"><Check size={12} className="text-brand-blue" /> CSV data exporters</li>
+              <p className="text-[10px] text-gray-400 leading-relaxed">Up to 500 employees, unlimited domain authing, custom templates.</p>
+              <div className="h-px bg-[#232323]" />
+              <ul className="space-y-2 text-[9px] text-gray-500 font-mono">
+                <li className="flex items-center gap-1.5"><Check size={10} className="text-[#00FF88]" /> Custom cue editors</li>
+                <li className="flex items-center gap-1.5"><Check size={10} className="text-[#00FF88]" /> Real-time funnel audits</li>
+                <li className="flex items-center gap-1.5"><Check size={10} className="text-[#00FF88]" /> CSV data exporters</li>
               </ul>
             </div>
-            <Link href="/admin/dashboard" className="w-full text-center mt-6 py-2 rounded-full bg-white text-black hover:bg-gray-200 text-xs font-mono font-semibold transition">
+            <Link href="/admin/dashboard" className="w-full text-center mt-6 py-2 rounded-lg bg-[#00FF88] text-black font-mono font-bold text-[10px] uppercase tracking-wider transition hover:bg-[#00D26A]">
               Get Started
             </Link>
           </div>
 
           {/* Plan 3 */}
-          <div className="glass-panel p-6 rounded-2.5xl flex flex-col justify-between border border-cyber-border">
+          <div className="p-5 border border-[#232323] bg-[#141414] rounded-2xl flex flex-col justify-between hover:border-[#00FF88]/30 transition">
             <div className="space-y-4">
               <div>
-                <h3 className="font-bold text-white text-xs uppercase font-mono tracking-wider text-gray-500">Enterprise Ops</h3>
+                <h3 className="font-bold text-gray-500 text-[10px] uppercase font-mono tracking-wider">Enterprise Command</h3>
                 <span className="text-2xl font-extrabold text-white font-mono mt-1 block">Custom</span>
               </div>
-              <p className="text-[11px] text-gray-400 min-h-[40px]">Unlimited seats, custom SMTP gateways, and dedicated support.</p>
-              <div className="h-px bg-cyber-border/40" />
-              <ul className="space-y-2 text-[10px] text-gray-500 font-mono">
-                <li className="flex items-center gap-1.5"><Check size={12} className="text-brand-blue" /> REST API webhooks</li>
-                <li className="flex items-center gap-1.5"><Check size={12} className="text-brand-blue" /> Custom mail SMTPs</li>
+              <p className="text-[10px] text-gray-400 leading-relaxed">Unlimited seats, custom SMTP gateways, and dedicated support.</p>
+              <div className="h-px bg-[#232323]" />
+              <ul className="space-y-2 text-[9px] text-gray-500 font-mono">
+                <li className="flex items-center gap-1.5"><Check size={10} className="text-[#00FF88]" /> REST API webhooks</li>
+                <li className="flex items-center gap-1.5"><Check size={10} className="text-[#00FF88]" /> Custom mail SMTPs</li>
               </ul>
             </div>
-            <Link href="/admin/dashboard" className="w-full text-center mt-6 py-2 rounded-full bg-white/5 border border-cyber-border hover:border-brand-blue text-xs font-mono font-semibold transition">
+            <Link href="/admin/dashboard" className="w-full text-center mt-6 py-2 rounded-lg border border-[#232323] bg-black/40 hover:border-[#00FF88]/30 text-[10px] font-mono font-bold uppercase tracking-wider transition">
               Contact Sales
             </Link>
           </div>
@@ -312,27 +275,29 @@ export default function Home() {
         </div>
       </section>
 
-      {/* CTA Box (Linear style) */}
-      <section className="px-6 pb-24 max-w-4xl mx-auto relative z-10">
-        <div className="glass-panel p-8 md:p-12 rounded-3xl border border-brand-blue/20 bg-gradient-to-r from-brand-blue/10 to-transparent text-center relative overflow-hidden flex flex-col items-center space-y-4">
-          <h2 className="text-2xl font-bold text-white tracking-tight">Train your employees before hackers do.</h2>
-          <p className="text-xs text-gray-400 max-w-md">Verify your domain authority in seconds and begin authorized training cycles today.</p>
-          <Link href="/admin/dashboard" className="px-6 py-2.5 rounded-full bg-white text-black font-extrabold text-[10px] uppercase tracking-wider hover:bg-gray-200 transition font-mono shadow-2xl">
-            Get Started Free
-          </Link>
+      {/* TECH STACK LOGO FOOTER */}
+      <section className="px-6 pb-12 max-w-5xl mx-auto border-t border-[#232323] pt-8 font-mono text-[9px] text-gray-500 flex flex-wrap items-center justify-between gap-4">
+        <span className="uppercase tracking-widest text-[#00D26A] font-bold">TECH STACK:</span>
+        <div className="flex flex-wrap gap-5 uppercase">
+          <span>/ Next.js</span>
+          <span>/ TypeScript</span>
+          <span>/ Tailwind CSS</span>
+          <span>/ Prisma</span>
+          <span>/ SQLite</span>
+          <span>/ Vercel</span>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-cyber-border/40 bg-black/40 py-10 px-6 text-center text-[10px] font-mono text-gray-500">
+      <footer className="border-t border-[#232323] bg-[#0E0E0E] py-6 px-6 text-center text-[9px] font-mono text-gray-500">
         <div className="max-w-5xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
           <span>© 2026 Pinkman Protects Platforms Inc.</span>
           <div className="flex gap-4">
-            <span>Ethical Boundary</span>
+            <span>Ethical Posture</span>
             <span>/</span>
             <span>Compliance Checkpoints</span>
             <span>/</span>
-            <span>SSO Integrations</span>
+            <span>SSO Modules</span>
           </div>
         </div>
       </footer>

@@ -482,12 +482,12 @@ export default function Dashboard() {
                     <stop offset="100%" stopColor="#a8a8a8" stopOpacity={0.15}/>
                   </linearGradient>
                   <linearGradient id="gradientClicked" x1="0" y1="0" x2="1" y2="0">
-                    <stop offset="0%" stopColor="#FF2D20" stopOpacity={0.85}/>
-                    <stop offset="100%" stopColor="#FF2D20" stopOpacity={0.15}/>
+                    <stop offset="0%" stopColor="#00D26A" stopOpacity={0.85}/>
+                    <stop offset="100%" stopColor="#00D26A" stopOpacity={0.15}/>
                   </linearGradient>
                   <linearGradient id="gradientSubmitted" x1="0" y1="0" x2="1" y2="0">
-                    <stop offset="0%" stopColor="#E50914" stopOpacity={0.85}/>
-                    <stop offset="100%" stopColor="#E50914" stopOpacity={0.15}/>
+                    <stop offset="0%" stopColor="#00FF88" stopOpacity={0.85}/>
+                    <stop offset="100%" stopColor="#00FF88" stopOpacity={0.15}/>
                   </linearGradient>
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.015)" horizontal={false} />
@@ -631,8 +631,8 @@ export default function Dashboard() {
                       <stop offset="95%" stopColor="#a8a8a8" stopOpacity={0}/>
                     </linearGradient>
                     <linearGradient id="colorSubmit" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#E50914" stopOpacity={0.25}/>
-                      <stop offset="95%" stopColor="#E50914" stopOpacity={0}/>
+                      <stop offset="5%" stopColor="#00FF88" stopOpacity={0.25}/>
+                      <stop offset="95%" stopColor="#00FF88" stopOpacity={0}/>
                     </linearGradient>
                     <linearGradient id="colorOpen" x1="0" y1="0" x2="0" y2="1">
                       <stop offset="5%" stopColor="#ffffff" stopOpacity={0.15}/>
@@ -670,7 +670,7 @@ export default function Dashboard() {
                   />
                   <Area type="monotone" dataKey="openRate" name="Open Rate" stroke="#ffffff" strokeWidth={2.5} fill="url(#colorOpen)" />
                   <Area type="monotone" dataKey="clickRate" name="Link Click Rate" stroke="#a8a8a8" strokeWidth={2.5} fill="url(#colorClick)" />
-                  <Area type="monotone" dataKey="submitRate" name="Credential Submission" stroke="#E50914" strokeWidth={2.5} fill="url(#colorSubmit)" />
+                  <Area type="monotone" dataKey="submitRate" name="Credential Submission" stroke="#00FF88" strokeWidth={2.5} fill="url(#colorSubmit)" />
                 </AreaChart>
               </ResponsiveContainer>
             ) : (

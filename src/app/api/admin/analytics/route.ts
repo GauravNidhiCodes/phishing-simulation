@@ -242,9 +242,9 @@ export async function GET(request: Request) {
 
     // Risk Distribution
     const riskDistribution = [
-      { name: 'Low Risk', value: lowRiskEmployees, color: '#22C55E' },
-      { name: 'Medium Risk', value: mediumRiskEmployees, color: '#F59E0B' },
-      { name: 'High Risk', value: highRiskEmployees, color: '#EF4444' },
+      { name: 'Low Risk', value: lowRiskEmployees, color: '#00D26A' },
+      { name: 'Medium Risk', value: mediumRiskEmployees, color: '#2ECC71' },
+      { name: 'High Risk', value: highRiskEmployees, color: '#00FF88' },
     ];
 
     // Security Score Trend
@@ -254,8 +254,8 @@ export async function GET(request: Request) {
     const campaignFunnel = [
       { stage: 'Delivered', count: totalDelivered, fill: '#ffffff' },
       { stage: 'Opened', count: totalOpened, fill: '#a8a8a8' },
-      { stage: 'Clicked', count: totalClicked, fill: '#FF2D20' },
-      { stage: 'Form Submitted', count: totalSubmitted, fill: '#E50914' },
+      { stage: 'Clicked', count: totalClicked, fill: '#00D26A' },
+      { stage: 'Form Submitted', count: totalSubmitted, fill: '#00FF88' },
     ];
 
     // Monthly Compliance Trend

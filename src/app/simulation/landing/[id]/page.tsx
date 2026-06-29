@@ -4,15 +4,9 @@ import React, { useEffect, useState, use } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   ShieldAlert, 
-  AlertTriangle, 
-  HelpCircle, 
   CheckCircle2, 
-  ArrowRight, 
   Eye, 
-  Info,
   Lock,
-  ChevronRight,
-  Globe,
   CornerDownRight
 } from 'lucide-react';
 
@@ -34,7 +28,7 @@ export default function SimulationLandingPage({ params }: { params: Promise<{ id
   const [passwordInput, setPasswordInput] = useState('');
   
   // Template indicators
-  const [indicators, setIndicators] = useState<Indicator[]>([
+  const [indicators] = useState<Indicator[]>([
     { id: 1, type: "sender", label: "Mismatched Domain", text: "Sent from 'pinkman-secure-portal.com' instead of 'pinkman.com'" },
     { id: 2, type: "urgency", label: "Artificial Urgency", text: "Contains coercive statements ('within 24 hours', 'automatic lockout') to induce panic" },
     { id: 3, type: "link", label: "Deceptive Link Destination", text: "Link redirects to an external simulation server rather than internal SSO portal" }
@@ -71,7 +65,7 @@ export default function SimulationLandingPage({ params }: { params: Promise<{ id
     <div className="min-h-screen bg-[#050505] text-[#A8A8A8] flex items-center justify-center p-4 relative font-sans">
       
       {/* Background visual nodes */}
-      <div className="absolute top-0 inset-x-0 h-80 bg-gradient-to-b from-red-500/5 to-transparent pointer-events-none" />
+      <div className="absolute top-0 inset-x-0 h-80 bg-gradient-to-b from-green-500/5 to-transparent pointer-events-none" />
 
       <AnimatePresence mode="wait">
         
@@ -82,11 +76,11 @@ export default function SimulationLandingPage({ params }: { params: Promise<{ id
             initial={{ opacity: 0, scale: 0.98 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95 }}
-            className="w-full max-w-md bg-[#141414] text-white rounded-2xl shadow-2xl overflow-hidden border border-[#252525]"
+            className="w-full max-w-md bg-[#141414] text-white rounded-2xl shadow-2xl overflow-hidden border border-[#232323]"
           >
             {/* Header branding */}
-            <div className="p-8 pb-4 flex flex-col items-center border-b border-[#252525] bg-[#181818]">
-              <div className="w-12 h-12 bg-red-950/20 text-red-500 rounded-xl flex items-center justify-center font-bold text-xl mb-3 shadow border border-red-500/30">
+            <div className="p-8 pb-4 flex flex-col items-center border-b border-[#232323] bg-[#181818]">
+              <div className="w-12 h-12 bg-green-950/20 text-[#00FF88] rounded-xl flex items-center justify-center font-bold text-xl mb-3 shadow border border-[#00FF88]/30">
                 PP
               </div>
               <h2 className="text-xl font-bold text-white">Pinkman Protects Access Portal</h2>
@@ -103,7 +97,7 @@ export default function SimulationLandingPage({ params }: { params: Promise<{ id
                   placeholder="name@company.com"
                   value={emailInput}
                   onChange={(e) => setEmailInput(e.target.value)}
-                  className="w-full px-4 py-3 rounded-lg border border-[#252525] focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent text-sm bg-[#181818] text-white"
+                  className="w-full px-4 py-3 rounded-lg border border-[#232323] focus:outline-none focus:ring-2 focus:ring-[#00FF88] focus:border-transparent text-sm bg-[#181818] text-white font-mono"
                 />
               </div>
 
@@ -118,30 +112,30 @@ export default function SimulationLandingPage({ params }: { params: Promise<{ id
                   placeholder="••••••••"
                   value={passwordInput}
                   onChange={(e) => setPasswordInput(e.target.value)}
-                  className="w-full px-4 py-3 rounded-lg border border-[#252525] focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent text-sm bg-[#181818] text-white"
+                  className="w-full px-4 py-3 rounded-lg border border-[#232323] focus:outline-none focus:ring-2 focus:ring-[#00FF88] focus:border-transparent text-sm bg-[#181818] text-white font-mono"
                 />
               </div>
 
               {/* Security info flag */}
-              <div className="flex items-start gap-2 bg-[#181818] p-3 rounded-lg border border-[#252525] text-[11px] text-[#A8A8A8] leading-normal">
-                <Lock size={14} className="shrink-0 mt-0.5 text-red-500" />
+              <div className="flex items-start gap-2 bg-[#181818] p-3 rounded-lg border border-[#232323] text-[11px] text-[#A8A8A8] leading-normal font-mono">
+                <Lock size={14} className="shrink-0 mt-0.5 text-[#00FF88]" />
                 <span>Standard single-sign-on protocol. Session will remain valid for 24 hours.</span>
               </div>
 
               <button
                 type="submit"
-                className="w-full py-3 rounded-lg bg-red-600 hover:bg-red-700 text-white font-bold text-sm transition shadow-lg"
+                className="w-full py-3 rounded-lg bg-[#00FF88] hover:bg-[#00D26A] text-black font-bold text-sm transition shadow-lg font-mono uppercase tracking-wider"
               >
                 Sign In
               </button>
             </form>
             
             {/* Direct jump to education feedback */}
-            <div className="p-4 border-t border-[#252525] bg-[#181818] text-center text-xs">
+            <div className="p-4 border-t border-[#232323] bg-[#181818] text-center text-xs">
               <button 
                 type="button" 
                 onClick={() => setPhase('EDUCATION_PANEL')}
-                className="text-red-500 hover:underline font-semibold"
+                className="text-[#00FF88] hover:underline font-semibold"
               >
                 Skip simulation & view training analysis
               </button>
@@ -153,23 +147,23 @@ export default function SimulationLandingPage({ params }: { params: Promise<{ id
             key="education-panel"
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="w-full max-w-4xl bg-[#141414]/95 border border-[#252525] backdrop-blur-xl rounded-3xl p-6 sm:p-8 md:p-10 shadow-2xl relative overflow-hidden grid md:grid-cols-5 gap-8"
+            className="w-full max-w-4xl bg-[#141414]/95 border border-[#232323] backdrop-blur-xl rounded-3xl p-6 sm:p-8 md:p-10 shadow-2xl relative overflow-hidden grid md:grid-cols-5 gap-8"
           >
             {/* Red alert overlay glow */}
-            <div className="absolute top-0 right-0 w-64 h-64 bg-red-500/5 rounded-full blur-[100px] pointer-events-none" />
+            <div className="absolute top-0 right-0 w-64 h-64 bg-green-500/5 rounded-full blur-[100px] pointer-events-none" />
 
             {/* Left Side: Notice & Warning */}
             <div className="md:col-span-2 space-y-6">
-              <div className="w-14 h-14 rounded-2xl bg-red-500/10 border border-red-500/20 text-red-500 flex items-center justify-center mx-auto md:mx-0 shadow-lg">
+              <div className="w-14 h-14 rounded-2xl bg-[#00FF88]/10 border border-[#00FF88]/20 text-[#00FF88] flex items-center justify-center mx-auto md:mx-0 shadow-lg">
                 <ShieldAlert size={32} className="animate-pulse" />
               </div>
 
               <div className="text-center md:text-left space-y-3">
-                <span className="px-3 py-1 rounded-full bg-red-500/10 border border-red-500/20 text-red-500 text-[10px] font-mono uppercase tracking-widest font-bold">
+                <span className="px-3 py-1 rounded-full bg-[#00FF88]/10 border border-[#00FF88]/20 text-[#00FF88] text-[10px] font-mono uppercase tracking-widest font-bold">
                   Simulation Intercepted
                 </span>
-                <h1 className="text-2xl sm:text-3xl font-extrabold text-white leading-tight">
-                  This was a Security Training Exercise
+                <h1 className="text-2xl sm:text-3xl font-extrabold text-white leading-tight uppercase font-mono">
+                  Security Training Exercise
                 </h1>
                 <p className="text-xs text-[#A8A8A8] leading-relaxed">
                   The email you recently interacted with was part of Pinkman Protects' authorized security awareness program. 
@@ -182,10 +176,10 @@ export default function SimulationLandingPage({ params }: { params: Promise<{ id
             </div>
 
             {/* Right Side: Threat Indicator Analysis */}
-            <div className="md:col-span-3 space-y-6 md:border-l md:border-[#252525]/40 md:pl-8">
+            <div className="md:col-span-3 space-y-6 md:border-l md:border-[#232323]/40 md:pl-8">
               <div>
                 <h2 className="text-lg font-bold text-white flex items-center gap-2">
-                  <Eye size={18} className="text-red-500" /> Phishing Cues Decoded
+                  <Eye size={18} className="text-[#00FF88]" /> Phishing Cues Decoded
                 </h2>
                 <p className="text-xs text-[#A8A8A8] mt-1">Review the warning indicators that were present in this email format:</p>
               </div>
@@ -193,8 +187,8 @@ export default function SimulationLandingPage({ params }: { params: Promise<{ id
               {/* Indicators Timeline */}
               <div className="space-y-4">
                 {indicators.map((ind, index) => (
-                  <div key={ind.id} className="flex gap-4 items-start bg-white/5 border border-[#252525] rounded-2xl p-4">
-                    <div className="w-6 h-6 rounded-lg bg-red-950/20 border border-[#252525] text-red-500 text-xs font-bold font-mono flex items-center justify-center shrink-0 mt-0.5">
+                  <div key={ind.id} className="flex gap-4 items-start bg-white/5 border border-[#232323] rounded-2xl p-4">
+                    <div className="w-6 h-6 rounded-lg bg-green-950/20 border border-[#232323] text-[#00FF88] text-xs font-bold font-mono flex items-center justify-center shrink-0 mt-0.5">
                       {index + 1}
                     </div>
                     <div className="space-y-1">
@@ -206,12 +200,12 @@ export default function SimulationLandingPage({ params }: { params: Promise<{ id
               </div>
 
               {/* Next Steps / Actions */}
-              <div className="bg-[#0B0B0B] border border-[#252525] rounded-2xl p-5 space-y-3 text-xs text-gray-300">
-                <span className="font-bold font-mono uppercase tracking-wider text-red-500 text-[10px]">Actionable Protocols</span>
+              <div className="bg-[#0B0B0B] border border-[#232323] rounded-2xl p-5 space-y-3 text-xs text-gray-300">
+                <span className="font-bold font-mono uppercase tracking-wider text-[#00FF88] text-[10px]">Actionable Protocols</span>
                 <ul className="space-y-2 text-[11px] leading-relaxed">
-                  <li className="flex items-start gap-1.5"><CornerDownRight size={12} className="text-red-500 shrink-0 mt-0.5" /> Always verify domain extensions before executing link click actions.</li>
-                  <li className="flex items-start gap-1.5"><CornerDownRight size={12} className="text-red-500 shrink-0 mt-0.5" /> Acknowledge coercive deadlines or panic warnings as high threat vectors.</li>
-                  <li className="flex items-start gap-1.5"><CornerDownRight size={12} className="text-red-500 shrink-0 mt-0.5" /> Use Pinkman Protects' 'Report Phish' dashboard client rather than replying.</li>
+                  <li className="flex items-start gap-1.5"><CornerDownRight size={12} className="text-[#00FF88] shrink-0 mt-0.5" /> Always verify domain extensions before executing link click actions.</li>
+                  <li className="flex items-start gap-1.5"><CornerDownRight size={12} className="text-[#00FF88] shrink-0 mt-0.5" /> Acknowledge coercive deadlines or panic warnings as high threat vectors.</li>
+                  <li className="flex items-start gap-1.5"><CornerDownRight size={12} className="text-[#00FF88] shrink-0 mt-0.5" /> Use Pinkman Protects' 'Report Phish' dashboard client rather than replying.</li>
                 </ul>
               </div>
             </div>

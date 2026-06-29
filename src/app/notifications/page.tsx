@@ -130,15 +130,15 @@ export default function NotificationsPage() {
   const getCategoryIcon = (category: string) => {
     switch (category) {
       case 'CAMPAIGN':
-        return <Send size={15} className="text-red-500" />;
+        return <Send size={15} className="text-[#00FF88]" />;
       case 'SECURITY_ALERT':
-        return <ShieldAlert size={15} className="text-red-600 shadow-[0_0_8px_rgba(239,68,68,0.3)] animate-pulse" />;
+        return <ShieldAlert size={15} className="text-[#00D26A] shadow-[0_0_8px_rgba(0,255,136,0.2)] animate-pulse" />;
       case 'LEARNING':
         return <GraduationCap size={15} className="text-[#A8A8A8]" />;
       case 'QUIZ':
         return <ClipboardList size={15} className="text-[#A8A8A8]" />;
       case 'AI_RECOMMENDATION':
-        return <Sparkles size={15} className="text-red-400" />;
+        return <Sparkles size={15} className="text-[#00FF88]" />;
       case 'REPORT':
         return <FileText size={15} className="text-gray-400" />;
       case 'MILESTONE':
@@ -153,13 +153,13 @@ export default function NotificationsPage() {
   const getPriorityBadgeClass = (priority: string) => {
     switch (priority) {
       case 'CRITICAL':
-        return 'bg-red-950/40 border border-red-600/50 text-red-500 font-bold shadow-[0_0_10px_rgba(229,9,20,0.3)] animate-pulse';
+        return 'bg-green-950/40 border border-[#00FF88]/50 text-[#00FF88] font-bold shadow-[0_0_10px_rgba(0,255,136,0.2)] animate-pulse';
       case 'HIGH':
-        return 'bg-red-950/20 border border-red-500/30 text-red-400 font-semibold';
+        return 'bg-green-950/20 border border-[#00FF88]/30 text-[#00FF88] font-semibold';
       case 'MEDIUM':
         return 'bg-amber-950/20 border border-amber-500/30 text-amber-500';
       default:
-        return 'bg-[#181818] border border-[#252525] text-gray-400';
+        return 'bg-[#181818] border border-[#232323] text-gray-400';
     }
   };
 
@@ -184,9 +184,9 @@ export default function NotificationsPage() {
     <div className="space-y-8">
       
       {/* Title Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-[#252525] pb-6">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-[#232323] pb-6">
         <div>
-          <h1 className="text-2xl font-extrabold text-white tracking-tight uppercase font-mono text-glow-red">
+          <h1 className="text-2xl font-extrabold text-white tracking-tight uppercase font-mono text-glow-cyan">
             Notification Center
           </h1>
           <p className="text-xs text-gray-400 mt-1.5 leading-relaxed">
@@ -198,7 +198,7 @@ export default function NotificationsPage() {
           <button
             onClick={handleMarkAllRead}
             disabled={unreadCount === 0}
-            className="px-4 py-2.5 rounded-xl border border-[#252525] bg-black/40 hover:bg-[#181818] hover:border-red-600/40 text-gray-400 hover:text-white disabled:opacity-40 disabled:hover:bg-transparent disabled:hover:border-[#252525] transition duration-200 text-xs font-mono flex items-center gap-2"
+            className="px-4 py-2.5 rounded-xl border border-[#232323] bg-black/40 hover:bg-[#181818] hover:border-[#00FF88]/40 text-gray-400 hover:text-white disabled:opacity-40 disabled:hover:bg-transparent disabled:hover:border-[#232323] transition duration-200 text-xs font-mono flex items-center gap-2"
           >
             <CheckSquare size={14} /> Mark All as Read
           </button>
@@ -212,11 +212,11 @@ export default function NotificationsPage() {
         <div className="lg:col-span-2 space-y-6">
           
           {/* Filtering Controls Card */}
-          <div className="p-4 border border-[#252525] bg-[#141414] rounded-2xl space-y-4 shadow-lg">
+          <div className="p-4 border border-[#232323] bg-[#141414] rounded-2xl space-y-4 shadow-lg">
             
             {/* Search and priority selects */}
             <div className="grid sm:grid-cols-3 gap-3">
-              <div className="sm:col-span-2 flex items-center gap-2 px-3 py-2 rounded-xl border border-[#252525] bg-[#0A0A0A] text-xs font-mono">
+              <div className="sm:col-span-2 flex items-center gap-2 px-3 py-2 rounded-xl border border-[#232323] bg-[#0A0A0A] text-xs font-mono">
                 <Search size={14} className="text-gray-500" />
                 <input
                   type="text"
@@ -227,7 +227,7 @@ export default function NotificationsPage() {
                 />
               </div>
 
-              <div className="flex items-center gap-2 px-3 py-2 rounded-xl border border-[#252525] bg-[#0A0A0A] text-xs font-mono text-gray-400">
+              <div className="flex items-center gap-2 px-3 py-2 rounded-xl border border-[#232323] bg-[#0A0A0A] text-xs font-mono text-gray-400">
                 <Filter size={12} className="text-gray-500" />
                 <select
                   value={activePriority}
@@ -249,8 +249,8 @@ export default function NotificationsPage() {
                   onClick={() => { setActiveCategory(cat.id); setPage(1); }}
                   className={`px-3 py-2 rounded-xl border text-[10px] font-mono uppercase tracking-wider transition shrink-0 ${
                     activeCategory === cat.id
-                      ? 'border-red-600 bg-red-950/15 text-white font-bold'
-                      : 'border-[#252525] bg-[#0A0A0A] text-gray-500 hover:text-white'
+                      ? 'border-[#00FF88] bg-green-950/15 text-white font-bold'
+                      : 'border-[#232323] bg-[#0A0A0A] text-gray-500 hover:text-white'
                   }`}
                 >
                   {cat.label}
@@ -264,14 +264,14 @@ export default function NotificationsPage() {
           <div className="space-y-4">
             
             {loading ? (
-              <div className="p-20 border border-[#252525] bg-[#141414] rounded-2xl flex flex-col items-center justify-center space-y-4 shadow-lg">
-                <div className="w-8 h-8 border-2 border-red-600 border-t-transparent rounded-full animate-spin" />
+              <div className="p-20 border border-[#232323] bg-[#141414] rounded-2xl flex flex-col items-center justify-center space-y-4 shadow-lg">
+                <div className="w-8 h-8 border-2 border-[#00FF88] border-t-transparent rounded-full animate-spin" />
                 <span className="text-xs font-mono text-gray-500 uppercase tracking-widest">Querying Notifications database...</span>
               </div>
             ) : notifications.length === 0 ? (
               /* Empty state */
-              <div className="p-20 border border-[#252525] bg-[#141414] rounded-2xl text-center space-y-4 shadow-lg">
-                <div className="w-14 h-14 rounded-full border border-[#252525] bg-[#181818] flex items-center justify-center mx-auto text-gray-600 shadow-inner">
+              <div className="p-20 border border-[#232323] bg-[#141414] rounded-2xl text-center space-y-4 shadow-lg">
+                <div className="w-14 h-14 rounded-full border border-[#232323] bg-[#181818] flex items-center justify-center mx-auto text-gray-600 shadow-inner">
                   <Bell size={20} />
                 </div>
                 <div className="space-y-1">
@@ -290,13 +290,13 @@ export default function NotificationsPage() {
                       exit={{ opacity: 0, x: -20 }}
                       className={`p-4 border rounded-2xl transition duration-200 relative group shadow-md flex items-start gap-4 ${
                         notif.isRead 
-                          ? 'bg-[#141414]/50 border-[#252525] hover:border-white/5' 
-                          : 'bg-[#141414] border-red-600/30 hover:border-red-600/40 shadow-[0_0_12px_rgba(229,9,20,0.04)]'
+                          ? 'bg-[#141414]/50 border-[#232323] hover:border-white/5' 
+                          : 'bg-[#141414] border-[#00FF88]/30 hover:border-[#00FF88]/40 shadow-[0_0_12px_rgba(0,255,136,0.03)]'
                       }`}
                     >
                       {/* Left icon */}
                       <div className={`p-2.5 rounded-xl border shrink-0 mt-0.5 ${
-                        notif.isRead ? 'bg-[#1c1c1c] border-[#2d2d2d]' : 'bg-red-950/15 border-red-600/25'
+                        notif.isRead ? 'bg-[#1c1c1c] border-[#2d2d2d]' : 'bg-green-950/15 border-[#00FF88]/25'
                       }`}>
                         {getCategoryIcon(notif.category)}
                       </div>
@@ -323,7 +323,7 @@ export default function NotificationsPage() {
                         {!notif.isRead && (
                           <button
                             onClick={() => handleMarkRead(notif.id)}
-                            className="p-1.5 rounded-lg bg-[#1c1c1c] border border-[#2d2d2d] text-gray-500 hover:text-white hover:border-red-600/40 transition"
+                            className="p-1.5 rounded-lg bg-[#1c1c1c] border border-[#2d2d2d] text-gray-500 hover:text-white hover:border-[#00FF88]/40 transition"
                             title="Mark as read"
                           >
                             <Check size={12} />
@@ -331,7 +331,7 @@ export default function NotificationsPage() {
                         )}
                         <button
                           onClick={() => handleDelete(notif.id)}
-                          className="p-1.5 rounded-lg bg-[#1c1c1c] border border-[#2d2d2d] text-gray-500 hover:text-red-500 transition"
+                          className="p-1.5 rounded-lg bg-[#1c1c1c] border border-[#2d2d2d] text-gray-500 hover:text-[#00FF88] transition"
                           title="Delete alert"
                         >
                           <Trash2 size={12} />
@@ -344,11 +344,11 @@ export default function NotificationsPage() {
 
                 {/* Pagination bar */}
                 {totalPages > 1 && (
-                  <div className="pt-4 flex items-center justify-between border-t border-[#252525] text-xs font-mono text-gray-500">
+                  <div className="pt-4 flex items-center justify-between border-t border-[#232323] text-xs font-mono text-gray-500">
                     <button
                       disabled={page === 1}
                       onClick={() => setPage(p => Math.max(1, p - 1))}
-                      className="px-3.5 py-2 rounded-xl bg-[#141414] border border-[#252525] hover:border-red-600/40 disabled:opacity-40 disabled:hover:border-[#252525] text-white transition duration-200"
+                      className="px-3.5 py-2 rounded-xl bg-[#141414] border border-[#232323] hover:border-[#00FF88]/40 disabled:opacity-40 disabled:hover:border-[#232323] text-white transition duration-200"
                     >
                       ← Previous Page
                     </button>
@@ -356,7 +356,7 @@ export default function NotificationsPage() {
                     <button
                       disabled={page === totalPages}
                       onClick={() => setPage(p => Math.min(totalPages, p + 1))}
-                      className="px-3.5 py-2 rounded-xl bg-[#141414] border border-[#252525] hover:border-red-600/40 disabled:opacity-40 disabled:hover:border-[#252525] text-white transition duration-200"
+                      className="px-3.5 py-2 rounded-xl bg-[#141414] border border-[#232323] hover:border-[#00FF88]/40 disabled:opacity-40 disabled:hover:border-[#232323] text-white transition duration-200"
                     >
                       Next Page →
                     </button>
@@ -375,8 +375,8 @@ export default function NotificationsPage() {
           <PreferencesPanel />
           
           {/* Extra system alerts tip card */}
-          <div className="p-5 border border-[#252525] bg-[#141414] rounded-2xl space-y-3">
-            <div className="flex items-center gap-2 text-red-500">
+          <div className="p-5 border border-[#232323] bg-[#141414] rounded-2xl space-y-3">
+            <div className="flex items-center gap-2 text-[#00FF88]">
               <AlertTriangle size={16} className="animate-pulse" />
               <h4 className="text-xs font-bold font-mono uppercase tracking-wider">SecOps Notice</h4>
             </div>

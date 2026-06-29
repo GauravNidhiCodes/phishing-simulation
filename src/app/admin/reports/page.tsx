@@ -282,7 +282,7 @@ export default function ReportsPage() {
     'Compliance Status'
   ];
 
-  const COLORS = ['#E50914', '#ffffff', '#a8a8a8', '#22C55E', '#F59E0B', '#EF4444', '#71717a'];
+  const COLORS = ['#00FF88', '#ffffff', '#a8a8a8', '#00D26A', '#2ECC71', '#22C55E', '#71717a'];
 
   return (
     <div className="space-y-8 pb-16 print:bg-white print:text-black print:p-0 print:space-y-4">
@@ -567,7 +567,7 @@ export default function ReportsPage() {
                           <XAxis dataKey="name" stroke="#64748b" />
                           <YAxis stroke="#64748b" />
                           <Tooltip contentStyle={{ backgroundColor: '#0f172a', borderColor: 'rgba(255,255,255,0.05)' }} />
-                          <Bar dataKey="averageScore" fill="#E50914" radius={[4, 4, 0, 0]} />
+                          <Bar dataKey="averageScore" fill="#00FF88" radius={[4, 4, 0, 0]} />
                         </BarChart>
                       </ResponsiveContainer>
                     </div>

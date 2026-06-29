@@ -71,18 +71,18 @@ export default function PreferencesPanel() {
 
   if (loading) {
     return (
-      <div className="p-8 border border-[#252525] bg-[#141414] rounded-2xl flex flex-col items-center justify-center space-y-3">
-        <div className="w-5 h-5 border-2 border-red-600 border-t-transparent rounded-full animate-spin" />
+      <div className="p-8 border border-[#232323] bg-[#141414] rounded-2xl flex flex-col items-center justify-center space-y-3">
+        <div className="w-5 h-5 border-2 border-[#00FF88] border-t-transparent rounded-full animate-spin" />
         <span className="text-[10px] font-mono text-gray-500 uppercase tracking-widest">Loading Preferences...</span>
       </div>
     );
   }
 
   return (
-    <div className="border border-[#252525] bg-[#141414] rounded-2xl overflow-hidden shadow-xl">
-      <div className="px-5 py-4 border-b border-[#252525] bg-[#181818] flex items-center justify-between">
+    <div className="border border-[#232323] bg-[#141414] rounded-2xl overflow-hidden shadow-xl">
+      <div className="px-5 py-4 border-b border-[#232323] bg-[#181818] flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <Shield size={16} className="text-red-500" />
+          <Shield size={16} className="text-[#00FF88]" />
           <h3 className="text-xs font-bold text-white font-mono uppercase tracking-wider">Alert Configurations</h3>
         </div>
         <span className="text-[8px] font-mono text-gray-500 uppercase">Per User Settings</span>
@@ -92,7 +92,7 @@ export default function PreferencesPanel() {
         
         {/* Core Channels */}
         <div className="space-y-4">
-          <h4 className="text-[10px] font-mono text-gray-500 uppercase tracking-widest border-b border-[#252525] pb-1.5">Delivery Channels</h4>
+          <h4 className="text-[10px] font-mono text-gray-500 uppercase tracking-widest border-b border-[#232323] pb-1.5">Delivery Channels</h4>
           
           <div className="grid sm:grid-cols-2 gap-4">
             {/* Dashboard Alerts */}
@@ -100,11 +100,11 @@ export default function PreferencesPanel() {
               onClick={() => handleToggle('dashboard')}
               className={`p-3.5 rounded-xl border cursor-pointer transition flex items-start gap-3 select-none ${
                 prefs.dashboard 
-                  ? 'bg-red-950/5 border-red-600/30' 
-                  : 'bg-[#0B0B0B] border-[#252525] opacity-60'
+                  ? 'bg-green-950/5 border-[#00FF88]/35' 
+                  : 'bg-[#0B0B0B] border-[#232323] opacity-60'
               }`}
             >
-              <Bell size={18} className={prefs.dashboard ? 'text-red-500' : 'text-gray-500'} />
+              <Bell size={18} className={prefs.dashboard ? 'text-[#00FF88]' : 'text-gray-500'} />
               <div className="space-y-0.5">
                 <span className="text-xs font-bold text-white block font-mono">Dashboard Alerts</span>
                 <span className="text-[9px] text-gray-400 leading-normal block">Receive in-app alerts in the slide-out Notification drawer.</span>
@@ -116,11 +116,11 @@ export default function PreferencesPanel() {
               onClick={() => handleToggle('email')}
               className={`p-3.5 rounded-xl border cursor-pointer transition flex items-start gap-3 select-none ${
                 prefs.email 
-                  ? 'bg-red-950/5 border-red-600/30' 
-                  : 'bg-[#0B0B0B] border-[#252525] opacity-60'
+                  ? 'bg-green-950/5 border-[#00FF88]/35' 
+                  : 'bg-[#0B0B0B] border-[#232323] opacity-60'
               }`}
             >
-              <Mail size={18} className={prefs.email ? 'text-red-500' : 'text-gray-500'} />
+              <Mail size={18} className={prefs.email ? 'text-[#00FF88]' : 'text-gray-500'} />
               <div className="space-y-0.5">
                 <span className="text-xs font-bold text-white block font-mono">Email Delivery</span>
                 <span className="text-[9px] text-gray-400 leading-normal block">Route warnings and training updates directly to your inbox.</span>
@@ -131,13 +131,13 @@ export default function PreferencesPanel() {
 
         {/* Categories Switches */}
         <div className="space-y-4">
-          <h4 className="text-[10px] font-mono text-gray-500 uppercase tracking-widest border-b border-[#252525] pb-1.5">Security Categories</h4>
+          <h4 className="text-[10px] font-mono text-gray-500 uppercase tracking-widest border-b border-[#232323] pb-1.5">Security Categories</h4>
           
           <div className="space-y-3">
             {/* Campaign Alerts */}
-            <div className="flex items-center justify-between p-3 rounded-lg bg-[#0F0F0F] border border-[#252525]">
+            <div className="flex items-center justify-between p-3 rounded-lg bg-[#0F0F0F] border border-[#232323]">
               <div className="flex items-start gap-2.5">
-                <Volume2 size={16} className="text-red-500 shrink-0 mt-0.5" />
+                <Volume2 size={16} className="text-[#00FF88] shrink-0 mt-0.5" />
                 <div className="space-y-0.5">
                   <span className="text-xs font-bold text-white font-mono block">Simulation Campaigns</span>
                   <span className="text-[9px] text-gray-400 leading-normal block">Triggers alerts when phishing simulation campaigns are launched or completed.</span>
@@ -147,14 +147,14 @@ export default function PreferencesPanel() {
                 type="checkbox"
                 checked={prefs.campaignAlerts}
                 onChange={() => handleToggle('campaignAlerts')}
-                className="w-4 h-4 rounded border-[#252525] bg-[#181818] text-red-600 focus:ring-red-500 focus:ring-offset-0 focus:ring-0 accent-red-600 cursor-pointer"
+                className="w-4 h-4 rounded border-[#232323] bg-[#181818] text-green-500 focus:ring-green-500 focus:ring-offset-0 focus:ring-0 accent-[#00FF88] cursor-pointer"
               />
             </div>
 
             {/* Learning Reminders */}
-            <div className="flex items-center justify-between p-3 rounded-lg bg-[#0F0F0F] border border-[#252525]">
+            <div className="flex items-center justify-between p-3 rounded-lg bg-[#0F0F0F] border border-[#232323]">
               <div className="flex items-start gap-2.5">
-                <GraduationCap size={16} className="text-red-500 shrink-0 mt-0.5" />
+                <GraduationCap size={16} className="text-[#00FF88] shrink-0 mt-0.5" />
                 <div className="space-y-0.5">
                   <span className="text-xs font-bold text-white font-mono block">Learning & Quizzes</span>
                   <span className="text-[9px] text-gray-400 leading-normal block">Reminds you of assigned courses and quiz scoring milestones.</span>
@@ -164,14 +164,14 @@ export default function PreferencesPanel() {
                 type="checkbox"
                 checked={prefs.learningReminders}
                 onChange={() => handleToggle('learningReminders')}
-                className="w-4 h-4 rounded border-[#252525] bg-[#181818] text-red-600 focus:ring-red-500 focus:ring-offset-0 focus:ring-0 accent-red-600 cursor-pointer"
+                className="w-4 h-4 rounded border-[#232323] bg-[#181818] text-green-500 focus:ring-green-500 focus:ring-offset-0 focus:ring-0 accent-[#00FF88] cursor-pointer"
               />
             </div>
 
             {/* Critical Alerts */}
-            <div className="flex items-center justify-between p-3 rounded-lg bg-[#0F0F0F] border border-[#252525]">
+            <div className="flex items-center justify-between p-3 rounded-lg bg-[#0F0F0F] border border-[#232323]">
               <div className="flex items-start gap-2.5">
-                <ShieldAlert size={16} className="text-red-600 shrink-0 mt-0.5 animate-pulse" />
+                <ShieldAlert size={16} className="text-[#00D26A] shrink-0 mt-0.5 animate-pulse" />
                 <div className="space-y-0.5">
                   <span className="text-xs font-bold text-white font-mono block">Critical Security Incidents</span>
                   <span className="text-[9px] text-gray-400 leading-normal block">Immediate alerts when department awareness drops or malware risks are high.</span>
@@ -181,12 +181,12 @@ export default function PreferencesPanel() {
                 type="checkbox"
                 checked={prefs.criticalAlerts}
                 onChange={() => handleToggle('criticalAlerts')}
-                className="w-4 h-4 rounded border-[#252525] bg-[#181818] text-red-600 focus:ring-red-500 focus:ring-offset-0 focus:ring-0 accent-red-600 cursor-pointer"
+                className="w-4 h-4 rounded border-[#232323] bg-[#181818] text-green-500 focus:ring-green-500 focus:ring-offset-0 focus:ring-0 accent-[#00FF88] cursor-pointer"
               />
             </div>
 
             {/* Weekly Reports */}
-            <div className="flex items-center justify-between p-3 rounded-lg bg-[#0F0F0F] border border-[#252525]">
+            <div className="flex items-center justify-between p-3 rounded-lg bg-[#0F0F0F] border border-[#232323]">
               <div className="flex items-start gap-2.5">
                 <Calendar size={16} className="text-[#A8A8A8] shrink-0 mt-0.5" />
                 <div className="space-y-0.5">
@@ -198,12 +198,12 @@ export default function PreferencesPanel() {
                 type="checkbox"
                 checked={prefs.weeklyReports}
                 onChange={() => handleToggle('weeklyReports')}
-                className="w-4 h-4 rounded border-[#252525] bg-[#181818] text-red-600 focus:ring-red-500 focus:ring-offset-0 focus:ring-0 accent-red-600 cursor-pointer"
+                className="w-4 h-4 rounded border-[#232323] bg-[#181818] text-green-500 focus:ring-green-500 focus:ring-offset-0 focus:ring-0 accent-[#00FF88] cursor-pointer"
               />
             </div>
 
             {/* Monthly Reports */}
-            <div className="flex items-center justify-between p-3 rounded-lg bg-[#0F0F0F] border border-[#252525]">
+            <div className="flex items-center justify-between p-3 rounded-lg bg-[#0F0F0F] border border-[#232323]">
               <div className="flex items-start gap-2.5">
                 <Calendar size={16} className="text-[#A8A8A8] shrink-0 mt-0.5" />
                 <div className="space-y-0.5">
@@ -215,7 +215,7 @@ export default function PreferencesPanel() {
                 type="checkbox"
                 checked={prefs.monthlyReports}
                 onChange={() => handleToggle('monthlyReports')}
-                className="w-4 h-4 rounded border-[#252525] bg-[#181818] text-red-600 focus:ring-red-500 focus:ring-offset-0 focus:ring-0 accent-red-600 cursor-pointer"
+                className="w-4 h-4 rounded border-[#232323] bg-[#181818] text-green-500 focus:ring-green-500 focus:ring-offset-0 focus:ring-0 accent-[#00FF88] cursor-pointer"
               />
             </div>
           </div>
@@ -242,10 +242,10 @@ export default function PreferencesPanel() {
           <button
             type="submit"
             disabled={saving}
-            className="px-5 py-2.5 rounded-xl bg-red-600 hover:bg-red-700 text-white font-mono text-xs font-bold shadow-[0_0_12px_rgba(229,9,20,0.3)] disabled:opacity-50 transition flex items-center gap-1.5"
+            className="px-5 py-2.5 rounded-xl bg-[#00FF88] hover:bg-[#00D26A] text-black font-mono text-xs font-bold shadow-[0_0_12px_rgba(0,255,136,0.25)] disabled:opacity-50 transition flex items-center gap-1.5"
           >
             {saving ? (
-              <div className="w-3.5 h-3.5 border border-white border-t-transparent rounded-full animate-spin" />
+              <div className="w-3.5 h-3.5 border border-black border-t-transparent rounded-full animate-spin" />
             ) : (
               <Save size={14} />
             )}

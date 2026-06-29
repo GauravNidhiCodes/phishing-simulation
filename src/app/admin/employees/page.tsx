@@ -748,8 +748,8 @@ export default function EmployeesPage() {
                         <AreaChart data={employeeTrendData} margin={{ left: -25, right: 5, top: 5, bottom: 0 }}>
                           <defs>
                             <linearGradient id="employeeScoreGrad" x1="0" y1="0" x2="0" y2="1">
-                              <stop offset="5%" stopColor="#E50914" stopOpacity={0.2}/>
-                              <stop offset="95%" stopColor="#E50914" stopOpacity={0}/>
+                              <stop offset="5%" stopColor="#00FF88" stopOpacity={0.2}/>
+                              <stop offset="95%" stopColor="#00FF88" stopOpacity={0}/>
                             </linearGradient>
                           </defs>
                           <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.015)" />
@@ -768,7 +768,7 @@ export default function EmployeesPage() {
                               return null;
                             }}
                           />
-                          <Area type="monotone" dataKey="Score" stroke="#E50914" strokeWidth={2} fill="url(#employeeScoreGrad)" />
+                          <Area type="monotone" dataKey="Score" stroke="#00FF88" strokeWidth={2} fill="url(#employeeScoreGrad)" />
                         </AreaChart>
                       </ResponsiveContainer>
                     </div>

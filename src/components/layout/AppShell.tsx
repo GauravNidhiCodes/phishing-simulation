@@ -44,7 +44,7 @@ const SidebarItem: React.FC<SidebarItemProps> = ({ href, label, icon, active, is
         isCollapsed ? 'justify-center p-3' : 'px-4 py-3'
       } ${
         active 
-          ? 'bg-gradient-to-r from-brand-blue/20 to-brand-cyan/10 border-l-2 border-brand-blue text-white font-medium shadow-[0_0_15px_rgba(229,9,20,0.05)]' 
+          ? 'bg-gradient-to-r from-brand-blue/20 to-brand-cyan/10 border-l-2 border-brand-blue text-white font-medium shadow-[0_0_15px_rgba(0,255,136,0.05)]' 
           : 'text-gray-400 hover:text-white hover:bg-white/5 border-l-2 border-transparent'
       }`}>
         <div className={`transition-colors shrink-0 ${active ? 'text-brand-cyan' : 'text-gray-400 group-hover:text-brand-cyan'}`}>
@@ -74,7 +74,7 @@ const SidebarItem: React.FC<SidebarItemProps> = ({ href, label, icon, active, is
         {active && !isCollapsed && (
           <motion.div 
             layoutId="sidebarActiveGlow"
-            className="absolute right-4 w-1.5 h-1.5 rounded-full bg-brand-cyan shadow-[0_0_8px_#E50914]"
+            className="absolute right-4 w-1.5 h-1.5 rounded-full bg-brand-cyan shadow-[0_0_8px_#00FF88]"
             transition={{ type: 'spring', stiffness: 380, damping: 30 }}
           />
         )}
@@ -89,6 +89,28 @@ export const AppShell: React.FC<{ children: React.ReactNode }> = ({ children }) 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [sessionUser, setSessionUser] = useState<any>(null);
+  const [isMobile, setIsMobile] = useState(false);
+  const [bypassMobileGate, setBypassMobileGate] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+
+    const bypassed = sessionStorage.getItem('pinkman_mobile_bypass') === 'true';
+    if (bypassed) {
+      setBypassMobileGate(true);
+    }
+
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  const handleBypass = () => {
+    sessionStorage.setItem('pinkman_mobile_bypass', 'true');
+    setBypassMobileGate(true);
+  };
 
   // Check if it is a simulation intercept page or an auth centered route
   const isSimulationPage = pathname?.includes('/simulation/landing/');
@@ -157,6 +179,41 @@ export const AppShell: React.FC<{ children: React.ReactNode }> = ({ children }) 
 
   if (isSimulationPage) {
     return <main className="flex-1 w-full min-h-screen bg-white text-gray-900">{children}</main>;
+  }
+
+  if (isMobile && !bypassMobileGate) {
+    return (
+      <div className="min-h-screen bg-[#050505] text-[#B5B5B5] flex flex-col items-center justify-center p-6 text-center font-sans">
+        <div className="w-16 h-16 rounded-xl border border-[#00FF88] bg-[#050505] shadow-[0_0_15px_rgba(0,255,136,0.3)] flex items-center justify-center text-white text-2xl font-bold mb-4">
+          PP
+        </div>
+        <h1 className="font-extrabold text-white text-xs tracking-wider uppercase font-mono mb-8">PINKMAN PROTECTS</h1>
+        
+        {/* Laptop Illustration */}
+        <div className="w-40 h-28 relative mx-auto mb-8 text-[#00FF88]">
+          <svg viewBox="0 0 100 60" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
+            <rect x="15" y="5" width="70" height="42" rx="3" fill="#141414" stroke="#232323" strokeWidth="2"/>
+            <line x1="25" y1="15" x2="75" y2="15" stroke="#777777" strokeWidth="2" strokeLinecap="round" />
+            <line x1="25" y1="22" x2="55" y2="22" stroke="#00FF88" strokeWidth="2" strokeLinecap="round" />
+            <line x1="25" y1="29" x2="65" y2="29" stroke="#777777" strokeWidth="2" strokeLinecap="round" />
+            <path d="M5 47H95C95 50.3137 92.3137 53 89 53H11C7.68629 53 5 50.3137 5 47Z" fill="#232323"/>
+            <rect x="42" y="49" width="16" height="3" rx="1" fill="#777777"/>
+          </svg>
+        </div>
+
+        <h2 className="text-xl font-black text-white tracking-tight uppercase font-mono mb-2">LAPTOP RECOMMENDED</h2>
+        <p className="text-xs text-[#B5B5B5] max-w-xs mx-auto leading-relaxed mb-8">
+          For the best experience, please access Pinkman Protects on a laptop or desktop device.
+        </p>
+
+        <button
+          onClick={handleBypass}
+          className="px-6 py-2.5 rounded-xl bg-[#00FF88] text-black font-bold text-xs uppercase font-mono tracking-wider shadow-[0_0_15px_rgba(0,255,136,0.3)] hover:scale-105 active:scale-95 transition-all duration-200"
+        >
+          Continue Anyway
+        </button>
+      </div>
+    );
   }
 
   const adminMenu = [

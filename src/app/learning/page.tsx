@@ -234,9 +234,9 @@ export default function LearningPage() {
                 />
                 <defs>
                   <linearGradient id="progressGradient" x1="0" y1="0" x2="1" y2="1">
-                    <stop offset="0%" stopColor="#FF2D20" />
-                    <stop offset="50%" stopColor="#E50914" />
-                    <stop offset="100%" stopColor="#D90429" />
+                    <stop offset="0%" stopColor="#00FF88" />
+                    <stop offset="50%" stopColor="#00D26A" />
+                    <stop offset="100%" stopColor="#2ECC71" />
                   </linearGradient>
                 </defs>
               </svg>
